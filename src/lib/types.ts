@@ -251,6 +251,7 @@ export interface PropertyMasterPlanTowersSection {
 }
 
 export interface MasterPlanProps {
+  id: string;
   featuresSectionTittle: string;
   featuresSectionFeaturesHeading: string;
   featuresSectionAccessibilityHeading: string;

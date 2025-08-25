@@ -247,6 +247,7 @@ export const propertyMasterPlanTowersSectionSchema = z.object({
 });
 
 export const masterPlanPropsSchema = z.object({
+    id: idSchema,
     featuresSectionTittle: z.string(),
     featuresSectionFeaturesHeading: z.string(),
     featuresSectionAccessibilityHeading: z.string(),

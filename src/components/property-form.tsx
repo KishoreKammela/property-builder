@@ -1,6 +1,6 @@
 'use client';
 
-import { useForm, FormProvider, useFieldArray } from 'react-hook-form';
+import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
@@ -20,6 +20,7 @@ import { SpecificationsSection } from './form-parts/specifications-section';
 import { FloorPlansSection } from './form-parts/floor-plans-section';
 import { LocationDeveloperSection } from './form-parts/location-developer-section';
 import { PropertyDetailPageSection } from './form-parts/property-detail-page-section';
+import { PropertyMasterPlanDetailPageSection } from './form-parts/property-master-plan-detail-page-section';
 
 interface PropertyFormProps {
   onFormSubmit: (data: Property) => void;
@@ -156,6 +157,36 @@ export function PropertyForm({ onFormSubmit }: PropertyFormProps) {
                 contactButtonText: 'Contact us',
                 faqItems: [],
             },
+        },
+        propertyMasterPlanDetailPage: {
+            propertyMasterPlanBannerSection: {
+                bannerSectionHeader: '',
+                bannerSectionCta: '',
+                bannerSectionImageUrl: '',
+                bannerSectionDescription: '',
+                bannerSectionFeatures: [],
+            },
+            propertyMasterPlanTowersSection: {
+                towerSectionHeading: '',
+                towerSectionDescription: '',
+                towerSectionAmenitiesHeading: '',
+                towerSectionUnitSizesHeading: '',
+                towerSectionUnitSizesSubHeading: '',
+                towerSectionTableDescription: '',
+                towerSectionSliderImages: [],
+                towerSectionTableDetails: [],
+                towerSectionAmenitiesPoints: [],
+                towerSectionUnitsSizes: [],
+            },
+            propertyMasterPlanFeaturesSection: {
+                features: [],
+            },
+            propertyMasterPlanFAQSection: {
+                mainHeading: 'Frequently asked questions',
+                subtitle: "Didn't find the question?",
+                contactButtonText: 'Contact us',
+                faqItems: [],
+            },
         }
     },
     mode: 'onChange',
@@ -250,6 +281,7 @@ export function PropertyForm({ onFormSubmit }: PropertyFormProps) {
             <FloorPlansSection />
             <LocationDeveloperSection />
             <PropertyDetailPageSection generateId={generateId} />
+            <PropertyMasterPlanDetailPageSection generateId={generateId} />
           </Accordion>
 
           <Button type="submit" className="w-full bg-accent hover:bg-accent/90" size="lg">
