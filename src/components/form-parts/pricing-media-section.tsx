@@ -13,14 +13,14 @@ interface PricingMediaSectionProps {
 export function PricingMediaSection({ isGeneratingAltText, generateAltText }: PricingMediaSectionProps) {
     const { control, watch } = useFormContext();
   return (
-    <FormSection value="item-3" title="Pricing and Media" description="Set the price and manage media assets.">
+    <FormSection value="item-3" title="Pricing and Media" description="Set the property price range and add media assets.">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <FormField
             control={control}
             name="priceRange.min"
             render={({ field }) => (
                 <FormItem>
-                <FormLabel>Min Price</FormLabel>
+                <FormLabel>Minimum Price</FormLabel>
                 <FormControl><Input type="number" placeholder="e.g., 5000000" {...field} onChange={e => field.onChange(Number(e.target.value))}/></FormControl>
                 <FormMessage />
                 </FormItem>
@@ -31,7 +31,7 @@ export function PricingMediaSection({ isGeneratingAltText, generateAltText }: Pr
             name="priceRange.max"
             render={({ field }) => (
                 <FormItem>
-                <FormLabel>Max Price</FormLabel>
+                <FormLabel>Maximum Price</FormLabel>
                 <FormControl><Input type="number" placeholder="e.g., 9000000" {...field} onChange={e => field.onChange(Number(e.target.value))}/></FormControl>
                 <FormMessage />
                 </FormItem>
@@ -42,7 +42,7 @@ export function PricingMediaSection({ isGeneratingAltText, generateAltText }: Pr
             name="currency"
             render={({ field }) => (
                 <FormItem className="md:col-span-2">
-                <FormLabel>Currency</FormLabel>
+                <FormLabel>Currency Code</FormLabel>
                 <FormControl><Input placeholder="e.g., INR" {...field} /></FormControl>
                 <FormMessage />
                 </FormItem>
@@ -57,7 +57,7 @@ export function PricingMediaSection({ isGeneratingAltText, generateAltText }: Pr
                 <FormItem>
                     <FormLabel>Featured Image URL</FormLabel>
                     <FormControl>
-                        <Input type="url" placeholder="https://example.com/image.png" {...field} />
+                        <Input type="url" placeholder="https://placehold.co/800x600.png" {...field} />
                     </FormControl>
                     <FormMessage />
                 </FormItem>
@@ -69,9 +69,9 @@ export function PricingMediaSection({ isGeneratingAltText, generateAltText }: Pr
                 name="alt"
                 render={({ field }) => (
                     <FormItem>
-                    <FormLabel>Alt Text</FormLabel>
+                    <FormLabel>Image Alt Text</FormLabel>
                     <FormControl>
-                        <Input placeholder="Descriptive alt text for the image" {...field} />
+                        <Input placeholder="A descriptive alt text for the image" {...field} />
                     </FormControl>
                     <FormMessage />
                     </FormItem>
@@ -90,7 +90,7 @@ export function PricingMediaSection({ isGeneratingAltText, generateAltText }: Pr
                 <FormItem>
                 <FormLabel>Master Plan Image URL</FormLabel>
                 <FormControl>
-                    <Input type="url" placeholder="https://example.com/master-plan.png" {...field} />
+                    <Input type="url" placeholder="https://placehold.co/800x800.png" {...field} />
                 </FormControl>
                 <FormMessage />
                 </FormItem>

@@ -11,23 +11,23 @@ export function FloorPlansSection() {
   const { fields, append, remove } = useFieldArray({ control, name: "floorPlans" });
 
   return (
-    <FormSection value="item-7" title="Floor Plans" description="Add details for each floor plan available.">
+    <FormSection value="item-7" title="Floor Plans" description="Add or remove floor plans available for this property.">
       {fields.map((field, index) => (
         <div key={field.id} className="p-4 border rounded-md space-y-4">
             <div className="flex justify-between items-center">
                 <h4 className="font-semibold">Floor Plan {index + 1}</h4>
-                <Button type="button" variant="destructive" size="icon" onClick={() => remove(index)}><Trash /></Button>
+                <Button type="button" variant="destructive" size="icon" onClick={() => remove(index)}><Trash className="h-4 w-4" /></Button>
             </div>
              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <FormField control={control} name={`floorPlans.${index}.id`} render={({ field }) => ( <FormItem><FormLabel>ID</FormLabel><FormControl><Input placeholder="floorplan-1" {...field} /></FormControl><FormMessage /></FormItem> )} />
-                <FormField control={control} name={`floorPlans.${index}.name`} render={({ field }) => ( <FormItem><FormLabel>Name</FormLabel><FormControl><Input placeholder="2BHK Premium" {...field} /></FormControl><FormMessage /></FormItem> )} />
-                <FormField control={control} name={`floorPlans.${index}.type`} render={({ field }) => ( <FormItem><FormLabel>Type</FormLabel><FormControl><Input placeholder="apartment" {...field} /></FormControl><FormMessage /></FormItem> )} />
+                <FormField control={control} name={`floorPlans.${index}.id`} render={({ field }) => ( <FormItem><FormLabel>Floor Plan ID</FormLabel><FormControl><Input placeholder="e.g., 2bhk-premium" {...field} /></FormControl><FormMessage /></FormItem> )} />
+                <FormField control={control} name={`floorPlans.${index}.name`} render={({ field }) => ( <FormItem><FormLabel>Name</FormLabel><FormControl><Input placeholder="e.g., 2BHK Premium" {...field} /></FormControl><FormMessage /></FormItem> )} />
+                <FormField control={control} name={`floorPlans.${index}.type`} render={({ field }) => ( <FormItem><FormLabel>Type</FormLabel><FormControl><Input placeholder="e.g., Apartment" {...field} /></FormControl><FormMessage /></FormItem> )} />
                 <FormField control={control} name={`floorPlans.${index}.area`} render={({ field }) => ( <FormItem><FormLabel>Area (sqft)</FormLabel><FormControl><Input type="number" placeholder="1200" {...field} onChange={e => field.onChange(Number(e.target.value))}/></FormControl><FormMessage /></FormItem> )} />
                 <FormField control={control} name={`floorPlans.${index}.bedrooms`} render={({ field }) => ( <FormItem><FormLabel>Bedrooms</FormLabel><FormControl><Input type="number" placeholder="2" {...field} onChange={e => field.onChange(Number(e.target.value))}/></FormControl><FormMessage /></FormItem> )} />
                 <FormField control={control} name={`floorPlans.${index}.bathrooms`} render={({ field }) => ( <FormItem><FormLabel>Bathrooms</FormLabel><FormControl><Input type="number" placeholder="2" {...field} onChange={e => field.onChange(Number(e.target.value))}/></FormControl><FormMessage /></FormItem> )} />
-                <FormField control={control} name={`floorPlans.${index}.price`} render={({ field }) => ( <FormItem><FormLabel>Price</FormLabel><FormControl><Input type="number" placeholder="75000000" {...field} onChange={e => field.onChange(Number(e.target.value))}/></FormControl><FormMessage /></FormItem> )} />
-                <FormField control={control} name={`floorPlans.${index}.image`} render={({ field }) => ( <FormItem className="md:col-span-2"><FormLabel>Image URL</FormLabel><FormControl><Input type="url" placeholder="https://example.com/floorplan.png" {...field} /></FormControl><FormMessage /></FormItem> )} />
-                <FormField control={control} name={`floorPlans.${index}.description`} render={({ field }) => ( <FormItem className="md:col-span-2"><FormLabel>Description</FormLabel><FormControl><Textarea placeholder="Floor plan description" {...field} /></FormControl><FormMessage /></FormItem> )} />
+                <FormField control={control} name={`floorPlans.${index}.price`} render={({ field }) => ( <FormItem><FormLabel>Price</FormLabel><FormControl><Input type="number" placeholder="7500000" {...field} onChange={e => field.onChange(Number(e.target.value))}/></FormControl><FormMessage /></FormItem> )} />
+                <FormField control={control} name={`floorPlans.${index}.image`} render={({ field }) => ( <FormItem className="md:col-span-2"><FormLabel>Image URL</FormLabel><FormControl><Input type="url" placeholder="https://placehold.co/600x400.png" {...field} /></FormControl><FormMessage /></FormItem> )} />
+                <FormField control={control} name={`floorPlans.${index}.description`} render={({ field }) => ( <FormItem className="md:col-span-2"><FormLabel>Description</FormLabel><FormControl><Textarea placeholder="Describe this floor plan." {...field} /></FormControl><FormMessage /></FormItem> )} />
             </div>
         </div>
       ))}

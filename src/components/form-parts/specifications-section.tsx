@@ -2,11 +2,12 @@ import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/comp
 import { Input } from '@/components/ui/input';
 import { FormSection } from '@/components/form-section';
 import { useFormContext } from 'react-hook-form';
+import { Textarea } from '../ui/textarea';
 
 export function SpecificationsSection() {
     const { control } = useFormContext();
   return (
-    <FormSection value="item-6" title="Specifications" description="Provide technical specifications.">
+    <FormSection value="item-6" title="Technical Specifications" description="Provide technical specifications for the property.">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <FormField
           control={control}
@@ -43,7 +44,7 @@ export function SpecificationsSection() {
           />
           <FormField control={control} name="specifications.launchDate" render={({ field }) => (<FormItem><FormLabel>Launch Date</FormLabel><FormControl><Input placeholder="e.g., 2024" {...field} /></FormControl><FormMessage /></FormItem>)} />
           <FormField control={control} name="specifications.possessionDate" render={({ field }) => (<FormItem><FormLabel>Possession Date</FormLabel><FormControl><Input placeholder="e.g., 2026" {...field} /></FormControl><FormMessage /></FormItem>)} />
-          <FormField control={control} name="specifications.elevators" render={({ field }) => (<FormItem><FormLabel>Elevators</FormLabel><FormControl><Input type="number" placeholder="e.g., 2" {...field} onChange={e => field.onChange(Number(e.target.value))}/></FormControl><FormMessage /></FormItem>)} />
+          <FormField control={control} name="specifications.elevators" render={({ field }) => (<FormItem><FormLabel>Number of Elevators</FormLabel><FormControl><Input type="number" placeholder="e.g., 2" {...field} onChange={e => field.onChange(Number(e.target.value))}/></FormControl><FormMessage /></FormItem>)} />
           <FormField control={control} name="specifications.parkingRatio" render={({ field }) => (<FormItem><FormLabel>Parking Ratio</FormLabel><FormControl><Input placeholder="e.g., 1:1" {...field} /></FormControl><FormMessage /></FormItem>)} />
           <FormField
               control={control}
@@ -52,10 +53,10 @@ export function SpecificationsSection() {
                   <FormItem className="md:col-span-2">
                   <FormLabel>Approvals (comma-separated)</FormLabel>
                   <FormControl>
-                      <Input
-                      placeholder="e.g., RERA,BDA,BESCOM"
+                      <Textarea
+                      placeholder="e.g., RERA, BDA, BESCOM"
                       {...field}
-                      value={Array.isArray(field.value) ? field.value.join(',') : ''}
+                      value={Array.isArray(field.value) ? field.value.join(', ') : ''}
                       onChange={e => field.onChange(e.target.value.split(',').map(s => s.trim()).filter(Boolean))}
                       />
                   </FormControl>

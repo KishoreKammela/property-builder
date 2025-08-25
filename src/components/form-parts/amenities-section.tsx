@@ -7,16 +7,16 @@ export function AmenitiesSection() {
   const { control } = useFormContext();
 
   return (
-    <FormSection value="item-5" title="Amenities" description="List the amenities available (comma-separated).">
+    <FormSection value="item-5" title="Property Amenities" description="List all amenities available at the property.">
       <FormField
         control={control}
         name="amenities"
         render={({ field }) => (
           <FormItem>
-            <FormLabel className="sr-only">Amenities</FormLabel>
+            <FormLabel>Amenities (comma-separated)</FormLabel>
             <FormControl>
               <Textarea
-                placeholder="e.g., Club House, Swimming Pool, Gymnasium"
+                placeholder="e.g., Clubhouse, Swimming Pool, Gymnasium, Landscaped Gardens"
                 {...field}
                 value={Array.isArray(field.value) ? field.value.join(', ') : ''}
                 onChange={e => {

@@ -6,7 +6,7 @@ import { useFormContext } from 'react-hook-form';
 export function DescriptionSection() {
     const { control } = useFormContext();
   return (
-    <FormSection value="item-2" title="Description" description="Add descriptive content for the property.">
+    <FormSection value="item-2" title="Property Descriptions" description="Add detailed and summary descriptions for the property.">
        <FormField
           control={control}
           name="description"
@@ -14,7 +14,7 @@ export function DescriptionSection() {
               <FormItem>
               <FormLabel>Full Description</FormLabel>
               <FormControl>
-                  <Textarea placeholder="Provide a detailed description of the property." {...field} rows={5}/>
+                  <Textarea placeholder="Provide a comprehensive and detailed description of the property, its features, and surroundings." {...field} rows={5}/>
               </FormControl>
               <FormMessage />
               </FormItem>
@@ -25,9 +25,9 @@ export function DescriptionSection() {
           name="shortDescription"
           render={({ field }) => (
               <FormItem>
-              <FormLabel>Short Description</FormLabel>
+              <FormLabel>Short Description / Summary</FormLabel>
               <FormControl>
-                  <Textarea placeholder="Provide a brief summary of the property." {...field} rows={2}/>
+                  <Textarea placeholder="Provide a brief, catchy summary of the property. This is often used in listings." {...field} rows={2}/>
               </FormControl>
               <FormMessage />
               </FormItem>

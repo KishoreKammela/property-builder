@@ -13,7 +13,7 @@ interface BasicInfoSectionProps {
 export function BasicInfoSection({ generateId }: BasicInfoSectionProps) {
     const { control } = useFormContext();
   return (
-    <FormSection value="item-1" title="Basic Property Information" description="Provide the main details of the property.">
+    <FormSection value="item-1" title="Basic Property Information" description="Provide the main details for the property listing.">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
          <FormField
           control={control}
@@ -37,11 +37,11 @@ export function BasicInfoSection({ generateId }: BasicInfoSectionProps) {
               <FormLabel>Property ID</FormLabel>
               <div className="flex gap-2">
                 <FormControl>
-                  <Input placeholder="auto-generated-id" {...field} />
+                  <Input placeholder="e.g., sattva-city-residence" {...field} />
                 </FormControl>
                  <Button type="button" size="icon" variant="outline" onClick={() => generateId('property', 'id')}><Sparkles /></Button>
               </div>
-              <FormDescription>Unique identifier for the property.</FormDescription>
+              <FormDescription>Unique identifier for this property (lowercase, no spaces).</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -52,10 +52,10 @@ export function BasicInfoSection({ generateId }: BasicInfoSectionProps) {
           name="slug"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Slug</FormLabel>
+              <FormLabel>URL Slug</FormLabel>
                <div className="flex gap-2">
                 <FormControl>
-                  <Input placeholder="auto-generated-slug" {...field} />
+                  <Input placeholder="e.g., sattva-city-residence" {...field} />
                 </FormControl>
                  <Button type="button" size="icon" variant="outline" onClick={() => generateId('slug', 'slug')}><Sparkles /></Button>
               </div>
@@ -81,8 +81,8 @@ export function BasicInfoSection({ generateId }: BasicInfoSectionProps) {
           name="area"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Area</FormLabel>
-              <FormControl><Input placeholder="e.g., North" {...field} /></FormControl>
+              <FormLabel>Area / Neighborhood</FormLabel>
+              <FormControl><Input placeholder="e.g., North Bangalore" {...field} /></FormControl>
               <FormMessage />
             </FormItem>
           )}
@@ -96,7 +96,7 @@ export function BasicInfoSection({ generateId }: BasicInfoSectionProps) {
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select property type" />
+                    <SelectValue placeholder="Select a property type" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
@@ -114,7 +114,7 @@ export function BasicInfoSection({ generateId }: BasicInfoSectionProps) {
           name="status"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Status</FormLabel>
+              <FormLabel>Property Status</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
@@ -124,7 +124,7 @@ export function BasicInfoSection({ generateId }: BasicInfoSectionProps) {
                 <SelectContent>
                   <SelectItem value="upcoming">Upcoming</SelectItem>
                   <SelectItem value="ongoing">Ongoing</SelectItem>
-                  <SelectItem value="ready">Ready</SelectItem>
+                  <SelectItem value="ready">Ready to Move</SelectItem>
                 </SelectContent>
               </Select>
               <FormMessage />

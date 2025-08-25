@@ -4,25 +4,25 @@ const idSchema = z.string().regex(/^[a-z0-9-]+$/, {
   message: 'ID must only contain lowercase letters, numbers, and hyphens.',
 }).min(1, 'ID is required.');
 
-const urlSchema = z.string().url("Invalid URL format.").min(1, "URL is required.");
+const urlSchema = z.string().url("Please enter a valid URL (e.g., https://example.com).").min(1, "URL is required.");
 
 export const cardSliderItemSchema = z.object({
   id: idSchema,
   src: urlSchema,
-  alt: z.string(),
+  alt: z.string().min(1, "Alt text is required for accessibility."),
   width: z.number().optional(),
   height: z.number().optional(),
 });
 
 export const amenitiesItemSchema = z.object({
     id: idSchema,
-    title: z.string().min(1, 'Title is required.'),
+    title: z.string().min(1, 'Amenity title is required.'),
     icon: z.any().optional(),
 });
 
 export const amenitiesAccordionItemSchema = z.object({
   id: idSchema,
-  amenitiesTitle: z.string().min(1, 'Title is required.'),
+  amenitiesTitle: z.string().min(1, 'Accordion title is required.'),
   amenitiesDescription: z.string().optional(),
   amenitiesItems: z.array(amenitiesItemSchema),
 });
@@ -44,16 +44,16 @@ export const faqItemSchema = z.object({
 });
 
 export const faqSectionSchema = z.object({
-  mainHeading: z.string().optional(),
+  mainHeading: z.string().min(1, "Main heading is required."),
   subtitle: z.string().optional(),
   contactButtonText: z.string().optional(),
   faqItems: z.array(faqItemSchema),
 });
 
 export const connectivitySchema = z.object({
-  name: z.string().min(1, 'Name is required.'),
-  time: z.string(),
-  distance: z.string(),
+  name: z.string().min(1, 'Location name is required.'),
+  time: z.string().optional(),
+  distance: z.string().min(1, "Distance is required."),
   icon: z.string().optional(),
 });
 
@@ -65,181 +65,181 @@ export const locationTabSchema = z.object({
 });
 
 export const locationAndConnectivitySectionSchema = z.object({
-  mainHeading: z.string().min(1, 'Heading is required.'),
-  locationText: z.string(),
+  mainHeading: z.string().min(1, 'Main heading is required.'),
+  locationText: z.string().min(1, "Location text is required."),
   locationLink: urlSchema,
-  locationLinkText: z.string(),
+  locationLinkText: z.string().min(1, "Link text is required."),
   locationImage: urlSchema,
   locationTabs: z.array(locationTabSchema),
 });
 
 export const floorPlanSchema = z.object({
     id: idSchema,
-    name: z.string().min(1),
-    type: z.string().min(1),
-    area: z.number(),
-    bedrooms: z.number(),
-    bathrooms: z.number(),
-    price: z.number(),
+    name: z.string().min(1, "Floor plan name is required."),
+    type: z.string().min(1, "Type is required."),
+    area: z.number().min(1, "Area must be greater than 0."),
+    bedrooms: z.number().min(0, "Bedrooms cannot be negative."),
+    bathrooms: z.number().min(0, "Bathrooms cannot be negative."),
+    price: z.number().min(0, "Price cannot be negative."),
     image: urlSchema,
-    description: z.string(),
+    description: z.string().min(1, "Description is required."),
 });
 
 export const propertySpecificationSchema = z.object({
     id: idSchema,
-    value: z.string(),
-    displayText: z.string(),
+    value: z.string().min(1, "Value is required."),
+    displayText: z.string().min(1, "Display text is required."),
     displayIcon: z.string().optional(),
 });
 
 export const keyProjectDateSchema = z.object({
     id: idSchema,
-    title: z.string(),
-    date: z.string(),
+    title: z.string().min(1, "Title is required."),
+    date: z.string().min(1, "Date is required."),
 });
 
 export const unitPlanSchema = z.object({
     id: idSchema,
-    unitPlanTitle: z.string(),
-    unitPlanDescription: z.string(),
+    unitPlanTitle: z.string().min(1, "Unit plan title is required."),
+    unitPlanDescription: z.string().min(1, "Description is required."),
     unitPlanImageUrl: urlSchema,
     unitPlanEnquireUrl: urlSchema,
 });
 
 export const productPricingTableItemSchema = z.object({
     pricingId: idSchema,
-    pricingConfigType: z.string(),
-    pricingCarpetApproxArea: z.string(),
-    price: z.string(),
-    pricingEnquireCtaText: z.string(),
+    pricingConfigType: z.string().min(1, "Configuration type is required."),
+    pricingCarpetApproxArea: z.string().min(1, "Carpet area is required."),
+    price: z.string().min(1, "Price is required."),
+    pricingEnquireCtaText: z.string().min(1, "CTA text is required."),
 });
 
 export const propertyLocationInformationSchema = z.object({
     estateInfoId: idSchema,
-    estateInfoTitle: z.string(),
-    estateInfoDescription: z.string(),
+    estateInfoTitle: z.string().min(1, "Title is required."),
+    estateInfoDescription: z.string().min(1, "Description is required."),
 });
 
 export const highlightItemSchema = z.object({
     highlightId: idSchema,
     highlightImageUrl: urlSchema,
-    highlightDescription: z.string(),
+    highlightDescription: z.string().min(1, "Highlight description is required."),
 });
 
 export const propertyBannerSectionSchema = z.object({
-    headingOne: z.string(),
-    headingTwo: z.string(),
+    headingOne: z.string().min(1, "Heading One is required."),
+    headingTwo: z.string().min(1, "Heading Two is required."),
     mainBannerImageUrl: urlSchema,
-    primeLocationAt: z.string(),
-    projectStatusTitle: z.string(),
+    primeLocationAt: z.string().min(1, "Prime location is required."),
+    projectStatusTitle: z.string().optional(),
     projectStatusValue: z.enum(['New Launch', 'Pre-Launch', 'Upcoming Launches']),
     isReraCertified: z.boolean(),
     reraLogo: urlSchema,
-    reraCertifiedLabel: z.string(),
-    priceRangeLabel: z.string(),
-    grabEarlyBirdAdvantages: z.string(),
-    limitedSlotsAvailable: z.string(),
-    brochureCta: z.string(),
-    bookVisitCta: z.string(),
-    viewAllPhotosCta: z.string(),
+    reraCertifiedLabel: z.string().min(1, "RERA label is required."),
+    priceRangeLabel: z.string().min(1, "Price range label is required."),
+    grabEarlyBirdAdvantages: z.string().optional(),
+    limitedSlotsAvailable: z.string().optional(),
+    brochureCta: z.string().min(1, "Brochure CTA is required."),
+    bookVisitCta: z.string().min(1, "Book visit CTA is required."),
+    viewAllPhotosCta: z.string().min(1, "View all photos CTA is required."),
     specifications: z.array(propertySpecificationSchema),
 });
 
 export const propertyOverviewSectionSchema = z.object({
-    projectOverviewLabel: z.string(),
-    projectWalkthroughLabel: z.string(),
-    projectOverviewDescription: z.string(),
+    projectOverviewLabel: z.string().min(1, "Label is required."),
+    projectWalkthroughLabel: z.string().min(1, "Label is required."),
+    projectOverviewDescription: z.string().min(1, "Description is required."),
     propertySpecifications: z.array(propertySpecificationSchema),
     isReraCertified: z.boolean(),
     reraLogo: urlSchema,
-    reraCertifiedLabel: z.string(),
-    reraNumberLabel: z.string(),
-    projectReraNumber: z.string(),
-    keyProjectDatesTitle: z.string(),
+    reraCertifiedLabel: z.string().min(1, "RERA label is required."),
+    reraNumberLabel: z.string().min(1, "RERA number label is required."),
+    projectReraNumber: z.string().min(1, "RERA number is required."),
+    keyProjectDatesTitle: z.string().min(1, "Title is required."),
     keyProjectDates: z.array(keyProjectDateSchema),
     projectOverviewImageUrl: urlSchema,
-    projectOverviewViewMoreCta: z.string(),
+    projectOverviewViewMoreCta: z.string().min(1, "CTA text is required."),
 });
 
 export const propertyHighlightsSectionSchema = z.object({
-    propertyHighlightsTitle: z.string(),
-    propertyHighlightsDescription: z.string(),
+    propertyHighlightsTitle: z.string().min(1, "Title is required."),
+    propertyHighlightsDescription: z.string().min(1, "Description is required."),
     propertyHighlights: z.array(highlightItemSchema),
 });
 
 export const propertyMasterPlanSectionSchema = z.object({
-    masterPlanTitle: z.string(),
+    masterPlanTitle: z.string().min(1, "Title is required."),
     masterPlanImageUrl: urlSchema,
-    masterPlanDescription: z.string(),
-    masterPlanEnquireNowCta: z.string(),
-    masterPlanViewInDetailCta: z.string(),
+    masterPlanDescription: z.string().min(1, "Description is required."),
+    masterPlanEnquireNowCta: z.string().min(1, "CTA text is required."),
+    masterPlanViewInDetailCta: z.string().min(1, "CTA text is required."),
 });
 
 export const propertyUnitPlanSectionSchema = z.object({
-    unitPlanTitle: z.string(),
-    unitPlanDescription: z.string(),
-    unitPlanViewInDetailCta: z.string(),
+    unitPlanTitle: z.string().min(1, "Title is required."),
+    unitPlanDescription: z.string().min(1, "Description is required."),
+    unitPlanViewInDetailCta: z.string().min(1, "CTA text is required."),
     unitPlans: z.array(unitPlanSchema),
 });
 
 export const propertyPricingSectionSchema = z.object({
-    pricingTitle: z.string(),
-    pricingDescription: z.string(),
+    pricingTitle: z.string().min(1, "Title is required."),
+    pricingDescription: z.string().min(1, "Description is required."),
     pricingImageUrl: urlSchema,
-    completeCostingDetailsLabel: z.string(),
-    pricingEnquireNowCta: z.string(),
+    completeCostingDetailsLabel: z.string().min(1, "Label is required."),
+    pricingEnquireNowCta: z.string().min(1, "CTA text is required."),
     pricingData: z.array(productPricingTableItemSchema),
 });
 
 export const propertySpecificationsSectionSchema = z.object({
-    specificationTitle: z.string(),
-    specificationDescription: z.string(),
-    specificationViewInDetailCta: z.string(),
+    specificationTitle: z.string().min(1, "Title is required."),
+    specificationDescription: z.string().min(1, "Description is required."),
+    specificationViewInDetailCta: z.string().min(1, "CTA text is required."),
     specificationImageUrl: urlSchema,
 });
 
 export const propertyLocationSectionSchema = z.object({
-    propertyLoactionTitle: z.string(),
-    propertyLoactionDescription: z.string(),
+    propertyLoactionTitle: z.string().min(1, "Title is required."),
+    propertyLoactionDescription: z.string().min(1, "Description is required."),
     propertyLoactionImageUrl: urlSchema,
     propertyLoactionInformation: z.array(propertyLocationInformationSchema),
 });
 
 export const masterPlanBannerFeaturesSchema = z.object({
-    title: z.string(),
-    description: z.string(),
+    title: z.string().min(1, "Title is required."),
+    description: z.string().min(1, "Description is required."),
 });
 
 export const propertyMasterPlanBannerSectionSchema = z.object({
-    bannerSectionHeader: z.string(),
-    bannerSectionCta: z.string(),
+    bannerSectionHeader: z.string().min(1, "Header is required."),
+    bannerSectionCta: z.string().min(1, "CTA text is required."),
     bannerSectionImageUrl: urlSchema,
-    bannerSectionDescription: z.string(),
+    bannerSectionDescription: z.string().min(1, "Description is required."),
     bannerSectionFeatures: z.array(masterPlanBannerFeaturesSchema),
 });
 
 export const towerDetailSchema = z.object({
-    towerRange: z.string(),
-    floors: z.string(),
-    specialFeature: z.string(),
+    towerRange: z.string().min(1, "Tower range is required."),
+    floors: z.string().min(1, "Floors information is required."),
+    specialFeature: z.string().min(1, "Special feature is required."),
 });
 
 export const amenityPointSchema = z.object({
-    description: z.string(),
+    description: z.string().min(1, "Description is required."),
 });
 
 export const unitSizeSchema = z.object({
-    type: z.string(),
-    sizeRange: z.string(),
+    type: z.string().min(1, "Type is required."),
+    sizeRange: z.string().min(1, "Size range is required."),
 });
 
 export const propertyMasterPlanTowersSectionSchema = z.object({
-    towerSectionHeading: z.string(),
-    towerSectionDescription: z.string(),
-    towerSectionAmenitiesHeading: z.string(),
-    towerSectionUnitSizesHeading: z.string(),
-    towerSectionUnitSizesSubHeading: z.string(),
-    towerSectionTableDescription: z.string(),
+    towerSectionHeading: z.string().min(1, "Heading is required."),
+    towerSectionDescription: z.string().min(1, "Description is required."),
+    towerSectionAmenitiesHeading: z.string().min(1, "Amenities heading is required."),
+    towerSectionUnitSizesHeading: z.string().min(1, "Unit sizes heading is required."),
+    towerSectionUnitSizesSubHeading: z.string().optional(),
+    towerSectionTableDescription: z.string().optional(),
     towerSectionSliderImages: z.array(cardSliderItemSchema),
     towerSectionTableDetails: z.array(towerDetailSchema),
     towerSectionAmenitiesPoints: z.array(amenityPointSchema),
@@ -248,13 +248,13 @@ export const propertyMasterPlanTowersSectionSchema = z.object({
 
 export const masterPlanPropsSchema = z.object({
     id: idSchema,
-    featuresSectionTittle: z.string(),
-    featuresSectionFeaturesHeading: z.string(),
-    featuresSectionAccessibilityHeading: z.string(),
-    featuresSectionDescription: z.string(),
+    featuresSectionTittle: z.string().min(1, "Title is required."),
+    featuresSectionFeaturesHeading: z.string().min(1, "Features heading is required."),
+    featuresSectionAccessibilityHeading: z.string().min(1, "Accessibility heading is required."),
+    featuresSectionDescription: z.string().min(1, "Description is required."),
     featuresSectionBannerImageUrl: urlSchema,
-    featuresSectionFeatureRichSpaces: z.array(z.string()),
-    featuresSectionAccessibilityLayoutStrategies: z.array(z.string()),
+    featuresSectionFeatureRichSpaces: z.array(z.string().min(1)),
+    featuresSectionAccessibilityLayoutStrategies: z.array(z.string().min(1)),
 });
 
 export const propertyMasterPlanFeaturesSectionSchema = z.object({
@@ -263,8 +263,8 @@ export const propertyMasterPlanFeaturesSectionSchema = z.object({
 
 export const floorOrUnitPlanSchema = z.object({
     id: idSchema,
-    title: z.string(),
-    description: z.string(),
+    title: z.string().min(1, "Title is required."),
+    description: z.string().min(1, "Description is required."),
     imageUrl: urlSchema,
     enquiryNowUrl: urlSchema,
     area: z.number().optional(),
@@ -273,69 +273,69 @@ export const floorOrUnitPlanSchema = z.object({
 });
 
 export const propertyFloorPlanSectionSchema = z.object({
-    floorPlanSectionHeading: z.string(),
-    floorPlanSectionDescription: z.string(),
+    floorPlanSectionHeading: z.string().min(1, "Heading is required."),
+    floorPlanSectionDescription: z.string().min(1, "Description is required."),
     floorPlanSectionPlans: z.array(floorOrUnitPlanSchema),
 });
 
 export const floorFeatureSchema = z.object({
     id: idSchema,
-    title: z.string(),
-    description: z.string(),
+    title: z.string().min(1, "Title is required."),
+    description: z.string().min(1, "Description is required."),
     imageUrl: urlSchema,
 });
 
 export const propertyDesignAndQualitySectionSchema = z.object({
-    designAndQualitySectionHeading: z.string(),
+    designAndQualitySectionHeading: z.string().min(1, "Heading is required."),
     designAndQualitySectionFeatures: z.array(floorFeatureSchema),
 });
 
 export const floorTableDataSchema = z.object({
-    configurationType: z.string(),
-    carpetAreaApprox: z.string(),
-    price: z.string(),
-    priceEnquireLabel: z.string(),
+    configurationType: z.string().min(1, "Configuration type is required."),
+    carpetAreaApprox: z.string().min(1, "Carpet area is required."),
+    price: z.string().min(1, "Price is required."),
+    priceEnquireLabel: z.string().min(1, "Enquire label is required."),
 });
 
 export const propertyUnitSizesSectionSchema = z.object({
-    unitSizesSectionHeading: z.string(),
+    unitSizesSectionHeading: z.string().min(1, "Heading is required."),
     unitSizesWithinTower: z.array(floorTableDataSchema),
 });
 
 export const highlightSchema = z.object({
-    name: z.string(),
-    description: z.string(),
+    name: z.string().min(1, "Name is required."),
+    description: z.string().min(1, "Description is required."),
     image: z.array(cardSliderItemSchema),
 });
 
 export const propertyUnitHighlightsSectionSchema = z.object({
-    highlightsSectionHeading: z.string(),
+    highlightsSectionHeading: z.string().min(1, "Heading is required."),
     highlightsSectionHighlights: z.array(highlightSchema),
 });
 
 export const propertyAmenitiesGallerySectionSchema = z.object({
     id: idSchema,
-    amenitiesGalleryTitle: z.string(),
-    amenitiesGalleryDescription: z.string(),
-    amenitiesGalleryAttractions: z.array(z.string()),
+    amenitiesGalleryTitle: z.string().min(1, "Title is required."),
+    amenitiesGalleryDescription: z.string().min(1, "Description is required."),
+    amenitiesGalleryAttractions: z.array(z.string().min(1)),
     amenitiesGallerySlideImages: z.array(cardSliderItemSchema),
-    amenitiesGallerySecondHeading: z.string(),
-    communityAmenities: z.array(z.string()),
+    amenitiesGallerySecondHeading: z.string().min(1, "Second heading is required."),
+    communityAmenities: z.array(z.string().min(1)),
     icon: z.any().optional(),
 });
 
 export const propertySpecificationsBannerSectionSchema = z.object({
-    specificationsBannerSectionTitle: z.string(),
-    specificationsBannerSectionDescription: z.string(),
+    specificationsBannerSectionTitle: z.string().min(1, "Title is required."),
+    specificationsBannerSectionDescription: z.string().min(1, "Description is required."),
     specificationsBannerSectionImageUrl: urlSchema,
     specificationsBannerSectionMobileImageUrl: urlSchema,
 });
 
 export const propertySpecificationsGalleryShowCaseAreaSchema = z.object({
     id: idSchema,
-    specificationsGalleryTitle: z.string(),
-    specificationsGalleryDescription: z.string(),
-    specificationsGalleryFeatures: z.array(z.string()),
+    specificationsGalleryTitle: z.string().min(1, "Title is required."),
+    specificationsGalleryDescription: z.string().min(1, "Description is required."),
+    specificationsGalleryFeatures: z.array(z.string().min(1)),
     specificationsGalleryImageUrl: urlSchema,
 });
 
@@ -343,15 +343,21 @@ const emptyStringToUndefined = z.literal('').transform(() => undefined);
 
 export const propertySchema = z.object({
     id: idSchema,
-    name: z.string().min(1, 'Property name is required'),
+    name: z.string().min(1, 'Property name is required.'),
     slug: idSchema,
-    city: z.string().min(1),
-    area: z.string().min(1),
+    city: z.string().min(1, "City is required."),
+    area: z.string().min(1, "Area or neighborhood is required."),
     type: z.enum(['apartment', 'villa', 'commercial']),
-    priceRange: z.object({ min: z.number(), max: z.number() }),
-    currency: z.string().min(1),
-    description: z.string().min(1),
-    shortDescription: z.string().min(1),
+    priceRange: z.object({ 
+        min: z.number().min(0, "Minimum price must be a positive number."), 
+        max: z.number().min(0, "Maximum price must be a positive number.") 
+    }).refine(data => data.max >= data.min, {
+        message: "Maximum price cannot be less than minimum price.",
+        path: ["max"],
+    }),
+    currency: z.string().min(1, "Currency code is required (e.g., INR)."),
+    description: z.string().min(1, "Full description is required."),
+    shortDescription: z.string().min(1, "Short description is required."),
     features: z.array(z.string()),
     amenities: z.array(z.string()),
     specifications: z.object({
@@ -365,16 +371,16 @@ export const propertySchema = z.object({
         parkingRatio: z.string().optional(),
     }),
     featuredImage: urlSchema,
-    alt: z.string().min(1, "Alt text is required."),
+    alt: z.string().min(1, "Alt text is required for the featured image."),
     masterPlan: urlSchema,
     floorPlans: z.array(floorPlanSchema),
-    address: z.string().min(1),
+    address: z.string().min(1, "Full address is required."),
     coordinates: z.object({ lat: z.number(), lng: z.number() }).optional(),
-    developer: z.string().min(1),
-    possession: z.string().min(1),
+    developer: z.string().min(1, "Developer name is required."),
+    possession: z.string().min(1, "Possession year is required."),
     status: z.enum(['upcoming', 'ongoing', 'ready']),
-    createdAt: z.string().min(1),
-    updatedAt: z.string().min(1),
+    createdAt: z.string().datetime("Invalid date format.").min(1),
+    updatedAt: z.string().datetime("Invalid date format.").min(1),
     propertyDetailPage: z.object({
         propertyBannerSection: propertyBannerSectionSchema,
         propertyLocationAndConnectivitySection: locationAndConnectivitySectionSchema,
