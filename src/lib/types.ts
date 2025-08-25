@@ -39,7 +39,7 @@ export interface FAQItem {
 }
 
 export interface FAQSectionProps {
-  mainHeading?: string;
+  mainHeading: string;
   subtitle?: string;
   contactButtonText?: string;
   faqItems: FAQItem[];
@@ -49,7 +49,7 @@ export interface FAQSectionProps {
 
 export interface Connectivity {
   name: string;
-  time: string;
+  time?: string;
   distance: string;
   icon?: string;
 }
@@ -129,14 +129,14 @@ export interface PropertyBannerSection {
   headingTwo: string;
   mainBannerImageUrl: string;
   primeLocationAt: string;
-  projectStatusTitle: string;
+  projectStatusTitle?: string;
   projectStatusValue: 'New Launch' | 'Pre-Launch' | 'Upcoming Launches';
   isReraCertified: boolean;
   reraLogo: string;
   reraCertifiedLabel: string;
   priceRangeLabel: string;
-  grabEarlyBirdAdvantages: string;
-  limitedSlotsAvailable: string;
+  grabEarlyBirdAdvantages?: string;
+  limitedSlotsAvailable?: string;
   brochureCta: string;
   bookVisitCta: string;
   viewAllPhotosCta: string;
@@ -242,8 +242,8 @@ export interface PropertyMasterPlanTowersSection {
   towerSectionDescription: string;
   towerSectionAmenitiesHeading: string;
   towerSectionUnitSizesHeading: string;
-  towerSectionUnitSizesSubHeading: string;
-  towerSectionTableDescription: string;
+  towerSectionUnitSizesSubHeading?: string;
+  towerSectionTableDescription?: string;
   towerSectionSliderImages: CardSliderItem[];
   towerSectionTableDetails: TowerDetail[];
   towerSectionAmenitiesPoints: AmenityPoint[];

@@ -16,7 +16,7 @@ const GenerateAltTextInputSchema = z.object({
   imageUrl: z
     .string()
     .describe(
-      'The URL of the image for which alt text needs to be generated.  Must be a data URI that include a MIME type and use Base64 encoding. Expected format: \'data:<mimetype>;base64,<encoded_data>\'.' // Added data URI requirement
+      "The URL of the image for which alt text needs to be generated. Must be a data URI that includes a MIME type and use Base64 encoding. Expected format: 'data:<mimetype>;base64,<encoded_data>'."
     ),
   propertyName: z.string().describe('The name of the property.'),
   propertyType: z.string().describe('The type of the property (e.g., apartment, villa).'),
@@ -44,7 +44,7 @@ Property Type: {{{propertyType}}}
 Property Area: {{{propertyArea}}}
 Image: {{media url=imageUrl}}
 
-Alt Text:`, // Added image tag
+Alt Text:`,
 });
 
 const generateAltTextFlow = ai.defineFlow(

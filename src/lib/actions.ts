@@ -18,9 +18,22 @@ export async function handleIdGeneration(input: GenerateUniqueIdInput) {
   }
 }
 
-export async function handleAltTextGeneration(input: GenerateAltTextInput) {
+async function imageUrlToDataUrl(url: string): Promise<string> {
+    const response = await fetch(url);
+    if (!response.ok) {
+        throw new Error(`Failed to fetch image: ${response.statusText}`);
+    }
+    const contentType = response.headers.get('content-type') || 'image/png';
+    const buffer = await response.arrayBuffer();
+    const base64 = Buffer.from(buffer).toString('base64');
+    return `data:${contentType};base64,${base64}`;
+}
+
+
+export async function handleAltTextGeneration(input: Omit<GenerateAltTextInput, 'imageUrl'> & { imageUrl: string }) {
   try {
-    const result = await generateAltTextFlow(input);
+    const dataUrl = await imageUrlToDataUrl(input.imageUrl);
+    const result = await generateAltTextFlow({ ...input, imageUrl: dataUrl });
     return { success: true, altText: result.altText };
   } catch (error) {
     console.error('Error generating alt text:', error);
