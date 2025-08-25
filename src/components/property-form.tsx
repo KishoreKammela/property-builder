@@ -7,7 +7,6 @@ import { Form } from '@/components/ui/form';
 import { Accordion } from '@/components/ui/accordion';
 import { propertySchema } from '@/lib/schema';
 import type { Property } from '@/lib/types';
-import { PROPERTIES_DATA } from '@/data/property-data';
 import { FormSection } from './form-section';
 import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
@@ -26,7 +25,41 @@ export function PropertyForm({ onFormSubmit }: PropertyFormProps) {
   const [isGeneratingAltText, setIsGeneratingAltText] = useState(false);
   const form = useForm<Property>({
     resolver: zodResolver(propertySchema),
-    defaultValues: PROPERTIES_DATA[0] as Property, // Use the first property as default
+    defaultValues: {
+        name: '',
+        id: '',
+        slug: '',
+        city: '',
+        area: '',
+        type: 'apartment',
+        status: 'upcoming',
+        description: '',
+        shortDescription: '',
+        priceRange: { min: 0, max: 0 },
+        currency: 'INR',
+        featuredImage: '',
+        alt: '',
+        features: [],
+        amenities: [],
+        specifications: {
+            totalFloors: 0,
+            totalUnits: 0,
+            constructionType: '',
+            launchDate: '',
+            possessionDate: '',
+            approvals: [],
+            elevators: 0,
+            parkingRatio: '',
+        },
+        floorPlans: [],
+        masterPlan: '',
+        address: '',
+        developer: '',
+        possession: '',
+        coordinates: { lat: 0, lng: 0 },
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+    },
     mode: 'onChange',
   });
 
@@ -201,7 +234,7 @@ export function PropertyForm({ onFormSubmit }: PropertyFormProps) {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Property Type</FormLabel>
-                      <Select onValuechange={field.onChange} defaultValue={field.value}>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Select property type" />
@@ -223,7 +256,7 @@ export function PropertyForm({ onFormSubmit }: PropertyFormProps) {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Status</FormLabel>
-                      <Select onValuechange={field.onChange} defaultValue={field.value}>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Select property status" />
@@ -339,6 +372,19 @@ export function PropertyForm({ onFormSubmit }: PropertyFormProps) {
                         </Button>
                     </div>
                 </div>
+                 <FormField
+                    control={form.control}
+                    name="masterPlan"
+                    render={({ field }) => (
+                        <FormItem>
+                        <FormLabel>Master Plan Image URL</FormLabel>
+                        <FormControl>
+                            <Input type="url" placeholder="https://example.com/master-plan.png" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                        </FormItem>
+                    )}
+                />
             </FormSection>
             <FormSection value="item-4" title="Features" description="List the key features of the property.">
                 {featureFields.map((field, index) => (
@@ -417,10 +463,63 @@ export function PropertyForm({ onFormSubmit }: PropertyFormProps) {
                         </FormItem>
                     )}
                     />
+                    <FormField control={form.control} name="specifications.launchDate" render={({ field }) => (<FormItem><FormLabel>Launch Date</FormLabel><FormControl><Input placeholder="e.g., 2024" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                    <FormField control={form.control} name="specifications.possessionDate" render={({ field }) => (<FormItem><FormLabel>Possession Date</FormLabel><FormControl><Input placeholder="e.g., 2026" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                    <FormField control={form.control} name="specifications.elevators" render={({ field }) => (<FormItem><FormLabel>Elevators</FormLabel><FormControl><Input type="number" placeholder="e.g., 2" {...field} onChange={e => field.onChange(Number(e.target.value))}/></FormControl><FormMessage /></FormItem>)} />
+                    <FormField control={form.control} name="specifications.parkingRatio" render={({ field }) => (<FormItem><FormLabel>Parking Ratio</FormLabel><FormControl><Input placeholder="e.g., 1:1" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                    <FormField
+                        control={form.control}
+                        name="specifications.approvals"
+                        render={({ field }) => (
+                            <FormItem className="md:col-span-2">
+                            <FormLabel>Approvals (comma-separated)</FormLabel>
+                            <FormControl>
+                                <Input 
+                                placeholder="e.g., RERA,BDA,BESCOM" 
+                                {...field} 
+                                value={Array.isArray(field.value) ? field.value.join(',') : ''}
+                                onChange={e => field.onChange(e.target.value.split(','))}
+                                />
+                            </FormControl>
+                            <FormMessage />
+                            </FormItem>
+                        )}
+                    />
                 </div>
             </FormSection>
+            
+            <FormSection value="item-7" title="Floor Plans" description="Add details for each floor plan available.">
+                {floorPlanFields.map((field, index) => (
+                    <div key={field.id} className="p-4 border rounded-md space-y-4">
+                        <div className="flex justify-between items-center">
+                            <h4 className="font-semibold">Floor Plan {index + 1}</h4>
+                            <Button type="button" variant="destructive" size="icon" onClick={() => removeFloorPlan(index)}><Trash /></Button>
+                        </div>
+                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <FormField control={form.control} name={`floorPlans.${index}.id`} render={({ field }) => ( <FormItem><FormLabel>ID</FormLabel><FormControl><Input placeholder="floorplan-1" {...field} /></FormControl><FormMessage /></FormItem> )} />
+                            <FormField control={form.control} name={`floorPlans.${index}.name`} render={({ field }) => ( <FormItem><FormLabel>Name</FormLabel><FormControl><Input placeholder="2BHK Premium" {...field} /></FormControl><FormMessage /></FormItem> )} />
+                            <FormField control={form.control} name={`floorPlans.${index}.type`} render={({ field }) => ( <FormItem><FormLabel>Type</FormLabel><FormControl><Input placeholder="apartment" {...field} /></FormControl><FormMessage /></FormItem> )} />
+                            <FormField control={form.control} name={`floorPlans.${index}.area`} render={({ field }) => ( <FormItem><FormLabel>Area (sqft)</FormLabel><FormControl><Input type="number" placeholder="1200" {...field} onChange={e => field.onChange(Number(e.target.value))}/></FormControl><FormMessage /></FormItem> )} />
+                            <FormField control={form.control} name={`floorPlans.${index}.bedrooms`} render={({ field }) => ( <FormItem><FormLabel>Bedrooms</FormLabel><FormControl><Input type="number" placeholder="2" {...field} onChange={e => field.onChange(Number(e.target.value))}/></FormControl><FormMessage /></FormItem> )} />
+                            <FormField control={form.control} name={`floorPlans.${index}.bathrooms`} render={({ field }) => ( <FormItem><FormLabel>Bathrooms</FormLabel><FormControl><Input type="number" placeholder="2" {...field} onChange={e => field.onChange(Number(e.target.value))}/></FormControl><FormMessage /></FormItem> )} />
+                            <FormField control={form.control} name={`floorPlans.${index}.price`} render={({ field }) => ( <FormItem><FormLabel>Price</FormLabel><FormControl><Input type="number" placeholder="75000000" {...field} onChange={e => field.onChange(Number(e.target.value))}/></FormControl><FormMessage /></FormItem> )} />
+                            <FormField control={form.control} name={`floorPlans.${index}.image`} render={({ field }) => ( <FormItem className="md:col-span-2"><FormLabel>Image URL</FormLabel><FormControl><Input type="url" placeholder="https://example.com/floorplan.png" {...field} /></FormControl><FormMessage /></FormItem> )} />
+                            <FormField control={form.control} name={`floorPlans.${index}.description`} render={({ field }) => ( <FormItem className="md:col-span-2"><FormLabel>Description</FormLabel><FormControl><Textarea placeholder="Floor plan description" {...field} /></FormControl><FormMessage /></FormItem> )} />
+                        </div>
+                    </div>
+                ))}
+                <Button type="button" variant="outline" onClick={() => appendFloorPlan({ id: `floorplan-${floorPlanFields.length + 1}`, name: '', type: 'apartment', area: 0, bedrooms: 0, bathrooms: 0, price: 0, image: '', description: ''})}>Add Floor Plan</Button>
+            </FormSection>
 
-            {/* We will add the other sections later */}
+            <FormSection value="item-8" title="Location and Developer" description="Provide location and developer details.">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <FormField control={form.control} name="address" render={({ field }) => ( <FormItem className="md:col-span-2"><FormLabel>Address</FormLabel><FormControl><Textarea placeholder="Full property address" {...field} /></FormControl><FormMessage /></FormItem> )} />
+                    <FormField control={form.control} name="coordinates.lat" render={({ field }) => ( <FormItem><FormLabel>Latitude</FormLabel><FormControl><Input type="number" placeholder="12.9715987" {...field} onChange={e => field.onChange(Number(e.target.value))}/></FormControl><FormMessage /></FormItem> )} />
+                    <FormField control={form.control} name="coordinates.lng" render={({ field }) => ( <FormItem><FormLabel>Longitude</FormLabel><FormControl><Input type="number" placeholder="77.594566" {...field} onChange={e => field.onChange(Number(e.target.value))}/></FormControl><FormMessage /></FormItem> )} />
+                    <FormField control={form.control} name="developer" render={({ field }) => ( <FormItem><FormLabel>Developer</FormLabel><FormControl><Input placeholder="e.g., Sattva Group" {...field} /></FormControl><FormMessage /></FormItem> )} />
+                    <FormField control={form.control} name="possession" render={({ field }) => ( <FormItem><FormLabel>Possession Year</FormLabel><FormControl><Input placeholder="e.g., 2026" {...field} /></FormControl><FormMessage /></FormItem> )} />
+                </div>
+            </FormSection>
             
           </Accordion>
 

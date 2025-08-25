@@ -371,7 +371,7 @@ export interface Property {
   createdAt: string;
   updatedAt: string;
 
-  propertyDetailPage: {
+  propertyDetailPage?: {
     propertyBannerSection: PropertyBannerSection;
     propertyLocationAndConnectivitySection: PropertyLocationAndConnectivitySection;
     propertyOverviewSection: PropertyOverviewSection;
@@ -384,25 +384,25 @@ export interface Property {
     propertyLocationSection: PropertyLocationSection;
     propertyDetailsFAQSection: PropertyDetailsFAQSection;
   };
-  propertyMasterPlanDetailPage: {
+  propertyMasterPlanDetailPage?: {
     propertyMasterPlanBannerSection: PropertyMasterPlanBannerSection;
     propertyMasterPlanTowersSection: PropertyMasterPlanTowersSection;
     propertyMasterPlanFeaturesSection: PropertyMasterPlanFeaturesSection;
     propertyMasterPlanFAQSection: FAQSectionProps;
   };
-  propertyUnitPlanDetailPage: {
+  propertyUnitPlanDetailPage?: {
     propertyFloorPlanSection: PropertyFloorPlanSection;
     propertyDesignAndQualitySection: PropertyDesignAndQualitySection;
     propertyUnitSizesSection: PropertyUnitSizesSection;
     propertyUnitHighlightsSection: PropertyUnitHighlightsSection;
     propertyUnitPlanFAQSection: FAQSectionProps;
   };
-  propertyAmenitiesDetailPage: {
+  propertyAmenitiesDetailPage?: {
     propertyAmenitiesAccordionSection: AmenitiesAccordionSectionProps;
     propertyAmenitiesGalleryShowCaseArea: PropertyAmenitiesGallerySection[];
     propertyAmenitiesFAQSection: FAQSectionProps;
   };
-  propertySpecificationsDetailPage: {
+  propertySpecificationsDetailPage?: {
     propertySpecificationsBannerSection: PropertySpecificationsBannerSection;
     propertySpecificationsGalleryShowCaseArea: PropertySpecificationsGalleryShowCaseArea[];
     propertySpecificationFAQSection: FAQSectionProps;

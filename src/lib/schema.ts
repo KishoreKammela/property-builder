@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
-const idSchema = z.string().regex(/^[a-z-]+$/, {
-  message: 'ID must only contain lowercase letters and hyphens.',
+const idSchema = z.string().regex(/^[a-z0-9-]+$/, {
+  message: 'ID must only contain lowercase letters, numbers, and hyphens.',
 }).min(1, 'ID is required.');
 
 const urlSchema = z.string().url("Invalid URL format.").min(1, "URL is required.");
@@ -185,7 +185,7 @@ export const propertyUnitPlanSectionSchema = z.object({
 export const propertyPricingSectionSchema = z.object({
     pricingTitle: z.string(),
     pricingDescription: z.string(),
-pricingImageUrl: urlSchema,
+    pricingImageUrl: urlSchema,
     completeCostingDetailsLabel: z.string(),
     pricingEnquireNowCta: z.string(),
     pricingData: z.array(productPricingTableItemSchema),
@@ -337,6 +337,8 @@ export const propertySpecificationsGalleryShowCaseAreaSchema = z.object({
     specificationsGalleryImageUrl: urlSchema,
 });
 
+const emptyStringToUndefined = z.literal('').transform(() => undefined);
+
 export const propertySchema = z.object({
     id: idSchema,
     name: z.string().min(1, 'Property name is required'),
@@ -383,28 +385,28 @@ export const propertySchema = z.object({
         propertySpecificationsSection: propertySpecificationsSectionSchema,
         propertyLocationSection: propertyLocationSectionSchema,
         propertyDetailsFAQSection: faqSectionSchema,
-    }),
+    }).optional(),
     propertyMasterPlanDetailPage: z.object({
         propertyMasterPlanBannerSection: propertyMasterPlanBannerSectionSchema,
         propertyMasterPlanTowersSection: propertyMasterPlanTowersSectionSchema,
         propertyMasterPlanFeaturesSection: propertyMasterPlanFeaturesSectionSchema,
         propertyMasterPlanFAQSection: faqSectionSchema,
-    }),
+    }).optional(),
     propertyUnitPlanDetailPage: z.object({
         propertyFloorPlanSection: propertyFloorPlanSectionSchema,
         propertyDesignAndQualitySection: propertyDesignAndQualitySectionSchema,
         propertyUnitSizesSection: propertyUnitSizesSectionSchema,
         propertyUnitHighlightsSection: propertyUnitHighlightsSectionSchema,
         propertyUnitPlanFAQSection: faqSectionSchema,
-    }),
+    }).optional(),
     propertyAmenitiesDetailPage: z.object({
         propertyAmenitiesAccordionSection: amenitiesAccordionSectionSchema,
         propertyAmenitiesGalleryShowCaseArea: z.array(propertyAmenitiesGallerySectionSchema),
         propertyAmenitiesFAQSection: faqSectionSchema,
-    }),
+    }).optional(),
     propertySpecificationsDetailPage: z.object({
         propertySpecificationsBannerSection: propertySpecificationsBannerSectionSchema,
         propertySpecificationsGalleryShowCaseArea: z.array(propertySpecificationsGalleryShowCaseAreaSchema),
         propertySpecificationFAQSection: faqSectionSchema,
-    }),
+    }).optional(),
 });
