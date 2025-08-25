@@ -17,7 +17,7 @@ import { Switch } from './ui/switch';
 import { ImageUpload } from './image-upload';
 import { toast } from '@/hooks/use-toast';
 import { handleIdGeneration } from '@/lib/actions';
-import { Sparkles } from 'lucide-react';
+import { Sparkles, Trash } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 
 interface PropertyFormProps {
@@ -87,7 +87,7 @@ export function PropertyForm({ onFormSubmit }: PropertyFormProps) {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <Accordion type="single" collapsible className="w-full" defaultValue="item-1">
-            <FormSection value="item-1" title="Basic Property Information">
+            <FormSection value="item-1" title="Basic Property Information" description="Provide the main details of the property.">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                  <FormField
                   control={form.control}
@@ -161,17 +161,204 @@ export function PropertyForm({ onFormSubmit }: PropertyFormProps) {
                     </FormItem>
                   )}
                 />
+                <FormField
+                  control={form.control}
+                  name="type"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Property Type</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select property type" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="apartment">Apartment</SelectItem>
+                          <SelectItem value="villa">Villa</SelectItem>
+                          <SelectItem value="commercial">Commercial</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                 <FormField
+                  control={form.control}
+                  name="status"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Status</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select property status" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="upcoming">Upcoming</SelectItem>
+                          <SelectItem value="ongoing">Ongoing</SelectItem>
+                          <SelectItem value="ready">Ready</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </div>
-
-               <ImageUpload
+            </FormSection>
+             <FormSection value="item-2" title="Description" description="Add descriptive content for the property.">
+                 <FormField
+                    control={form.control}
+                    name="description"
+                    render={({ field }) => (
+                        <FormItem>
+                        <FormLabel>Full Description</FormLabel>
+                        <FormControl>
+                            <Textarea placeholder="Provide a detailed description of the property." {...field} rows={5}/>
+                        </FormControl>
+                        <FormMessage />
+                        </FormItem>
+                    )}
+                    />
+                <FormField
+                    control={form.control}
+                    name="shortDescription"
+                    render={({ field }) => (
+                        <FormItem>
+                        <FormLabel>Short Description</FormLabel>
+                        <FormControl>
+                            <Textarea placeholder="Provide a brief summary of the property." {...field} rows={2}/>
+                        </FormControl>
+                        <FormMessage />
+                        </FormItem>
+                    )}
+                    />
+            </FormSection>
+            <FormSection value="item-3" title="Pricing and Media" description="Set the price and upload images.">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <FormField
+                    control={form.control}
+                    name="priceRange.min"
+                    render={({ field }) => (
+                        <FormItem>
+                        <FormLabel>Min Price</FormLabel>
+                        <FormControl><Input type="number" placeholder="e.g., 5000000" {...field} onChange={e => field.onChange(Number(e.target.value))}/></FormControl>
+                        <FormMessage />
+                        </FormItem>
+                    )}
+                    />
+                    <FormField
+                    control={form.control}
+                    name="priceRange.max"
+                    render={({ field }) => (
+                        <FormItem>
+                        <FormLabel>Max Price</FormLabel>
+                        <FormControl><Input type="number" placeholder="e.g., 9000000" {...field} onChange={e => field.onChange(Number(e.target.value))}/></FormControl>
+                        <FormMessage />
+                        </FormItem>
+                    )}
+                    />
+                    <FormField
+                    control={form.control}
+                    name="currency"
+                    render={({ field }) => (
+                        <FormItem className="md:col-span-2">
+                        <FormLabel>Currency</FormLabel>
+                        <FormControl><Input placeholder="e.g., INR" {...field} /></FormControl>
+                        <FormMessage />
+                        </FormItem>
+                    )}
+                    />
+                </div>
+                 <ImageUpload
                   form={form}
                   name="featuredImage"
                   label="Featured Image"
                   altField="alt" 
                 />
             </FormSection>
-            
-            {/* Add more sections as Accordion Items here later */}
+            <FormSection value="item-4" title="Features" description="List the key features of the property.">
+                {featureFields.map((field, index) => (
+                    <div key={field.id} className="flex items-center gap-2">
+                    <FormField
+                        control={form.control}
+                        name={`features.${index}`}
+                        render={({ field }) => (
+                        <FormItem className="flex-grow">
+                            <FormControl>
+                            <Input placeholder={`Feature ${index + 1}`} {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                        )}
+                    />
+                    <Button type="button" variant="destructive" size="icon" onClick={() => removeFeature(index)}><Trash /></Button>
+                    </div>
+                ))}
+                <Button type="button" variant="outline" onClick={() => appendFeature('')}>Add Feature</Button>
+            </FormSection>
+
+            <FormSection value="item-5" title="Amenities" description="List the amenities available.">
+                {amenityFields.map((field, index) => (
+                    <div key={field.id} className="flex items-center gap-2">
+                    <FormField
+                        control={form.control}
+                        name={`amenities.${index}`}
+                        render={({ field }) => (
+                        <FormItem className="flex-grow">
+                            <FormControl>
+                            <Input placeholder={`Amenity ${index + 1}`} {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                        )}
+                    />
+                    <Button type="button" variant="destructive" size="icon" onClick={() => removeAmenity(index)}><Trash /></Button>
+                    </div>
+                ))}
+                <Button type="button" variant="outline" onClick={() => appendAmenity('')}>Add Amenity</Button>
+            </FormSection>
+
+            <FormSection value="item-6" title="Specifications" description="Provide technical specifications.">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <FormField
+                    control={form.control}
+                    name="specifications.totalFloors"
+                    render={({ field }) => (
+                        <FormItem>
+                        <FormLabel>Total Floors</FormLabel>
+                        <FormControl><Input type="number" placeholder="e.g., 15" {...field} onChange={e => field.onChange(Number(e.target.value))}/></FormControl>
+                        <FormMessage />
+                        </FormItem>
+                    )}
+                    />
+                    <FormField
+                    control={form.control}
+                    name="specifications.totalUnits"
+                    render={({ field }) => (
+                        <FormItem>
+                        <FormLabel>Total Units</FormLabel>
+                        <FormControl><Input type="number" placeholder="e.g., 120" {...field} onChange={e => field.onChange(Number(e.target.value))}/></FormControl>
+                        <FormMessage />
+                        </FormItem>
+                    )}
+                    />
+                    <FormField
+                    control={form.control}
+                    name="specifications.constructionType"
+                    render={({ field }) => (
+                        <FormItem className="md:col-span-2">
+                        <FormLabel>Construction Type</FormLabel>
+                        <FormControl><Input placeholder="e.g., RCC Framed Structure" {...field} /></FormControl>
+                        <FormMessage />
+                        </FormItem>
+                    )}
+                    />
+                </div>
+            </FormSection>
+
+            {/* We will add the other sections later */}
             
           </Accordion>
 
@@ -183,3 +370,5 @@ export function PropertyForm({ onFormSubmit }: PropertyFormProps) {
     </FormProvider>
   );
 }
+
+    
