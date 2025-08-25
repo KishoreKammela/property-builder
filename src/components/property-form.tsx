@@ -21,6 +21,8 @@ import { FloorPlansSection } from './form-parts/floor-plans-section';
 import { LocationDeveloperSection } from './form-parts/location-developer-section';
 import { PropertyDetailPageSection } from './form-parts/property-detail-page-section';
 import { PropertyMasterPlanDetailPageSection } from './form-parts/property-master-plan-detail-page-section';
+import { PropertyUnitPlanDetailPageSection } from './form-parts/property-unit-plan-detail-page-section';
+
 
 interface PropertyFormProps {
   onFormSubmit: (data: Property) => void;
@@ -187,6 +189,31 @@ export function PropertyForm({ onFormSubmit }: PropertyFormProps) {
                 contactButtonText: 'Contact us',
                 faqItems: [],
             },
+        },
+        propertyUnitPlanDetailPage: {
+            propertyFloorPlanSection: {
+                floorPlanSectionHeading: '',
+                floorPlanSectionDescription: '',
+                floorPlanSectionPlans: [],
+            },
+            propertyDesignAndQualitySection: {
+                designAndQualitySectionHeading: '',
+                designAndQualitySectionFeatures: [],
+            },
+            propertyUnitSizesSection: {
+                unitSizesSectionHeading: '',
+                unitSizesWithinTower: [],
+            },
+            propertyUnitHighlightsSection: {
+                highlightsSectionHeading: '',
+                highlightsSectionHighlights: [],
+            },
+            propertyUnitPlanFAQSection: {
+                mainHeading: 'Frequently asked questions',
+                subtitle: "Didn't find the question?",
+                contactButtonText: 'Contact us',
+                faqItems: [],
+            },
         }
     },
     mode: 'onChange',
@@ -282,6 +309,7 @@ export function PropertyForm({ onFormSubmit }: PropertyFormProps) {
             <LocationDeveloperSection />
             <PropertyDetailPageSection generateId={generateId} />
             <PropertyMasterPlanDetailPageSection generateId={generateId} />
+            <PropertyUnitPlanDetailPageSection generateId={generateId} />
           </Accordion>
 
           <Button type="submit" className="w-full bg-accent hover:bg-accent/90" size="lg">
