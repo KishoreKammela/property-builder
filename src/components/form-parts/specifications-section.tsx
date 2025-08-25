@@ -52,11 +52,11 @@ export function SpecificationsSection() {
                   <FormItem className="md:col-span-2">
                   <FormLabel>Approvals (comma-separated)</FormLabel>
                   <FormControl>
-                      <Input 
-                      placeholder="e.g., RERA,BDA,BESCOM" 
-                      {...field} 
+                      <Input
+                      placeholder="e.g., RERA,BDA,BESCOM"
+                      {...field}
                       value={Array.isArray(field.value) ? field.value.join(',') : ''}
-                      onChange={e => field.onChange(e.target.value.split(','))}
+                      onChange={e => field.onChange(e.target.value.split(',').map(s => s.trim()).filter(Boolean))}
                       />
                   </FormControl>
                   <FormMessage />
