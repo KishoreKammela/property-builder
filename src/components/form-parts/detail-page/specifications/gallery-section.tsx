@@ -43,29 +43,31 @@ export function SpecificationsGallerySection({ generateId }: SpecificationsGalle
 
 function StringArrayField({ name, label }: { name: string, label: string }) {
     const { control } = useFormContext();
-    const { fields, append, remove } = useFieldArray({ control, name });
   
     return (
       <div className="space-y-2">
         <h5 className="font-medium">{label}</h5>
-        {fields.map((field, index) => (
-          <div key={field.id} className="flex items-center gap-2">
-            <FormField
-              control={control}
-              name={`${name}.${index}`}
-              render={({ field }) => (
-                <FormItem className="flex-grow">
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button type="button" variant="destructive" size="icon" onClick={() => remove(index)}><Trash /></Button>
-          </div>
-        ))}
-        <Button type="button" variant="outline" onClick={() => append('')}>Add Item</Button>
+        <FormField
+          control={control}
+          name={name}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="sr-only">{label}</FormLabel>
+              <FormControl>
+                <Textarea
+                  placeholder="Enter items separated by commas"
+                  {...field}
+                  value={Array.isArray(field.value) ? field.value.join(', ') : ''}
+                  onChange={e => {
+                    const values = e.target.value.split(',').map(s => s.trim()).filter(Boolean);
+                    field.onChange(values);
+                  }}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
       </div>
     );
-}
+  }

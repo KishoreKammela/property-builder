@@ -34,8 +34,8 @@ export function MasterPlanFeaturesSection({ generateId }: MasterPlanFeaturesSect
                 <FormField control={control} name={`propertyMasterPlanDetailPage.propertyMasterPlanFeaturesSection.features.${index}.featuresSectionDescription`} render={({ field }) => (<FormItem><FormLabel>Description</FormLabel><FormControl><Textarea {...field} /></FormControl><FormMessage /></FormItem>)} />
                 <FormField control={control} name={`propertyMasterPlanDetailPage.propertyMasterPlanFeaturesSection.features.${index}.featuresSectionBannerImageUrl`} render={({ field }) => (<FormItem><FormLabel>Banner Image URL</FormLabel><FormControl><Input type="url" {...field} /></FormControl><FormMessage /></FormItem>)} />
 
-                <FeaturesArray name={`propertyMasterPlanDetailPage.propertyMasterPlanFeaturesSection.features.${index}.featuresSectionFeatureRichSpaces`} label="Feature Rich Spaces" />
-                <FeaturesArray name={`propertyMasterPlanDetailPage.propertyMasterPlanFeaturesSection.features.${index}.featuresSectionAccessibilityLayoutStrategies`} label="Accessibility Layout Strategies" />
+                <StringArrayField name={`propertyMasterPlanDetailPage.propertyMasterPlanFeaturesSection.features.${index}.featuresSectionFeatureRichSpaces`} label="Feature Rich Spaces" />
+                <StringArrayField name={`propertyMasterPlanDetailPage.propertyMasterPlanFeaturesSection.features.${index}.featuresSectionAccessibilityLayoutStrategies`} label="Accessibility Layout Strategies" />
             </div>
         ))}
         <Button type="button" variant="outline" onClick={() => append({ 
@@ -53,34 +53,33 @@ export function MasterPlanFeaturesSection({ generateId }: MasterPlanFeaturesSect
   );
 }
 
-function FeaturesArray({ name, label }: { name: string, label: string }) {
+function StringArrayField({ name, label }: { name: string, label: string }) {
     const { control } = useFormContext();
-    const { fields, append, remove } = useFieldArray({
-      control,
-      name,
-    });
   
     return (
       <div className="space-y-2">
         <h5 className="font-medium">{label}</h5>
-        {fields.map((field, index) => (
-          <div key={field.id} className="flex items-center gap-2">
-            <FormField
-              control={control}
-              name={`${name}.${index}`}
-              render={({ field }) => (
-                <FormItem className="flex-grow">
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button type="button" variant="destructive" size="icon" onClick={() => remove(index)}><Trash /></Button>
-          </div>
-        ))}
-        <Button type="button" variant="outline" onClick={() => append('')}>Add Item</Button>
+        <FormField
+          control={control}
+          name={name}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="sr-only">{label}</FormLabel>
+              <FormControl>
+                <Textarea
+                  placeholder="Enter items separated by commas"
+                  {...field}
+                  value={Array.isArray(field.value) ? field.value.join(', ') : ''}
+                  onChange={e => {
+                    const values = e.target.value.split(',').map(s => s.trim()).filter(Boolean);
+                    field.onChange(values);
+                  }}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
       </div>
     );
   }
