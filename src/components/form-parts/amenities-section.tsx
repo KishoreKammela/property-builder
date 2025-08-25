@@ -1,34 +1,35 @@
-import { FormField, FormItem, FormControl, FormMessage } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
+import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
+import { Textarea } from '@/components/ui/textarea';
 import { FormSection } from '@/components/form-section';
-import { Trash } from 'lucide-react';
-import { useFormContext, useFieldArray } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 
 export function AmenitiesSection() {
   const { control } = useFormContext();
-  const { fields, append, remove } = useFieldArray({ control, name: "amenities" });
 
   return (
-    <FormSection value="item-5" title="Amenities" description="List the amenities available.">
-      {fields.map((field, index) => (
-        <div key={field.id} className="flex items-center gap-2">
-          <FormField
-            control={control}
-            name={`amenities.${index}`}
-            render={({ field }) => (
-              <FormItem className="flex-grow">
-                <FormControl>
-                  <Input placeholder={`Amenity ${index + 1}`} {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <Button type="button" variant="destructive" size="icon" onClick={() => remove(index)}><Trash /></Button>
-        </div>
-      ))}
-      <Button type="button" variant="outline" onClick={() => append('')}>Add Amenity</Button>
+    <FormSection value="item-5" title="Amenities" description="List the amenities available (comma-separated).">
+      <FormField
+        control={control}
+        name="amenities"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel className="sr-only">Amenities</FormLabel>
+            <FormControl>
+              <Textarea
+                placeholder="e.g., Club House, Swimming Pool, Gymnasium"
+                {...field}
+                value={Array.isArray(field.value) ? field.value.join(', ') : ''}
+                onChange={e => {
+                  const values = e.target.value.split(',').map(s => s.trim()).filter(Boolean);
+                  field.onChange(values);
+                }}
+                rows={4}
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
     </FormSection>
   );
 }
