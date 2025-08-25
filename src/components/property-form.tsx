@@ -40,8 +40,8 @@ export function PropertyForm({ onFormSubmit }: PropertyFormProps) {
         slug: '',
         city: '',
         area: '',
-        type: 'apartment',
-        status: 'upcoming',
+        type: undefined,
+        status: undefined,
         description: '',
         shortDescription: '',
         priceRange: { min: 0, max: 0 },
@@ -75,7 +75,7 @@ export function PropertyForm({ onFormSubmit }: PropertyFormProps) {
                 mainBannerImageUrl: '',
                 primeLocationAt: '',
                 projectStatusTitle: 'Project status: ',
-                projectStatusValue: 'New Launch',
+                projectStatusValue: undefined,
                 isReraCertified: true,
                 reraLogo: '',
                 reraCertifiedLabel: 'RERA Certified',
@@ -92,7 +92,7 @@ export function PropertyForm({ onFormSubmit }: PropertyFormProps) {
                 locationText: '',
                 locationImage: '',
                 locationLinkText: 'View in detail',
-                locationLink: 'https://maps.google.com',
+                locationLink: '',
                 locationTabs: [],
             },
             propertyOverviewSection: {
@@ -116,6 +116,8 @@ export function PropertyForm({ onFormSubmit }: PropertyFormProps) {
                 subtitle: '',
                 amenitiesAccordionItems: [],
                 cardSlideItems: [],
+                footerDescription: '',
+                contactButtonText: ''
             },
             propertyHighlightsSection: {
                 propertyHighlightsTitle: '',
@@ -330,7 +332,7 @@ export function PropertyForm({ onFormSubmit }: PropertyFormProps) {
     <FormProvider {...form}>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          <Accordion type="single" collapsible className="w-full" defaultValue="item-1">
+          <Accordion type="multiple" className="w-full space-y-4" defaultValue={['item-1']}>
             <BasicInfoSection generateId={generateId} />
             <DescriptionSection />
             <PricingMediaSection 
@@ -349,8 +351,8 @@ export function PropertyForm({ onFormSubmit }: PropertyFormProps) {
             <PropertySpecificationsDetailPageSection generateId={generateId} />
           </Accordion>
 
-          <Button type="submit" className="w-full bg-accent hover:bg-accent/90" size="lg">
-            Generate and Validate JSON
+          <Button type="submit" className="w-full bg-accent hover:bg-accent/90 text-accent-foreground" size="lg">
+            Generate and Validate Data
           </Button>
         </form>
       </Form>

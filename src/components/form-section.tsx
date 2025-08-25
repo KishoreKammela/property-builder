@@ -9,15 +9,15 @@ interface FormSectionProps {
 
 export function FormSection({ value, title, description, children }: FormSectionProps) {
   return (
-    <AccordionItem value={value}>
-      <AccordionTrigger className="hover:no-underline">
+    <AccordionItem value={value} className="border-b-0 rounded-lg overflow-hidden bg-card shadow-sm">
+      <AccordionTrigger className="p-6 hover:no-underline bg-muted/50">
         <div className="text-left">
           <h3 className="text-lg font-medium">{title}</h3>
-          {description && <p className="text-sm text-muted-foreground">{description}</p>}
+          {description && <p className="text-sm text-muted-foreground mt-1">{description}</p>}
         </div>
       </AccordionTrigger>
-      <AccordionContent>
-        <div className="p-4 border-l-2 border-primary/20 bg-muted/20 rounded-r-lg space-y-6">
+      <AccordionContent className="p-6 pt-2">
+        <div className="space-y-6">
           {children}
         </div>
       </AccordionContent>
