@@ -7,8 +7,8 @@ import { cn } from '@/lib/utils';
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 
 export const metadata: Metadata = {
-  title: 'Content Form Builder',
-  description: 'A form to build content for property listings with AI-powered features.',
+  title: 'Property Content Generator',
+  description: 'An intelligent form to generate structured content for property listings with AI-powered features.',
 };
 
 export default function RootLayout({

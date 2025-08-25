@@ -16,9 +16,9 @@ export default function Home() {
   return (
     <main className="container mx-auto p-4 md:p-8">
       <header className="mb-8 text-center">
-        <h1 className="text-4xl font-bold font-headline text-primary">Content Form Builder</h1>
+        <h1 className="text-4xl font-bold font-headline text-primary">Property Content Generator</h1>
         <p className="text-muted-foreground mt-2">
-          Fill in the property details below to generate the content structure.
+          Fill in the property details below to generate the structured content for your listings.
         </p>
       </header>
       <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-12">
