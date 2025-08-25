@@ -22,6 +22,7 @@ import { LocationDeveloperSection } from './form-parts/location-developer-sectio
 import { PropertyDetailPageSection } from './form-parts/property-detail-page-section';
 import { PropertyMasterPlanDetailPageSection } from './form-parts/property-master-plan-detail-page-section';
 import { PropertyUnitPlanDetailPageSection } from './form-parts/property-unit-plan-detail-page-section';
+import { PropertyAmenitiesDetailPageSection } from './form-parts/property-amenities-detail-page-section';
 
 
 interface PropertyFormProps {
@@ -214,7 +215,25 @@ export function PropertyForm({ onFormSubmit }: PropertyFormProps) {
                 contactButtonText: 'Contact us',
                 faqItems: [],
             },
-        }
+        },
+        propertyAmenitiesDetailPage: {
+            propertyAmenitiesAccordionSection: {
+                variant: 'light',
+                mainHeading: '',
+                subtitle: '',
+                footerDescription: '',
+                contactButtonText: '',
+                amenitiesAccordionItems: [],
+                cardSlideItems: [],
+            },
+            propertyAmenitiesGalleryShowCaseArea: [],
+            propertyAmenitiesFAQSection: {
+                mainHeading: 'Frequently asked questions',
+                subtitle: "Didn't find the question?",
+                contactButtonText: 'Contact us',
+                faqItems: [],
+            },
+        },
     },
     mode: 'onChange',
   });
@@ -310,6 +329,7 @@ export function PropertyForm({ onFormSubmit }: PropertyFormProps) {
             <PropertyDetailPageSection generateId={generateId} />
             <PropertyMasterPlanDetailPageSection generateId={generateId} />
             <PropertyUnitPlanDetailPageSection generateId={generateId} />
+            <PropertyAmenitiesDetailPageSection generateId={generateId} />
           </Accordion>
 
           <Button type="submit" className="w-full bg-accent hover:bg-accent/90" size="lg">
