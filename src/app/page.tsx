@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { PropertyForm } from '@/components/property-form';
@@ -46,8 +46,9 @@ export default function Home() {
         developer: '',
         possession: '',
         coordinates: { lat: 0, lng: 0 },
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
+        // Dates will be set in useEffect to avoid hydration mismatch
+        createdAt: '',
+        updatedAt: '',
         propertyDetailPage: {
             propertyBannerSection: {
                 headingOne: '',
@@ -239,6 +240,13 @@ export default function Home() {
   const [generatedJson, setGeneratedJson] = useState<Property | null>(null);
 
   const watchedData = form.watch();
+
+  useEffect(() => {
+    const now = new Date().toISOString();
+    form.setValue('createdAt', now);
+    form.setValue('updatedAt', now);
+  }, [form]);
+
 
   const handleFormSubmit = (data: Property) => {
     setGeneratedJson(data);
