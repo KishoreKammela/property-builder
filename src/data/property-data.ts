@@ -46,6 +46,7 @@ export const PROPERTIES_DATA: Property[] = [
       parkingRatio: '1:1',
     },
     featuredImage: 'https://placehold.co/800x600.png',
+    alt: 'A beautiful modern apartment complex at dusk.',
     masterPlan: 'https://placehold.co/800x800.png',
     floorPlans: [
       {

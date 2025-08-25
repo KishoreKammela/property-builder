@@ -13,18 +13,17 @@ import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
 import { FormField, FormItem, FormLabel, FormControl, FormMessage, FormDescription } from './ui/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
-import { Switch } from './ui/switch';
-import { ImageUpload } from './image-upload';
-import { toast } from '@/hooks/use-toast';
-import { handleIdGeneration } from '@/lib/actions';
-import { Sparkles, Trash } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
+import { useToast } from '@/hooks/use-toast';
+import { handleAltTextGeneration, handleIdGeneration } from '@/lib/actions';
+import { Loader2, Sparkles, Trash } from 'lucide-react';
+import { useState } from 'react';
 
 interface PropertyFormProps {
   onFormSubmit: (data: Property) => void;
 }
 
 export function PropertyForm({ onFormSubmit }: PropertyFormProps) {
+  const [isGeneratingAltText, setIsGeneratingAltText] = useState(false);
   const form = useForm<Property>({
     resolver: zodResolver(propertySchema),
     defaultValues: PROPERTIES_DATA[0] as Property, // Use the first property as default
@@ -71,6 +70,41 @@ export function PropertyForm({ onFormSubmit }: PropertyFormProps) {
       toast({
         title: 'ID Generated',
         description: `Successfully generated ID for ${sectionName}.`,
+      });
+    } else {
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: result.error,
+      });
+    }
+  };
+
+  const generateAltText = async () => {
+    const imageUrl = form.getValues('featuredImage');
+    if (!imageUrl) {
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: 'Please provide an image URL first.',
+      });
+      return;
+    }
+
+    setIsGeneratingAltText(true);
+    const result = await handleAltTextGeneration({
+      imageUrl,
+      propertyName: form.getValues('name') || 'Property',
+      propertyType: form.getValues('type') || 'real estate',
+      propertyArea: form.getValues('area') || 'location',
+    });
+    setIsGeneratingAltText(false);
+
+    if (result.success && result.altText) {
+      form.setValue('alt', result.altText, { shouldValidate: true });
+      toast({
+        title: 'Alt Text Generated',
+        description: 'Successfully generated alt text for the image.',
       });
     } else {
       toast({
@@ -167,7 +201,7 @@ export function PropertyForm({ onFormSubmit }: PropertyFormProps) {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Property Type</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <Select onValuechange={field.onChange} defaultValue={field.value}>
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Select property type" />
@@ -189,7 +223,7 @@ export function PropertyForm({ onFormSubmit }: PropertyFormProps) {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Status</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <Select onValuechange={field.onChange} defaultValue={field.value}>
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Select property status" />
@@ -235,7 +269,7 @@ export function PropertyForm({ onFormSubmit }: PropertyFormProps) {
                     )}
                     />
             </FormSection>
-            <FormSection value="item-3" title="Pricing and Media" description="Set the price and upload images.">
+            <FormSection value="item-3" title="Pricing and Media" description="Set the price and manage media assets.">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <FormField
                     control={form.control}
@@ -271,12 +305,40 @@ export function PropertyForm({ onFormSubmit }: PropertyFormProps) {
                     )}
                     />
                 </div>
-                 <ImageUpload
-                  form={form}
-                  name="featuredImage"
-                  label="Featured Image"
-                  altField="alt" 
-                />
+                 <div className="space-y-4 rounded-lg border p-4">
+                    <FormField
+                        control={form.control}
+                        name="featuredImage"
+                        render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Featured Image URL</FormLabel>
+                            <FormControl>
+                                <Input type="url" placeholder="https://example.com/image.png" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                        )}
+                    />
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-end">
+                        <FormField
+                        control={form.control}
+                        name="alt"
+                        render={({ field }) => (
+                            <FormItem>
+                            <FormLabel>Alt Text</FormLabel>
+                            <FormControl>
+                                <Input placeholder="Descriptive alt text for the image" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                            </FormItem>
+                        )}
+                        />
+                        <Button type="button" onClick={generateAltText} disabled={isGeneratingAltText || !form.watch('featuredImage')} className="w-full md:w-auto">
+                            {isGeneratingAltText ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Sparkles className="mr-2 h-4 w-4" />}
+                            Generate Alt Text
+                        </Button>
+                    </div>
+                </div>
             </FormSection>
             <FormSection value="item-4" title="Features" description="List the key features of the property.">
                 {featureFields.map((field, index) => (
@@ -370,5 +432,3 @@ export function PropertyForm({ onFormSubmit }: PropertyFormProps) {
     </FormProvider>
   );
 }
-
-    

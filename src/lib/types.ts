@@ -360,6 +360,7 @@ export interface Property {
     parkingRatio?: string;
   };
   featuredImage: string;
+  alt: string;
   masterPlan: string;
   floorPlans: FloorPlan[];
   address: string;

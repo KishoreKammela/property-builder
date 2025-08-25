@@ -4,7 +4,7 @@ const idSchema = z.string().regex(/^[a-z-]+$/, {
   message: 'ID must only contain lowercase letters and hyphens.',
 }).min(1, 'ID is required.');
 
-const urlSchema = z.string().min(1, "URL is required."); // Simplified for data URIs and paths
+const urlSchema = z.string().url("Invalid URL format.").min(1, "URL is required.");
 
 export const cardSliderItemSchema = z.object({
   id: idSchema,
@@ -185,7 +185,7 @@ export const propertyUnitPlanSectionSchema = z.object({
 export const propertyPricingSectionSchema = z.object({
     pricingTitle: z.string(),
     pricingDescription: z.string(),
-    pricingImageUrl: urlSchema,
+pricingImageUrl: urlSchema,
     completeCostingDetailsLabel: z.string(),
     pricingEnquireNowCta: z.string(),
     pricingData: z.array(productPricingTableItemSchema),
@@ -361,6 +361,7 @@ export const propertySchema = z.object({
         parkingRatio: z.string().optional(),
     }),
     featuredImage: urlSchema,
+    alt: z.string().min(1, "Alt text is required."),
     masterPlan: urlSchema,
     floorPlans: z.array(floorPlanSchema),
     address: z.string().min(1),
