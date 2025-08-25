@@ -628,7 +628,28 @@ export function PropertyForm({ onFormSubmit }: PropertyFormProps) {
                          <FormField control={form.control} name="propertyDetailPage.propertyBannerSection.mainBannerImageUrl" render={({ field }) => (<FormItem><FormLabel>Main Banner Image URL</FormLabel><FormControl><Input type="url" {...field} /></FormControl><FormMessage /></FormItem>)} />
                          <FormField control={form.control} name="propertyDetailPage.propertyBannerSection.primeLocationAt" render={({ field }) => (<FormItem><FormLabel>Prime Location At</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
                          <FormField control={form.control} name="propertyDetailPage.propertyBannerSection.projectStatusTitle" render={({ field }) => (<FormItem><FormLabel>Project Status Title</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
-                         <FormField control={form.control} name="propertyDetailPage.propertyBannerSection.projectStatusValue" render={({ field }) => (<FormItem><FormLabel>Project Status Value</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value}><FormControl><SelectTrigger><SelectValue placeholder="Select status" /></SelectTrigger></FormControl><SelectContent><SelectItem value="New Launch">New Launch</SelectItem><SelectItem value="Pre-Launch">Pre-Launch</SelectItem><SelectItem value="Upcoming Launches">Upcoming Launches</SelectItem></SelectContent></Select><FormMessage /></FormItem>)} />
+                         <FormField
+                            control={form.control}
+                            name="propertyDetailPage.propertyBannerSection.projectStatusValue"
+                            render={({ field }) => (
+                                <FormItem>
+                                <FormLabel>Project Status Value</FormLabel>
+                                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                    <FormControl>
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Select status" />
+                                    </SelectTrigger>
+                                    </FormControl>
+                                    <SelectContent>
+                                    <SelectItem value="New Launch">New Launch</SelectItem>
+                                    <SelectItem value="Pre-Launch">Pre-Launch</SelectItem>
+                                    <SelectItem value="Upcoming Launches">Upcoming Launches</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                                <FormMessage />
+                                </FormItem>
+                            )}
+                            />
                          <FormField control={form.control} name="propertyDetailPage.propertyBannerSection.isReraCertified" render={({ field }) => (<FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4"><FormControl><Checkbox checked={field.value} onCheckedChange={field.onChange} /></FormControl><div className="space-y-1 leading-none"><FormLabel>RERA Certified</FormLabel></div></FormItem>)} />
                          <FormField control={form.control} name="propertyDetailPage.propertyBannerSection.reraLogo" render={({ field }) => (<FormItem><FormLabel>RERA Logo URL</FormLabel><FormControl><Input type="url" {...field} /></FormControl><FormMessage /></FormItem>)} />
                          <FormField control={form.control} name="propertyDetailPage.propertyBannerSection.reraCertifiedLabel" render={({ field }) => (<FormItem><FormLabel>RERA Certified Label</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
@@ -657,12 +678,192 @@ export function PropertyForm({ onFormSubmit }: PropertyFormProps) {
                     </FormSection>
                      <FormSection value="sub-item-2" title="Location & Connectivity">
                         <FormField control={form.control} name="propertyDetailPage.propertyLocationAndConnectivitySection.mainHeading" render={({ field }) => (<FormItem><FormLabel>Main Heading</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
-                        {/* ... other fields for location and connectivity ... */}
+                        <FormField control={form.control} name="propertyDetailPage.propertyLocationAndConnectivitySection.locationText" render={({ field }) => (<FormItem><FormLabel>Location Text</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
+                        <FormField control={form.control} name="propertyDetailPage.propertyLocationAndConnectivitySection.locationImage" render={({ field }) => (<FormItem><FormLabel>Location Image URL</FormLabel><FormControl><Input type="url" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                        <FormField control={form.control} name="propertyDetailPage.propertyLocationAndConnectivitySection.locationLink" render={({ field }) => (<FormItem><FormLabel>Location Link</FormLabel><FormControl><Input type="url" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                        <FormField control={form.control} name="propertyDetailPage.propertyLocationAndConnectivitySection.locationLinkText" render={({ field }) => (<FormItem><FormLabel>Location Link Text</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
+
+                        <div className="space-y-4">
+                            <h4 className="font-semibold">Location Tabs</h4>
+                            {locationTabFields.map((field, index) => (
+                                <div key={field.id} className="p-4 border rounded-md space-y-4">
+                                     <div className="flex justify-between items-center">
+                                        <h5 className="font-semibold">Location Tab {index + 1}</h5>
+                                        <Button type="button" variant="destructive" size="icon" onClick={() => removeLocationTab(index)}><Trash /></Button>
+                                    </div>
+                                    <FormField control={form.control} name={`propertyDetailPage.propertyLocationAndConnectivitySection.locationTabs.${index}.id`} render={({ field }) => (<FormItem><FormLabel>ID</FormLabel><div className="flex gap-2"><FormControl><Input {...field} /></FormControl><Button type="button" size="icon" variant="outline" onClick={() => generateId(`loc-tab-${index + 1}`, `propertyDetailPage.propertyLocationAndConnectivitySection.locationTabs.${index}.id`)}><Sparkles /></Button></div><FormMessage /></FormItem>)} />
+                                    <FormField control={form.control} name={`propertyDetailPage.propertyLocationAndConnectivitySection.locationTabs.${index}.tabName`} render={({ field }) => (<FormItem><FormLabel>Tab Name</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
+                                    {/* Nested Field Array for Connectivity */}
+                                </div>
+                            ))}
+                            <Button type="button" variant="outline" onClick={() => appendLocationTab({id: '', tabName: '', connectivity: []})}>Add Location Tab</Button>
+                        </div>
                      </FormSection>
                      <FormSection value="sub-item-3" title="Overview Section">
-                        {/* ... fields for overview section ... */}
+                        <FormField control={form.control} name="propertyDetailPage.propertyOverviewSection.projectOverviewLabel" render={({ field }) => (<FormItem><FormLabel>Project Overview Label</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
+                        <FormField control={form.control} name="propertyDetailPage.propertyOverviewSection.projectWalkthroughLabel" render={({ field }) => (<FormItem><FormLabel>Project Walkthrough Label</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
+                        <FormField control={form.control} name="propertyDetailPage.propertyOverviewSection.projectOverviewDescription" render={({ field }) => (<FormItem><FormLabel>Project Overview Description</FormLabel><FormControl><Textarea {...field} /></FormControl><FormMessage /></FormItem>)} />
+                        <FormField control={form.control} name="propertyDetailPage.propertyOverviewSection.isReraCertified" render={({ field }) => (<FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4"><FormControl><Checkbox checked={field.value} onCheckedChange={field.onChange} /></FormControl><div className="space-y-1 leading-none"><FormLabel>RERA Certified</FormLabel></div></FormItem>)} />
+                        <FormField control={form.control} name="propertyDetailPage.propertyOverviewSection.reraLogo" render={({ field }) => (<FormItem><FormLabel>RERA Logo URL</FormLabel><FormControl><Input type="url" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                        <FormField control={form.control} name="propertyDetailPage.propertyOverviewSection.reraCertifiedLabel" render={({ field }) => (<FormItem><FormLabel>RERA Certified Label</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
+                        <FormField control={form.control} name="propertyDetailPage.propertyOverviewSection.reraNumberLabel" render={({ field }) => (<FormItem><FormLabel>RERA Number Label</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
+                        <FormField control={form.control} name="propertyDetailPage.propertyOverviewSection.projectReraNumber" render={({ field }) => (<FormItem><FormLabel>Project RERA Number</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
+                        <FormField control={form.control} name="propertyDetailPage.propertyOverviewSection.keyProjectDatesTitle" render={({ field }) => (<FormItem><FormLabel>Key Project Dates Title</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
+                        <FormField control={form.control} name="propertyDetailPage.propertyOverviewSection.projectOverviewImageUrl" render={({ field }) => (<FormItem><FormLabel>Project Overview Image URL</FormLabel><FormControl><Input type="url" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                        <FormField control={form.control} name="propertyDetailPage.propertyOverviewSection.projectOverviewViewMoreCta" render={({ field }) => (<FormItem><FormLabel>View More CTA</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
+
+                        <div className="space-y-4">
+                            <h4 className="font-semibold">Overview Specifications</h4>
+                            {overviewSpecFields.map((field, index) => (
+                                <div key={field.id} className="p-4 border rounded-md space-y-4">
+                                    <div className="flex justify-between items-center">
+                                        <h5 className="font-semibold">Specification {index + 1}</h5>
+                                        <Button type="button" variant="destructive" size="icon" onClick={() => removeOverviewSpec(index)}><Trash /></Button>
+                                    </div>
+                                    <FormField control={form.control} name={`propertyDetailPage.propertyOverviewSection.propertySpecifications.${index}.id`} render={({ field }) => (<FormItem><FormLabel>ID</FormLabel><div className="flex gap-2"><FormControl><Input {...field} /></FormControl><Button type="button" size="icon" variant="outline" onClick={() => generateId(`overview-spec-${index+1}`, `propertyDetailPage.propertyOverviewSection.propertySpecifications.${index}.id`)}><Sparkles /></Button></div><FormMessage /></FormItem>)} />
+                                    <FormField control={form.control} name={`propertyDetailPage.propertyOverviewSection.propertySpecifications.${index}.value`} render={({ field }) => (<FormItem><FormLabel>Value</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
+                                    <FormField control={form.control} name={`propertyDetailPage.propertyOverviewSection.propertySpecifications.${index}.displayText`} render={({ field }) => (<FormItem><FormLabel>Display Text</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
+                                </div>
+                            ))}
+                            <Button type="button" variant="outline" onClick={() => appendOverviewSpec({ id: '', value: '', displayText: ''})}>Add Overview Specification</Button>
+                        </div>
+                        <div className="space-y-4">
+                            <h4 className="font-semibold">Key Project Dates</h4>
+                             {keyDateFields.map((field, index) => (
+                                <div key={field.id} className="p-4 border rounded-md space-y-4">
+                                     <div className="flex justify-between items-center">
+                                        <h5 className="font-semibold">Date {index + 1}</h5>
+                                        <Button type="button" variant="destructive" size="icon" onClick={() => removeKeyDate(index)}><Trash /></Button>
+                                    </div>
+                                    <FormField control={form.control} name={`propertyDetailPage.propertyOverviewSection.keyProjectDates.${index}.id`} render={({ field }) => (<FormItem><FormLabel>ID</FormLabel><div className="flex gap-2"><FormControl><Input {...field} /></FormControl><Button type="button" size="icon" variant="outline" onClick={() => generateId(`key-date-${index + 1}`, `propertyDetailPage.propertyOverviewSection.keyProjectDates.${index}.id`)}><Sparkles /></Button></div><FormMessage /></FormItem>)} />
+                                    <FormField control={form.control} name={`propertyDetailPage.propertyOverviewSection.keyProjectDates.${index}.title`} render={({ field }) => (<FormItem><FormLabel>Title</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
+                                    <FormField control={form.control} name={`propertyDetailPage.propertyOverviewSection.keyProjectDates.${index}.date`} render={({ field }) => (<FormItem><FormLabel>Date</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
+                                </div>
+                            ))}
+                             <Button type="button" variant="outline" onClick={() => appendKeyDate({id: '', title: '', date: ''})}>Add Key Date</Button>
+                        </div>
                      </FormSection>
-                     {/* ... Add other sections for propertyDetailPage in a similar fashion */}
+                     <FormSection value="sub-item-4" title="Highlights Section">
+                        <FormField control={form.control} name="propertyDetailPage.propertyHighlightsSection.propertyHighlightsTitle" render={({ field }) => (<FormItem><FormLabel>Title</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
+                        <FormField control={form.control} name="propertyDetailPage.propertyHighlightsSection.propertyHighlightsDescription" render={({ field }) => (<FormItem><FormLabel>Description</FormLabel><FormControl><Textarea {...field} /></FormControl><FormMessage /></FormItem>)} />
+                        <div className="space-y-4">
+                            <h4 className="font-semibold">Highlights</h4>
+                            {highlightFields.map((field, index) => (
+                                <div key={field.id} className="p-4 border rounded-md space-y-4">
+                                     <div className="flex justify-between items-center">
+                                        <h5 className="font-semibold">Highlight {index + 1}</h5>
+                                        <Button type="button" variant="destructive" size="icon" onClick={() => removeHighlight(index)}><Trash /></Button>
+                                    </div>
+                                    <FormField control={form.control} name={`propertyDetailPage.propertyHighlightsSection.propertyHighlights.${index}.highlightId`} render={({ field }) => (<FormItem><FormLabel>ID</FormLabel><div className="flex gap-2"><FormControl><Input {...field} /></FormControl><Button type="button" size="icon" variant="outline" onClick={() => generateId(`highlight-${index + 1}`, `propertyDetailPage.propertyHighlightsSection.propertyHighlights.${index}.highlightId`)}><Sparkles /></Button></div><FormMessage /></FormItem>)} />
+                                    <FormField control={form.control} name={`propertyDetailPage.propertyHighlightsSection.propertyHighlights.${index}.highlightImageUrl`} render={({ field }) => (<FormItem><FormLabel>Image URL</FormLabel><FormControl><Input type="url" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                                    <FormField control={form.control} name={`propertyDetailPage.propertyHighlightsSection.propertyHighlights.${index}.highlightDescription`} render={({ field }) => (<FormItem><FormLabel>Description</FormLabel><FormControl><Textarea {...field} /></FormControl><FormMessage /></FormItem>)} />
+                                </div>
+                            ))}
+                            <Button type="button" variant="outline" onClick={() => appendHighlight({highlightId: '', highlightImageUrl: '', highlightDescription: ''})}>Add Highlight</Button>
+                        </div>
+                     </FormSection>
+                     <FormSection value="sub-item-5" title="Master Plan Section">
+                        <FormField control={form.control} name="propertyDetailPage.propertyMasterPlanSection.masterPlanTitle" render={({ field }) => (<FormItem><FormLabel>Title</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
+                        <FormField control={form.control} name="propertyDetailPage.propertyMasterPlanSection.masterPlanDescription" render={({ field }) => (<FormItem><FormLabel>Description</FormLabel><FormControl><Textarea {...field} /></FormControl><FormMessage /></FormItem>)} />
+                        <FormField control={form.control} name="propertyDetailPage.propertyMasterPlanSection.masterPlanImageUrl" render={({ field }) => (<FormItem><FormLabel>Image URL</FormLabel><FormControl><Input type="url" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                        <FormField control={form.control} name="propertyDetailPage.propertyMasterPlanSection.masterPlanEnquireNowCta" render={({ field }) => (<FormItem><FormLabel>Enquire Now CTA</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
+                        <FormField control={form.control} name="propertyDetailPage.propertyMasterPlanSection.masterPlanViewInDetailCta" render={({ field }) => (<FormItem><FormLabel>View In Detail CTA</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
+                     </FormSection>
+                      <FormSection value="sub-item-6" title="Unit Plans Section">
+                        <FormField control={form.control} name="propertyDetailPage.propertyUnitPlansSection.unitPlanTitle" render={({ field }) => (<FormItem><FormLabel>Title</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
+                        <FormField control={form.control} name="propertyDetailPage.propertyUnitPlansSection.unitPlanDescription" render={({ field }) => (<FormItem><FormLabel>Description</FormLabel><FormControl><Textarea {...field} /></FormControl><FormMessage /></FormItem>)} />
+                        <FormField control={form.control} name="propertyDetailPage.propertyUnitPlansSection.unitPlanViewInDetailCta" render={({ field }) => (<FormItem><FormLabel>View In Detail CTA</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
+                        <div className="space-y-4">
+                            <h4 className="font-semibold">Unit Plans</h4>
+                            {unitPlanFields.map((field, index) => (
+                                <div key={field.id} className="p-4 border rounded-md space-y-4">
+                                     <div className="flex justify-between items-center">
+                                        <h5 className="font-semibold">Unit Plan {index + 1}</h5>
+                                        <Button type="button" variant="destructive" size="icon" onClick={() => removeUnitPlan(index)}><Trash /></Button>
+                                    </div>
+                                    <FormField control={form.control} name={`propertyDetailPage.propertyUnitPlansSection.unitPlans.${index}.id`} render={({ field }) => (<FormItem><FormLabel>ID</FormLabel><div className="flex gap-2"><FormControl><Input {...field} /></FormControl><Button type="button" size="icon" variant="outline" onClick={() => generateId(`unit-plan-${index + 1}`, `propertyDetailPage.propertyUnitPlansSection.unitPlans.${index}.id`)}><Sparkles /></Button></div><FormMessage /></FormItem>)} />
+                                    <FormField control={form.control} name={`propertyDetailPage.propertyUnitPlansSection.unitPlans.${index}.unitPlanTitle`} render={({ field }) => (<FormItem><FormLabel>Title</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
+                                    <FormField control={form.control} name={`propertyDetailPage.propertyUnitPlansSection.unitPlans.${index}.unitPlanDescription`} render={({ field }) => (<FormItem><FormLabel>Description</FormLabel><FormControl><Textarea {...field} /></FormControl><FormMessage /></FormItem>)} />
+                                    <FormField control={form.control} name={`propertyDetailPage.propertyUnitPlansSection.unitPlans.${index}.unitPlanImageUrl`} render={({ field }) => (<FormItem><FormLabel>Image URL</FormLabel><FormControl><Input type="url" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                                    <FormField control={form.control} name={`propertyDetailPage.propertyUnitPlansSection.unitPlans.${index}.unitPlanEnquireUrl`} render={({ field }) => (<FormItem><FormLabel>Enquire URL</FormLabel><FormControl><Input type="url" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                                </div>
+                            ))}
+                            <Button type="button" variant="outline" onClick={() => appendUnitPlan({id: '', unitPlanTitle: '', unitPlanDescription: '', unitPlanImageUrl: '', unitPlanEnquireUrl: ''})}>Add Unit Plan</Button>
+                        </div>
+                     </FormSection>
+                     <FormSection value="sub-item-7" title="Pricing Section">
+                        <FormField control={form.control} name="propertyDetailPage.propertyPricingSection.pricingTitle" render={({ field }) => (<FormItem><FormLabel>Title</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
+                        <FormField control={form.control} name="propertyDetailPage.propertyPricingSection.pricingDescription" render={({ field }) => (<FormItem><FormLabel>Description</FormLabel><FormControl><Textarea {...field} /></FormControl><FormMessage /></FormItem>)} />
+                        <FormField control={form.control} name="propertyDetailPage.propertyPricingSection.pricingImageUrl" render={({ field }) => (<FormItem><FormLabel>Image URL</FormLabel><FormControl><Input type="url" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                        <FormField control={form.control} name="propertyDetailPage.propertyPricingSection.completeCostingDetailsLabel" render={({ field }) => (<FormItem><FormLabel>Complete Costing Details Label</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
+                        <FormField control={form.control} name="propertyDetailPage.propertyPricingSection.pricingEnquireNowCta" render={({ field }) => (<FormItem><FormLabel>Enquire Now CTA</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
+                        <div className="space-y-4">
+                            <h4 className="font-semibold">Pricing Data</h4>
+                            {pricingDataFields.map((field, index) => (
+                                <div key={field.id} className="p-4 border rounded-md space-y-4">
+                                     <div className="flex justify-between items-center">
+                                        <h5 className="font-semibold">Pricing Entry {index + 1}</h5>
+                                        <Button type="button" variant="destructive" size="icon" onClick={() => removePricingData(index)}><Trash /></Button>
+                                    </div>
+                                    <FormField control={form.control} name={`propertyDetailPage.propertyPricingSection.pricingData.${index}.pricingId`} render={({ field }) => (<FormItem><FormLabel>ID</FormLabel><div className="flex gap-2"><FormControl><Input {...field} /></FormControl><Button type="button" size="icon" variant="outline" onClick={() => generateId(`pricing-data-${index + 1}`, `propertyDetailPage.propertyPricingSection.pricingData.${index}.pricingId`)}><Sparkles /></Button></div><FormMessage /></FormItem>)} />
+                                    <FormField control={form.control} name={`propertyDetailPage.propertyPricingSection.pricingData.${index}.pricingConfigType`} render={({ field }) => (<FormItem><FormLabel>Config Type</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
+                                    <FormField control={form.control} name={`propertyDetailPage.propertyPricingSection.pricingData.${index}.pricingCarpetApproxArea`} render={({ field }) => (<FormItem><FormLabel>Carpet Area (approx)</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
+                                    <FormField control={form.control} name={`propertyDetailPage.propertyPricingSection.pricingData.${index}.price`} render={({ field }) => (<FormItem><FormLabel>Price</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
+                                    <FormField control={form.control} name={`propertyDetailPage.propertyPricingSection.pricingData.${index}.pricingEnquireCtaText`} render={({ field }) => (<FormItem><FormLabel>Enquire CTA Text</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
+                                </div>
+                            ))}
+                            <Button type="button" variant="outline" onClick={() => appendPricingData({ pricingId: '', pricingConfigType: '', pricingCarpetApproxArea: '', price: '', pricingEnquireCtaText: '' })}>Add Pricing Data</Button>
+                        </div>
+                     </FormSection>
+
+                    <FormSection value="sub-item-8" title="Specifications Section">
+                        <FormField control={form.control} name="propertyDetailPage.propertySpecificationsSection.specificationTitle" render={({ field }) => (<FormItem><FormLabel>Title</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
+                        <FormField control={form.control} name="propertyDetailPage.propertySpecificationsSection.specificationDescription" render={({ field }) => (<FormItem><FormLabel>Description</FormLabel><FormControl><Textarea {...field} /></FormControl><FormMessage /></FormItem>)} />
+                        <FormField control={form.control} name="propertyDetailPage.propertySpecificationsSection.specificationImageUrl" render={({ field }) => (<FormItem><FormLabel>Image URL</FormLabel><FormControl><Input type="url" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                        <FormField control={form.control} name="propertyDetailPage.propertySpecificationsSection.specificationViewInDetailCta" render={({ field }) => (<FormItem><FormLabel>View In Detail CTA</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
+                     </FormSection>
+
+                     <FormSection value="sub-item-9" title="Location Section">
+                        <FormField control={form.control} name="propertyDetailPage.propertyLocationSection.propertyLoactionTitle" render={({ field }) => (<FormItem><FormLabel>Title</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
+                        <FormField control={form.control} name="propertyDetailPage.propertyLocationSection.propertyLoactionDescription" render={({ field }) => (<FormItem><FormLabel>Description</FormLabel><FormControl><Textarea {...field} /></FormControl><FormMessage /></FormItem>)} />
+                        <FormField control={form.control} name="propertyDetailPage.propertyLocationSection.propertyLoactionImageUrl" render={({ field }) => (<FormItem><FormLabel>Image URL</FormLabel><FormControl><Input type="url" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                        <div className="space-y-4">
+                            <h4 className="font-semibold">Location Information</h4>
+                            {locationInfoFields.map((field, index) => (
+                                <div key={field.id} className="p-4 border rounded-md space-y-4">
+                                     <div className="flex justify-between items-center">
+                                        <h5 className="font-semibold">Info {index + 1}</h5>
+                                        <Button type="button" variant="destructive" size="icon" onClick={() => removeLocationInfo(index)}><Trash /></Button>
+                                    </div>
+                                    <FormField control={form.control} name={`propertyDetailPage.propertyLocationSection.propertyLoactionInformation.${index}.estateInfoId`} render={({ field }) => (<FormItem><FormLabel>ID</FormLabel><div className="flex gap-2"><FormControl><Input {...field} /></FormControl><Button type="button" size="icon" variant="outline" onClick={() => generateId(`loc-info-${index + 1}`, `propertyDetailPage.propertyLocationSection.propertyLoactionInformation.${index}.estateInfoId`)}><Sparkles /></Button></div><FormMessage /></FormItem>)} />
+                                    <FormField control={form.control} name={`propertyDetailPage.propertyLocationSection.propertyLoactionInformation.${index}.estateInfoTitle`} render={({ field }) => (<FormItem><FormLabel>Title</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
+                                    <FormField control={form.control} name={`propertyDetailPage.propertyLocationSection.propertyLoactionInformation.${index}.estateInfoDescription`} render={({ field }) => (<FormItem><FormLabel>Description</FormLabel><FormControl><Textarea {...field} /></FormControl><FormMessage /></FormItem>)} />
+                                </div>
+                            ))}
+                            <Button type="button" variant="outline" onClick={() => appendLocationInfo({ estateInfoId: '', estateInfoTitle: '', estateInfoDescription: '' })}>Add Location Info</Button>
+                        </div>
+                     </FormSection>
+
+                    <FormSection value="sub-item-10" title="FAQ Section">
+                        <FormField control={form.control} name="propertyDetailPage.propertyDetailsFAQSection.mainHeading" render={({ field }) => (<FormItem><FormLabel>Main Heading</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
+                        <FormField control={form.control} name="propertyDetailPage.propertyDetailsFAQSection.subtitle" render={({ field }) => (<FormItem><FormLabel>Subtitle</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
+                        <FormField control={form.control} name="propertyDetailPage.propertyDetailsFAQSection.contactButtonText" render={({ field }) => (<FormItem><FormLabel>Contact Button Text</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
+                        <div className="space-y-4">
+                            <h4 className="font-semibold">FAQ Items</h4>
+                            {faqFields.map((field, index) => (
+                                <div key={field.id} className="p-4 border rounded-md space-y-4">
+                                     <div className="flex justify-between items-center">
+                                        <h5 className="font-semibold">FAQ {index + 1}</h5>
+                                        <Button type="button" variant="destructive" size="icon" onClick={() => removeFaq(index)}><Trash /></Button>
+                                    </div>
+                                    <FormField control={form.control} name={`propertyDetailPage.propertyDetailsFAQSection.faqItems.${index}.id`} render={({ field }) => (<FormItem><FormLabel>ID</FormLabel><div className="flex gap-2"><FormControl><Input {...field} /></FormControl><Button type="button" size="icon" variant="outline" onClick={() => generateId(`faq-${index + 1}`, `propertyDetailPage.propertyDetailsFAQSection.faqItems.${index}.id`)}><Sparkles /></Button></div><FormMessage /></FormItem>)} />
+                                    <FormField control={form.control} name={`propertyDetailPage.propertyDetailsFAQSection.faqItems.${index}.question`} render={({ field }) => (<FormItem><FormLabel>Question</FormLabel><FormControl><Textarea {...field} /></FormControl><FormMessage /></FormItem>)} />
+                                    <FormField control={form.control} name={`propertyDetailPage.propertyDetailsFAQSection.faqItems.${index}.answer`} render={({ field }) => (<FormItem><FormLabel>Answer</FormLabel><FormControl><Textarea {...field} /></FormControl><FormMessage /></FormItem>)} />
+                                </div>
+                            ))}
+                            <Button type="button" variant="outline" onClick={() => appendFaq({ id: '', question: '', answer: '' })}>Add FAQ</Button>
+                        </div>
+                     </FormSection>
                 </Accordion>
             </FormSection>
             
