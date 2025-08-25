@@ -16,6 +16,7 @@ import { useToast } from '@/hooks/use-toast';
 import { handleAltTextGeneration, handleIdGeneration } from '@/lib/actions';
 import { Loader2, Sparkles, Trash } from 'lucide-react';
 import { useState } from 'react';
+import { Checkbox } from './ui/checkbox';
 
 interface PropertyFormProps {
   onFormSubmit: (data: Property) => void;
@@ -59,24 +60,116 @@ export function PropertyForm({ onFormSubmit }: PropertyFormProps) {
         coordinates: { lat: 0, lng: 0 },
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
+        propertyDetailPage: {
+            propertyBannerSection: {
+                headingOne: '',
+                headingTwo: '',
+                mainBannerImageUrl: '',
+                primeLocationAt: '',
+                projectStatusTitle: 'Project status: ',
+                projectStatusValue: 'New Launch',
+                isReraCertified: true,
+                reraLogo: '',
+                reraCertifiedLabel: 'RERA Certified',
+                priceRangeLabel: 'Price range',
+                grabEarlyBirdAdvantages: '',
+                limitedSlotsAvailable: '',
+                brochureCta: 'Brochure',
+                bookVisitCta: 'Book visit',
+                viewAllPhotosCta: 'View all photos',
+                specifications: [],
+            },
+            propertyLocationAndConnectivitySection: {
+                mainHeading: '',
+                locationText: '',
+                locationImage: '',
+                locationLinkText: 'View in detail',
+                locationLink: 'https://maps.google.com',
+                locationTabs: [],
+            },
+            propertyOverviewSection: {
+                projectOverviewLabel: 'Project Overview',
+                projectWalkthroughLabel: 'Project walkthrough',
+                projectOverviewDescription: '',
+                propertySpecifications: [],
+                isReraCertified: true,
+                reraLogo: '',
+                reraCertifiedLabel: 'Project RERA certified',
+                reraNumberLabel: 'RERA No: ',
+                projectReraNumber: '',
+                keyProjectDatesTitle: 'Key Project Dates',
+                keyProjectDates: [],
+                projectOverviewImageUrl: '',
+                projectOverviewViewMoreCta: 'View more',
+            },
+            propertyAmenitiesSection: {
+                variant: 'dark',
+                mainHeading: '',
+                subtitle: '',
+                amenitiesAccordionItems: [],
+                cardSlideItems: [],
+            },
+            propertyHighlightsSection: {
+                propertyHighlightsTitle: '',
+                propertyHighlightsDescription: '',
+                propertyHighlights: [],
+            },
+            propertyMasterPlanSection: {
+                masterPlanTitle: '',
+                masterPlanImageUrl: '',
+                masterPlanDescription: '',
+                masterPlanEnquireNowCta: 'Enquire now',
+                masterPlanViewInDetailCta: 'View in detail',
+            },
+            propertyUnitPlansSection: {
+                unitPlanTitle: '',
+                unitPlanDescription: '',
+                unitPlanViewInDetailCta: 'View in detail',
+                unitPlans: [],
+            },
+            propertyPricingSection: {
+                pricingTitle: '',
+                pricingDescription: '',
+                pricingImageUrl: '',
+                completeCostingDetailsLabel: 'Complete costing details',
+                pricingEnquireNowCta: 'Enquire now',
+                pricingData: [],
+            },
+            propertySpecificationsSection: {
+                specificationTitle: '',
+                specificationDescription: '',
+                specificationViewInDetailCta: 'View in detail',
+                specificationImageUrl: '',
+            },
+            propertyLocationSection: {
+                propertyLoactionTitle: '',
+                propertyLoactionDescription: '',
+                propertyLoactionImageUrl: '',
+                propertyLoactionInformation: [],
+            },
+            propertyDetailsFAQSection: {
+                mainHeading: 'Frequently asked questions',
+                subtitle: "Didn't find the question?",
+                contactButtonText: 'Contact us',
+                faqItems: [],
+            },
+        }
     },
     mode: 'onChange',
   });
 
-  const { fields: featureFields, append: appendFeature, remove: removeFeature } = useFieldArray({
-    control: form.control,
-    name: "features",
-  });
-
-  const { fields: amenityFields, append: appendAmenity, remove: removeAmenity } = useFieldArray({
-    control: form.control,
-    name: "amenities",
-  });
-
-   const { fields: floorPlanFields, append: appendFloorPlan, remove: removeFloorPlan } = useFieldArray({
-    control: form.control,
-    name: "floorPlans",
-  });
+  const { fields: featureFields, append: appendFeature, remove: removeFeature } = useFieldArray({ control: form.control, name: "features" });
+  const { fields: amenityFields, append: appendAmenity, remove: removeAmenity } = useFieldArray({ control: form.control, name: "amenities" });
+  const { fields: floorPlanFields, append: appendFloorPlan, remove: removeFloorPlan } = useFieldArray({ control: form.control, name: "floorPlans" });
+  const { fields: bannerSpecFields, append: appendBannerSpec, remove: removeBannerSpec } = useFieldArray({ control: form.control, name: "propertyDetailPage.propertyBannerSection.specifications" });
+  const { fields: locationTabFields, append: appendLocationTab, remove: removeLocationTab } = useFieldArray({ control: form.control, name: "propertyDetailPage.propertyLocationAndConnectivitySection.locationTabs" });
+  const { fields: overviewSpecFields, append: appendOverviewSpec, remove: removeOverviewSpec } = useFieldArray({ control: form.control, name: "propertyDetailPage.propertyOverviewSection.propertySpecifications" });
+  const { fields: keyDateFields, append: appendKeyDate, remove: removeKeyDate } = useFieldArray({ control: form.control, name: "propertyDetailPage.propertyOverviewSection.keyProjectDates" });
+  const { fields: highlightFields, append: appendHighlight, remove: removeHighlight } = useFieldArray({ control: form.control, name: "propertyDetailPage.propertyHighlightsSection.propertyHighlights" });
+  const { fields: unitPlanFields, append: appendUnitPlan, remove: removeUnitPlan } = useFieldArray({ control: form.control, name: "propertyDetailPage.propertyUnitPlansSection.unitPlans" });
+  const { fields: pricingDataFields, append: appendPricingData, remove: removePricingData } = useFieldArray({ control: form.control, name: "propertyDetailPage.propertyPricingSection.pricingData" });
+  const { fields: locationInfoFields, append: appendLocationInfo, remove: removeLocationInfo } = useFieldArray({ control: form.control, name: "propertyDetailPage.propertyLocationSection.propertyLoactionInformation" });
+  const { fields: faqFields, append: appendFaq, remove: removeFaq } = useFieldArray({ control: form.control, name: "propertyDetailPage.propertyDetailsFAQSection.faqItems" });
 
 
   const onSubmit = (data: Property) => {
@@ -87,7 +180,7 @@ export function PropertyForm({ onFormSubmit }: PropertyFormProps) {
     });
   };
 
-  const generateId = async (sectionName: string, fieldName: `id` | `slug`) => {
+  const generateId = async (sectionName: string, fieldName: any, index?: number) => {
     const propertyName = form.getValues('name');
     if (!propertyName) {
       toast({
@@ -99,7 +192,12 @@ export function PropertyForm({ onFormSubmit }: PropertyFormProps) {
     }
     const result = await handleIdGeneration({ propertyName, sectionName });
     if (result.success && result.id) {
-      form.setValue(fieldName, result.id, { shouldValidate: true });
+        if (index !== undefined) {
+             form.setValue(fieldName, result.id, { shouldValidate: true });
+        } else {
+            form.setValue(fieldName, result.id, { shouldValidate: true });
+        }
+      
       toast({
         title: 'ID Generated',
         description: `Successfully generated ID for ${sectionName}.`,
@@ -519,6 +617,53 @@ export function PropertyForm({ onFormSubmit }: PropertyFormProps) {
                     <FormField control={form.control} name="developer" render={({ field }) => ( <FormItem><FormLabel>Developer</FormLabel><FormControl><Input placeholder="e.g., Sattva Group" {...field} /></FormControl><FormMessage /></FormItem> )} />
                     <FormField control={form.control} name="possession" render={({ field }) => ( <FormItem><FormLabel>Possession Year</FormLabel><FormControl><Input placeholder="e.g., 2026" {...field} /></FormControl><FormMessage /></FormItem> )} />
                 </div>
+            </FormSection>
+
+            <FormSection value="item-9" title="Property Detail Page" description="Content for the main property detail page.">
+                
+                <Accordion type="single" collapsible className="w-full">
+                    <FormSection value="sub-item-1" title="Banner Section">
+                         <FormField control={form.control} name="propertyDetailPage.propertyBannerSection.headingOne" render={({ field }) => (<FormItem><FormLabel>Heading One</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
+                         <FormField control={form.control} name="propertyDetailPage.propertyBannerSection.headingTwo" render={({ field }) => (<FormItem><FormLabel>Heading Two</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
+                         <FormField control={form.control} name="propertyDetailPage.propertyBannerSection.mainBannerImageUrl" render={({ field }) => (<FormItem><FormLabel>Main Banner Image URL</FormLabel><FormControl><Input type="url" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                         <FormField control={form.control} name="propertyDetailPage.propertyBannerSection.primeLocationAt" render={({ field }) => (<FormItem><FormLabel>Prime Location At</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
+                         <FormField control={form.control} name="propertyDetailPage.propertyBannerSection.projectStatusTitle" render={({ field }) => (<FormItem><FormLabel>Project Status Title</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
+                         <FormField control={form.control} name="propertyDetailPage.propertyBannerSection.projectStatusValue" render={({ field }) => (<FormItem><FormLabel>Project Status Value</FormLabel> <Select onValueChange={field.onChange} defaultValue={field.value}> <FormControl> <SelectTrigger> <SelectValue placeholder="Select status" /> </SelectTrigger> </FormControl> <SelectContent> <SelectItem value="New Launch">New Launch</SelectItem> <SelectItem value="Pre-Launch">Pre-Launch</SelectItem> <SelectItem value="Upcoming Launches">Upcoming Launches</SelectItem> </SelectContent> </Select> <FormMessage /></FormItem>)} />
+                         <FormField control={form.control} name="propertyDetailPage.propertyBannerSection.isReraCertified" render={({ field }) => (<FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4"><FormControl><Checkbox checked={field.value} onCheckedChange={field.onChange} /></FormControl><div className="space-y-1 leading-none"><FormLabel>RERA Certified</FormLabel></div></FormItem>)} />
+                         <FormField control={form.control} name="propertyDetailPage.propertyBannerSection.reraLogo" render={({ field }) => (<FormItem><FormLabel>RERA Logo URL</FormLabel><FormControl><Input type="url" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                         <FormField control={form.control} name="propertyDetailPage.propertyBannerSection.reraCertifiedLabel" render={({ field }) => (<FormItem><FormLabel>RERA Certified Label</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
+                         <FormField control={form.control} name="propertyDetailPage.propertyBannerSection.priceRangeLabel" render={({ field }) => (<FormItem><FormLabel>Price Range Label</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
+                         <FormField control={form.control} name="propertyDetailPage.propertyBannerSection.grabEarlyBirdAdvantages" render={({ field }) => (<FormItem><FormLabel>Grab Early Bird Advantages</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
+                         <FormField control={form.control} name="propertyDetailPage.propertyBannerSection.limitedSlotsAvailable" render={({ field }) => (<FormItem><FormLabel>Limited Slots Available</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
+                         <FormField control={form.control} name="propertyDetailPage.propertyBannerSection.brochureCta" render={({ field }) => (<FormItem><FormLabel>Brochure CTA</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
+                         <FormField control={form.control} name="propertyDetailPage.propertyBannerSection.bookVisitCta" render={({ field }) => (<FormItem><FormLabel>Book Visit CTA</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
+                         <FormField control={form.control} name="propertyDetailPage.propertyBannerSection.viewAllPhotosCta" render={({ field }) => (<FormItem><FormLabel>View All Photos CTA</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
+                        
+                        <div className="space-y-4">
+                            <h4 className="font-semibold">Banner Specifications</h4>
+                             {bannerSpecFields.map((field, index) => (
+                                <div key={field.id} className="p-4 border rounded-md space-y-4">
+                                    <div className="flex justify-between items-center">
+                                        <h5 className="font-semibold">Specification {index + 1}</h5>
+                                        <Button type="button" variant="destructive" size="icon" onClick={() => removeBannerSpec(index)}><Trash /></Button>
+                                    </div>
+                                    <FormField control={form.control} name={`propertyDetailPage.propertyBannerSection.specifications.${index}.id`} render={({ field }) => (<FormItem><FormLabel>ID</FormLabel><div className="flex gap-2"><FormControl><Input {...field} /></FormControl><Button type="button" size="icon" variant="outline" onClick={() => generateId(`banner-spec-${index + 1}`, `propertyDetailPage.propertyBannerSection.specifications.${index}.id`)}><Sparkles /></Button></div><FormMessage /></FormItem>)} />
+                                    <FormField control={form.control} name={`propertyDetailPage.propertyBannerSection.specifications.${index}.value`} render={({ field }) => (<FormItem><FormLabel>Value</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
+                                    <FormField control={form.control} name={`propertyDetailPage.propertyBannerSection.specifications.${index}.displayText`} render={({ field }) => (<FormItem><FormLabel>Display Text</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
+                                </div>
+                            ))}
+                            <Button type="button" variant="outline" onClick={() => appendBannerSpec({id: '', value: '', displayText: ''})}>Add Banner Specification</Button>
+                        </div>
+                    </FormSection>
+                     <FormSection value="sub-item-2" title="Location & Connectivity">
+                        <FormField control={form.control} name="propertyDetailPage.propertyLocationAndConnectivitySection.mainHeading" render={({ field }) => (<FormItem><FormLabel>Main Heading</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
+                        {/* ... other fields for location and connectivity ... */}
+                     </FormSection>
+                     <FormSection value="sub-item-3" title="Overview Section">
+                        {/* ... fields for overview section ... */}
+                     </FormSection>
+                     {/* ... Add other sections for propertyDetailPage in a similar fashion */}
+                </Accordion>
             </FormSection>
             
           </Accordion>
