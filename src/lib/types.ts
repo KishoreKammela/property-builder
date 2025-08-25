@@ -331,6 +331,7 @@ export interface PropertySpecificationsBannerSection {
   specificationsBannerSectionMobileImageUrl: string;
 }
 export interface PropertySpecificationsGalleryShowCaseArea {
+  id: string;
   specificationsGalleryTitle: string;
   specificationsGalleryDescription: string;
   specificationsGalleryFeatures: string[];

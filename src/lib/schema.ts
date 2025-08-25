@@ -332,6 +332,7 @@ export const propertySpecificationsBannerSectionSchema = z.object({
 });
 
 export const propertySpecificationsGalleryShowCaseAreaSchema = z.object({
+    id: idSchema,
     specificationsGalleryTitle: z.string(),
     specificationsGalleryDescription: z.string(),
     specificationsGalleryFeatures: z.array(z.string()),
