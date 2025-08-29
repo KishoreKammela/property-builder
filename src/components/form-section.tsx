@@ -9,8 +9,8 @@ interface FormSectionProps {
 
 export function FormSection({ value, title, description, children }: FormSectionProps) {
   return (
-    <AccordionItem value={value} className="border-b-0 rounded-lg overflow-hidden bg-card shadow-sm transition-all">
-      <AccordionTrigger className="p-6 hover:no-underline sticky top-0 z-10 bg-muted/50 data-[state=open]:bg-primary data-[state=open]:text-primary-foreground">
+    <AccordionItem value={value} className="border-b-0 bg-card shadow-sm rounded-lg">
+      <AccordionTrigger className="p-6 hover:no-underline sticky top-0 z-10 bg-muted/50 data-[state=open]:bg-primary data-[state=open]:text-primary-foreground rounded-t-lg">
         <div className="text-left">
           <h3 className="text-lg font-medium">{title}</h3>
           {description && <p className="text-sm text-muted-foreground mt-1 data-[state=open]:text-primary-foreground/80">{description}</p>}
