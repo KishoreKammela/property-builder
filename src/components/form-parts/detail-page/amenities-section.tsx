@@ -7,11 +7,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Sparkles, Trash } from 'lucide-react';
 import { useFormContext, useFieldArray } from 'react-hook-form';
 
-interface AmenitiesSectionProps {
+interface PropertyAmenitiesSectionProps {
     generateId: (sectionName: string, fieldName: any) => void;
 }
 
-export function PropertyAmenitiesSection({ generateId }: AmenitiesSectionProps) {
+export function PropertyAmenitiesSection({ generateId }: PropertyAmenitiesSectionProps) {
   const { control } = useFormContext();
   const { fields: accordionItems, append: appendAccordion, remove: removeAccordion } = useFieldArray({ control, name: "propertyDetailPage.propertyAmenitiesSection.amenitiesAccordionItems" });
   const { fields: slideItems, append: appendSlide, remove: removeSlide } = useFieldArray({ control, name: "propertyDetailPage.propertyAmenitiesSection.cardSlideItems" });
