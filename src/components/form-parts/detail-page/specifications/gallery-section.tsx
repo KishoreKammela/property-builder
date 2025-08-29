@@ -30,7 +30,15 @@ export function SpecificationsGallerySection({ generateId }: SpecificationsGalle
                     </div>
                     <FormField control={control} name={`propertySpecificationsDetailPage.propertySpecificationsGalleryShowCaseArea.${index}.id`} render={({ field }) => (<FormItem><FormLabel>ID</FormLabel><div className="flex gap-2"><FormControl><Input {...field} /></FormControl><Button type="button" size="icon" variant="outline" onClick={() => generateId(`spec-gallery-${index + 1}`, `propertySpecificationsDetailPage.propertySpecificationsGalleryShowCaseArea.${index}.id`)}><Sparkles /></Button></div><FormMessage /></FormItem>)} />
                     <FormField control={control} name={`propertySpecificationsDetailPage.propertySpecificationsGalleryShowCaseArea.${index}.specificationsGalleryTitle`} render={({ field }) => (<FormItem><FormLabel>Title</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
-                    <FormField control={control} name={`propertySpecificationsDetailPage.propertySpecificationsGalleryShowCaseArea.${index}.specificationsGalleryDescription`} render={({ field }) => (<FormItem><FormLabel>Description</FormLabel><FormControl><Textarea {...field} /></FormControl><FormMessage /></FormMessage>)} />
+                    <FormField control={control} name={`propertySpecificationsDetailPage.propertySpecificationsGalleryShowCaseArea.${index}.specificationsGalleryDescription`} render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Description</FormLabel>
+                        <FormControl>
+                          <Textarea {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )} />
                     <ImagePreviewInput name={`propertySpecificationsDetailPage.propertySpecificationsGalleryShowCaseArea.${index}.specificationsGalleryImageUrl`} label="Image URL" />
 
                     <StringArrayField name={`propertySpecificationsDetailPage.propertySpecificationsGalleryShowCaseArea.${index}.specificationsGalleryFeatures`} label="Features" />
