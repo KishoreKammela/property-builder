@@ -7,7 +7,6 @@ import { Accordion } from '@/components/ui/accordion';
 import type { Property } from '@/lib/types';
 import { useToast } from '@/hooks/use-toast';
 import { handleAltTextGeneration, handleIdGeneration, handleDescriptionGeneration } from '@/lib/actions';
-import { Loader2, RotateCcw } from 'lucide-react';
 import { useState } from 'react';
 import { BasicInfoSection } from './form-parts/basic-info-section';
 import { DescriptionSection } from './form-parts/description-section';
@@ -22,7 +21,6 @@ import { PropertyMasterPlanDetailPageSection } from './form-parts/property-maste
 import { PropertyUnitPlanDetailPageSection } from './form-parts/property-unit-plan-detail-page-section';
 import { PropertyAmenitiesDetailPageSection } from './form-parts/property-amenities-detail-page-section';
 import { PropertySpecificationsDetailPageSection } from './form-parts/property-specifications-detail-page-section';
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from './ui/alert-dialog';
 
 interface PropertyFormProps {
   onFormSubmit: (data: Property) => void;
@@ -142,9 +140,9 @@ export function PropertyForm({ onFormSubmit, onFormError }: PropertyFormProps) {
 
   return (
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onFormSubmit, onFormError)} className="space-y-8" noValidate>
+        <form onSubmit={form.handleSubmit(onFormSubmit, onFormError)} className="space-y-4" noValidate>
           <Accordion type="multiple" className="w-full space-y-4" defaultValue={['item-1']}>
-            <BasicInfoSection generateId={generateId} isGenerating={generatingFields} />
+            <BasicInfoSection generateId={generateId} />
             <DescriptionSection isGenerating={isGeneratingDescriptions} onGenerate={generateDescriptions} />
             <PricingMediaSection 
               isGenerating={generatingFields} 
@@ -162,37 +160,10 @@ export function PropertyForm({ onFormSubmit, onFormError }: PropertyFormProps) {
             <PropertySpecificationsDetailPageSection generateId={generateId} generateAltText={generateAltText} isGenerating={generatingFields} />
           </Accordion>
 
-          <div className="lg:hidden flex items-start gap-4">
-             <div className="flex-1">
-              <Button type="submit" className="w-full bg-accent hover:bg-accent/90 text-accent-foreground" size="lg">
+          <div className="lg:hidden flex flex-col sm:flex-row-reverse items-start gap-4 mt-8">
+              <Button type="submit" className="w-full sm:w-auto bg-accent hover:bg-accent/90 text-accent-foreground" size="lg">
                 Generate and Validate Data
               </Button>
-             </div>
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <Button type="button" variant="outline">
-                    <RotateCcw className="mr-2 h-4 w-4" />
-                    Reset
-                  </Button>
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                    <AlertDialogDescription>
-                      This action cannot be undone. This will permanently clear the form
-                      and remove your data from our servers.
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={() => {
-                       form.reset();
-                       localStorage.removeItem('property-form-autosave');
-                       toast({ title: "Form Reset", description: "The form has been cleared." });
-                    }}>Continue</AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
           </div>
         </form>
       </Form>

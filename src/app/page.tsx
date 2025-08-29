@@ -26,7 +26,7 @@ import {
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Textarea } from '@/components/ui/textarea';
 import { handleContentIngestion } from '@/lib/actions';
-import { get, set } from 'lodash';
+import { get } from 'lodash';
 
 const LOCAL_STORAGE_KEY = 'property-form-autosave';
 
@@ -118,44 +118,45 @@ export default function Home() {
   };
   
   const onFormError = (errors: any) => {
-    toast({
-      variant: 'destructive',
-      title: "Validation Error",
-      description: "Please check the form for errors and try again.",
-    });
-
-    // Find the first error and focus the element
     const errorKeys = Object.keys(errors);
-    if(errorKeys.length > 0) {
-      let fieldToFocus = errorKeys[0];
-
-      // Handle nested fields
-      const findFirstError = (obj: any, path: string = ''): string | null => {
-        for(const key in obj) {
-          const newPath = path ? `${path}.${key}` : key;
-          const value = get(obj, key);
-          if(value.message) { // This is an error object
-            return newPath;
+    
+    // Custom function to recursively find the first error path
+    const findFirstErrorPath = (obj: any): string | null => {
+        const keys = Object.keys(obj);
+        if (keys.length === 0) return null;
+      
+        for (const key of keys) {
+          const value = obj[key];
+          if (typeof value === 'object' && value !== null && 'message' in value) {
+            return key; 
           }
-          if(typeof value === 'object' && value !== null) {
-            const nestedError = findFirstError(value, newPath);
-            if(nestedError) return nestedError;
+          if (typeof value === 'object' && value !== null) {
+            const nestedPath = findFirstErrorPath(value);
+            if (nestedPath) {
+              // Check if the key is a number (array index)
+              const prefix = isNaN(Number(key)) ? `${key}.` : `[${key}].`;
+              return `${prefix}${nestedPath}`.replace(/\.\[/g, '[');
+            }
           }
         }
-        return null;
-      }
+        return keys[0];
+      };
 
-      const firstErrorPath = findFirstError(errors);
+    const firstErrorPath = findFirstErrorPath(errors);
 
-      if (firstErrorPath) {
-        // Find the element by name attribute
-        const element = document.querySelector(`[name="${firstErrorPath}"]`);
-        if (element && typeof (element as HTMLElement).focus === 'function') {
-          (element as HTMLElement).focus();
+    toast({
+      variant: 'destructive',
+      title: `Validation Error (${errorKeys.length} issues)`,
+      description: `Please check the form for errors. First error at: ${firstErrorPath}`,
+    });
+
+    if (firstErrorPath) {
+        const element = document.querySelector<HTMLElement>(`[name="${firstErrorPath}"]`);
+        if (element) {
+          element.focus({ preventScroll: true });
           element.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       }
-    }
   };
 
 
@@ -218,7 +219,7 @@ export default function Home() {
           <div className="mt-8 lg:mt-0 relative">
               <div className="lg:sticky lg:top-8">
                 <JsonPreview data={watchedData} />
-                <div className="hidden lg:flex flex-col sm:flex-row-reverse gap-4 mt-4">
+                <div className="flex flex-col sm:flex-row-reverse gap-4 mt-4">
                     <Button onClick={form.handleSubmit(handleFormSubmit, onFormError)} className="w-full sm:w-auto bg-accent hover:bg-accent/90 text-accent-foreground" size="lg">
                       Generate and Validate Data
                     </Button>
