@@ -1,9 +1,10 @@
-import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
+import { FormField, FormItem, FormLabel, FormControl, FormMessage, FormDescription } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { FormSection } from '@/components/form-section';
 import { Loader2, Sparkles } from 'lucide-react';
 import { useFormContext } from 'react-hook-form';
+import { toWords } from '@/lib/currency-to-words';
 
 interface PricingMediaSectionProps {
     isGeneratingAltText: boolean;
@@ -12,6 +13,9 @@ interface PricingMediaSectionProps {
 
 export function PricingMediaSection({ isGeneratingAltText, generateAltText }: PricingMediaSectionProps) {
     const { control, watch } = useFormContext();
+    const minPrice = watch('priceRange.min');
+    const maxPrice = watch('priceRange.max');
+
   return (
     <FormSection value="item-3" title="Pricing and Media" description="Set the property price range and add media assets.">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -22,6 +26,7 @@ export function PricingMediaSection({ isGeneratingAltText, generateAltText }: Pr
                 <FormItem>
                 <FormLabel>Minimum Price</FormLabel>
                 <FormControl><Input type="number" placeholder="e.g., 5000000" {...field} onChange={e => field.onChange(Number(e.target.value))}/></FormControl>
+                 {minPrice > 0 && <FormDescription>{toWords(minPrice)}</FormDescription>}
                 <FormMessage />
                 </FormItem>
             )}
@@ -33,6 +38,7 @@ export function PricingMediaSection({ isGeneratingAltText, generateAltText }: Pr
                 <FormItem>
                 <FormLabel>Maximum Price</FormLabel>
                 <FormControl><Input type="number" placeholder="e.g., 9000000" {...field} onChange={e => field.onChange(Number(e.target.value))}/></FormControl>
+                {maxPrice > 0 && <FormDescription>{toWords(maxPrice)}</FormDescription>}
                 <FormMessage />
                 </FormItem>
             )}

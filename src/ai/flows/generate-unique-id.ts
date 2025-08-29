@@ -5,25 +5,12 @@
  *  for content sections based on property attributes.
  *
  * - generateUniqueId - A function that generates a unique ID.
- * - GenerateUniqueIdInput - The input type for the generateUniqueId function.
- * - GenerateUniqueIdOutput - The return type for the generateUniqueId function.
  */
 
 import {ai} from '@/ai/genkit';
-import {z} from 'genkit';
+import { GenerateUniqueIdInputSchema, GenerateUniqueIdOutputSchema, type GenerateUniqueIdInput } from '@/lib/schema';
 
-const GenerateUniqueIdInputSchema = z.object({
-  propertyName: z.string().describe('The name of the property.'),
-  sectionName: z.string().describe('The name of the content section.'),
-});
-export type GenerateUniqueIdInput = z.infer<typeof GenerateUniqueIdInputSchema>;
-
-const GenerateUniqueIdOutputSchema = z.object({
-  uniqueId: z.string().describe('The generated unique ID for the content section.'),
-});
-export type GenerateUniqueIdOutput = z.infer<typeof GenerateUniqueIdOutputSchema>;
-
-export async function generateUniqueId(input: GenerateUniqueIdInput): Promise<GenerateUniqueIdOutput> {
+export async function generateUniqueId(input: GenerateUniqueIdInput) {
   return generateUniqueIdFlow(input);
 }
 
@@ -52,7 +39,7 @@ const generateUniqueIdFlow = ai.defineFlow(
   async input => {
     const {output} = await prompt(input);
     return {
-      uniqueId: output!.uniqueId.toLowerCase().replace(/[^a-z0-9-]+/g, '-').replace(/^-+|-+$/g, ''),
+      uniqueId: output!.uniqueId.toLowerCase().replace(/[^a-z-]/g, '').replace(/^-+|-+$/g, ''),
     };
   }
 );

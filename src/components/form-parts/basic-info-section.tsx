@@ -5,13 +5,35 @@ import { FormSection } from '@/components/form-section';
 import { Button } from '../ui/button';
 import { Sparkles } from 'lucide-react';
 import { useFormContext } from 'react-hook-form';
+import { useEffect } from 'react';
 
 interface BasicInfoSectionProps {
     generateId: (sectionName: string, fieldName: any) => void;
 }
 
 export function BasicInfoSection({ generateId }: BasicInfoSectionProps) {
-    const { control } = useFormContext();
+    const { control, watch, setValue } = useFormContext();
+    const propertyName = watch('name');
+
+    useEffect(() => {
+        if (propertyName) {
+            const slug = propertyName.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+            setValue('slug', slug, { shouldValidate: true });
+            
+            // Auto-populate other headings
+            setValue('propertyDetailPage.propertyBannerSection.headingOne', propertyName.split(' ')[0]);
+            setValue('propertyDetailPage.propertyBannerSection.headingTwo', propertyName.substring(propertyName.indexOf(' ') + 1));
+            setValue('propertyDetailPage.propertyHighlightsSection.propertyHighlightsTitle', `${propertyName} Highlights`);
+            setValue('propertyDetailPage.propertyMasterPlanSection.masterPlanTitle', `${propertyName} Master Plan`);
+            setValue('propertyDetailPage.propertyUnitPlansSection.unitPlanTitle', `${propertyName} Floor Plan`);
+            setValue('propertyDetailPage.propertyPricingSection.pricingTitle', `${propertyName} Price`);
+            setValue('propertyDetailPage.propertySpecificationsSection.specificationTitle', `${propertyName} Specification`);
+            setValue('propertyDetailPage.propertyLocationSection.propertyLoactionTitle', `Know about ${watch('area')}`);
+            setValue('propertyMasterPlanDetailPage.propertyMasterPlanBannerSection.bannerSectionHeader', `${propertyName} Master Plan - A Vision in 53 Acres`);
+            setValue('propertyUnitPlanDetailPage.propertyFloorPlanSection.floorPlanSectionHeading', `${propertyName} Floor Plan`);
+        }
+    }, [propertyName, setValue, watch]);
+
   return (
     <FormSection value="item-1" title="Basic Property Information" description="Provide the main details for the property listing.">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

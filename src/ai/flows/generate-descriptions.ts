@@ -5,29 +5,12 @@
  *
  * It exports:
  * - `generateDescriptions`: An async function that takes property details and returns a full and short description.
- * - `GenerateDescriptionsInput`: The input type for the `generateDescriptions` function.
- * - `GenerateDescriptionsOutput`: The output type for the `generateDescriptions` function.
  */
 
 import {ai} from '@/ai/genkit';
-import {z} from 'genkit';
+import { GenerateDescriptionsInputSchema, GenerateDescriptionsOutputSchema, type GenerateDescriptionsInput } from '@/lib/schema';
 
-const GenerateDescriptionsInputSchema = z.object({
-  propertyName: z.string().describe('The name of the property.'),
-  propertyType: z.string().describe('The type of the property (e.g., apartment, villa).'),
-  propertyArea: z.string().describe('The area where the property is located.'),
-  features: z.array(z.string()).describe('A list of key features of the property.'),
-  amenities: z.array(z.string()).describe('A list of amenities available at the property.'),
-});
-export type GenerateDescriptionsInput = z.infer<typeof GenerateDescriptionsInputSchema>;
-
-const GenerateDescriptionsOutputSchema = z.object({
-  description: z.string().describe('The generated full description for the property.'),
-  shortDescription: z.string().describe('The generated short summary for the property.'),
-});
-export type GenerateDescriptionsOutput = z.infer<typeof GenerateDescriptionsOutputSchema>;
-
-export async function generateDescriptions(input: GenerateDescriptionsInput): Promise<GenerateDescriptionsOutput> {
+export async function generateDescriptions(input: GenerateDescriptionsInput) {
   return generateDescriptionsFlow(input);
 }
 

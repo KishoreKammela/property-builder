@@ -10,6 +10,7 @@ import { PricingSection } from './detail-page/pricing-section';
 import { SpecificationsSection as DetailSpecificationsSection } from './detail-page/specifications-section';
 import { LocationSection } from './detail-page/location-section';
 import { FaqSection } from './detail-page/faq-section';
+import { PropertyAmenitiesSection } from './detail-page/amenities-section';
 
 interface PropertyDetailPageSectionProps {
     generateId: (sectionName: string, fieldName: any) => void;
@@ -29,6 +30,7 @@ export function PropertyDetailPageSection({ generateId }: PropertyDetailPageSect
         <DetailSpecificationsSection />
         <LocationSection generateId={generateId} />
         <FaqSection generateId={generateId} />
+        <PropertyAmenitiesSection generateId={generateId}/>
       </Accordion>
     </FormSection>
   );

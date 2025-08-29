@@ -339,7 +339,57 @@ export const propertySpecificationsGalleryShowCaseAreaSchema = z.object({
     specificationsGalleryImageUrl: urlSchema,
 });
 
-const emptyStringToUndefined = z.literal('').transform(() => undefined);
+export const GenerateUniqueIdInputSchema = z.object({
+    propertyName: z.string().describe('The name of the property.'),
+    sectionName: z.string().describe('The name of the content section.'),
+});
+export type GenerateUniqueIdInput = z.infer<typeof GenerateUniqueIdInputSchema>;
+
+export const GenerateUniqueIdOutputSchema = z.object({
+    uniqueId: z.string().describe('The generated unique ID for the content section.'),
+});
+export type GenerateUniqueIdOutput = z.infer<typeof GenerateUniqueIdOutputSchema>;
+
+export const GenerateAltTextInputSchema = z.object({
+    imageUrl: z
+      .string()
+      .describe(
+        "The URL of the image for which alt text needs to be generated. Must be a data URI that includes a MIME type and use Base64 encoding. Expected format: 'data:<mimetype>;base64,<encoded_data>'."
+      ),
+    propertyName: z.string().describe('The name of the property.'),
+    propertyType: z.string().describe('The type of the property (e.g., apartment, villa).'),
+    propertyArea: z.string().describe('The area where the property is located.'),
+});
+export type GenerateAltTextInput = z.infer<typeof GenerateAltTextInputSchema>;
+  
+export const GenerateAltTextOutputSchema = z.object({
+    altText: z.string().describe('The generated alt text for the image.'),
+});
+export type GenerateAltTextOutput = z.infer<typeof GenerateAltTextOutputSchema>;
+
+export const GenerateDescriptionsInputSchema = z.object({
+    propertyName: z.string().describe('The name of the property.'),
+    propertyType: z.string().describe('The type of the property (e.g., apartment, villa).'),
+    propertyArea: z.string().describe('The area where the property is located.'),
+    features: z.array(z.string()).describe('A list of key features of the property.'),
+    amenities: z.array(z.string()).describe('A list of amenities available at the property.'),
+});
+export type GenerateDescriptionsInput = z.infer<typeof GenerateDescriptionsInputSchema>;
+
+export const GenerateDescriptionsOutputSchema = z.object({
+    description: z.string().describe('The generated full description for the property.'),
+    shortDescription: z.string().describe('The generated short summary for the property.'),
+});
+export type GenerateDescriptionsOutput = z.infer<typeof GenerateDescriptionsOutputSchema>;
+
+export const IngestContentInputSchema = z.object({
+    draftContent: z.string().describe('A block of text, potentially from a Word document or other source, containing details about a property.'),
+});
+export type IngestContentInput = z.infer<typeof IngestContentInputSchema>;
+  
+export const IngestContentOutputSchema = z.lazy(() => propertySchema);
+export type IngestContentOutput = z.infer<typeof IngestContentOutputSchema>;
+
 
 export const propertySchema = z.object({
     id: idSchema,
@@ -417,4 +467,4 @@ export const propertySchema = z.object({
         propertySpecificationsGalleryShowCaseArea: z.array(propertySpecificationsGalleryShowCaseAreaSchema),
         propertySpecificationFAQSection: faqSectionSchema,
     }),
-});
+}).deepPartial();

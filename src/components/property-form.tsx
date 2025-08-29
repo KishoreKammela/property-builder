@@ -22,7 +22,7 @@ import { PropertyMasterPlanDetailPageSection } from './form-parts/property-maste
 import { PropertyUnitPlanDetailPageSection } from './form-parts/property-unit-plan-detail-page-section';
 import { PropertyAmenitiesDetailPageSection } from './form-parts/property-amenities-detail-page-section';
 import { PropertySpecificationsDetailPageSection } from './form-parts/property-specifications-detail-page-section';
-
+import { PropertyAmenitiesSection } from './form-parts/detail-page/amenities-section';
 
 interface PropertyFormProps {
   onFormSubmit: (data: Property) => void;

@@ -1,17 +1,19 @@
 'use server';
 
-import { generateUniqueId as generateUniqueIdFlow, type GenerateUniqueIdInput } from '@/ai/flows/generate-unique-id';
-import { generateAltText as generateAltTextFlow, type GenerateAltTextInput } from '@/ai/flows/generate-alt-text';
-import { generateDescriptions as generateDescriptionsFlow, type GenerateDescriptionsInput } from '@/ai/flows/generate-descriptions';
+import { generateUniqueId as generateUniqueIdFlow } from '@/ai/flows/generate-unique-id';
+import { generateAltText as generateAltTextFlow } from '@/ai/flows/generate-alt-text';
+import { generateDescriptions as generateDescriptionsFlow } from '@/ai/flows/generate-descriptions';
+import { ingestContent as ingestContentFlow } from '@/ai/flows/ingest-content';
+import type { GenerateUniqueIdInput, GenerateAltTextInput, GenerateDescriptionsInput, IngestContentInput } from './schema';
+
 
 export async function handleIdGeneration(input: GenerateUniqueIdInput) {
   try {
     const { uniqueId } = await generateUniqueIdFlow(input);
-    // Adhere to the user rule of no numbers, only lowercase letters and hyphens
     const filteredId = uniqueId
       .toLowerCase()
-      .replace(/[^a-z-]/g, '') // remove numbers and other special characters
-      .replace(/^-+|-+$/g, ''); // trim hyphens
+      .replace(/[^a-z-]/g, '')
+      .replace(/^-+|-+$/g, '');
     return { success: true, id: filteredId };
   } catch (error) {
     console.error('Error generating unique ID:', error);
@@ -20,14 +22,23 @@ export async function handleIdGeneration(input: GenerateUniqueIdInput) {
 }
 
 async function imageUrlToDataUrl(url: string): Promise<string> {
-    const response = await fetch(url);
-    if (!response.ok) {
-        throw new Error(`Failed to fetch image: ${response.statusText}`);
+    if (url.startsWith('data:')) {
+        return url;
     }
-    const contentType = response.headers.get('content-type') || 'image/png';
-    const buffer = await response.arrayBuffer();
-    const base64 = Buffer.from(buffer).toString('base64');
-    return `data:${contentType};base64,${base64}`;
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            console.warn(`Failed to fetch image, returning placeholder: ${response.statusText}`);
+            return "data:image/png;base64,";
+        }
+        const contentType = response.headers.get('content-type') || 'image/png';
+        const buffer = await response.arrayBuffer();
+        const base64 = Buffer.from(buffer).toString('base64');
+        return `data:${contentType};base64,${base64}`;
+    } catch (error) {
+        console.warn(`Error fetching image, returning placeholder:`, error);
+        return "data:image/png;base64,";
+    }
 }
 
 
@@ -50,4 +61,14 @@ export async function handleDescriptionGeneration(input: GenerateDescriptionsInp
     console.error('Error generating descriptions:', error);
     return { success: false, error: 'Failed to generate descriptions.' };
   }
+}
+
+export async function handleContentIngestion(input: IngestContentInput) {
+    try {
+        const result = await ingestContentFlow(input);
+        return { success: true, data: result };
+    } catch (error) {
+        console.error('Error ingesting content:', error);
+        return { success: false, error: 'Failed to ingest content from the provided text.' };
+    }
 }

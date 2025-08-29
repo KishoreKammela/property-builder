@@ -10,7 +10,7 @@ import { ThemeToggle } from '@/components/theme-toggle';
 import { propertySchema } from '@/lib/schema';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
-import { RotateCcw } from 'lucide-react';
+import { RotateCcw, ScanText, Loader2, Sparkles } from 'lucide-react';
 import { defaultValues } from '@/data/property-data';
 import {
   AlertDialog,
@@ -23,12 +23,18 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import { Textarea } from '@/components/ui/textarea';
+import { handleContentIngestion } from '@/lib/actions';
 
 const LOCAL_STORAGE_KEY = 'property-form-autosave';
 
 export default function Home() {
   const { toast } = useToast();
   const [isMounted, setIsMounted] = useState(false);
+  const [isIngesting, setIsIngesting] = useState(false);
+  const [draftContent, setDraftContent] = useState('');
+
 
   const form = useForm<Property>({
     resolver: zodResolver(propertySchema),
@@ -73,6 +79,34 @@ export default function Home() {
     return () => subscription.unsubscribe();
   }, [form, isMounted]);
 
+  const ingestContent = async () => {
+    if (!draftContent) {
+        toast({
+            variant: 'destructive',
+            title: 'No Content Provided',
+            description: 'Please paste some content into the text area before ingesting.',
+        });
+        return;
+    }
+    setIsIngesting(true);
+    const result = await handleContentIngestion({ draftContent });
+    setIsIngesting(false);
+
+    if (result.success && result.data) {
+        form.reset(result.data);
+        toast({
+            title: 'Content Ingested',
+            description: 'The form has been pre-filled with the provided content.',
+        });
+    } else {
+        toast({
+            variant: 'destructive',
+            title: 'Error Ingesting Content',
+            description: result.error,
+        });
+    }
+  }
+
 
   const handleFormSubmit = (data: Property) => {
     toast({
@@ -108,6 +142,30 @@ export default function Home() {
             Fill in the property details below to generate structured content for your listings.
           </p>
         </header>
+
+         <Collapsible className="mb-8">
+            <CollapsibleTrigger asChild>
+                <Button variant="outline" className="w-full">
+                    <ScanText className="mr-2 h-4 w-4" />
+                    Pre-fill form from document
+                </Button>
+            </CollapsibleTrigger>
+            <CollapsibleContent className="mt-4">
+                <div className="grid gap-4">
+                    <Textarea 
+                        placeholder="Paste your draft content from a Word document or other source here..."
+                        rows={10}
+                        value={draftContent}
+                        onChange={(e) => setDraftContent(e.target.value)}
+                    />
+                    <Button onClick={ingestContent} disabled={isIngesting}>
+                        {isIngesting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Sparkles className="mr-2 h-4 w-4" />}
+                        Ingest Content and Pre-fill Form
+                    </Button>
+                </div>
+            </CollapsibleContent>
+        </Collapsible>
+
         <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-12">
           <div className="lg:pr-6">
             <FormProvider {...form}>
