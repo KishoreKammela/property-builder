@@ -10,7 +10,7 @@ import { ThemeToggle } from '@/components/theme-toggle';
 import { propertySchema } from '@/lib/schema';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
-import { RotateCcw, ScanText, Loader2, Sparkles } from 'lucide-react';
+import { RotateCcw, ScanText, Loader2, Sparkles, TriangleAlert } from 'lucide-react';
 import { defaultValues } from '@/data/property-data';
 import {
   AlertDialog,
@@ -26,9 +26,31 @@ import {
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Textarea } from '@/components/ui/textarea';
 import { handleContentIngestion } from '@/lib/actions';
-import { get } from 'lodash';
+import { get, set } from 'lodash';
 
 const LOCAL_STORAGE_KEY = 'property-form-autosave';
+
+// Helper to find the first error path for focusing
+const findFirstErrorPath = (obj: any, path: string = ''): string | null => {
+    const keys = Object.keys(obj);
+    if (keys.length === 0) return null;
+  
+    for (const key of keys) {
+      const value = obj[key];
+      const newPath = path ? (isNaN(Number(key)) ? `${path}.${key}` : `${path}[${key}]`) : key;
+      if (typeof value === 'object' && value !== null) {
+        if ('message' in value && typeof value.message === 'string') {
+          return newPath;
+        }
+        const nestedPath = findFirstErrorPath(value, newPath);
+        if (nestedPath) {
+          return nestedPath;
+        }
+      }
+    }
+    return null;
+  };
+
 
 export default function Home() {
   const { toast } = useToast();
@@ -43,6 +65,7 @@ export default function Home() {
     mode: 'onChange',
   });
 
+  const { formState: { errors } } = form;
   const watchedData = form.watch();
 
   // Load from localStorage on initial render
@@ -119,29 +142,6 @@ export default function Home() {
   
   const onFormError = (errors: any) => {
     const errorKeys = Object.keys(errors);
-    
-    // Custom function to recursively find the first error path
-    const findFirstErrorPath = (obj: any): string | null => {
-        const keys = Object.keys(obj);
-        if (keys.length === 0) return null;
-      
-        for (const key of keys) {
-          const value = obj[key];
-          if (typeof value === 'object' && value !== null && 'message' in value) {
-            return key; 
-          }
-          if (typeof value === 'object' && value !== null) {
-            const nestedPath = findFirstErrorPath(value);
-            if (nestedPath) {
-              // Check if the key is a number (array index)
-              const prefix = isNaN(Number(key)) ? `${key}.` : `[${key}].`;
-              return `${prefix}${nestedPath}`.replace(/\.\[/g, '[');
-            }
-          }
-        }
-        return keys[0];
-      };
-
     const firstErrorPath = findFirstErrorPath(errors);
 
     toast({
@@ -151,7 +151,8 @@ export default function Home() {
     });
 
     if (firstErrorPath) {
-        const element = document.querySelector<HTMLElement>(`[name="${firstErrorPath}"]`);
+        const selector = firstErrorPath.replace(/\[(\d+)\]/g, '.$1').replace(/\.\d+/g, (match) => `[${match.substring(1)}]`);
+        const element = document.querySelector<HTMLElement>(`[name="${selector}"]`);
         if (element) {
           element.focus({ preventScroll: true });
           element.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -218,14 +219,14 @@ export default function Home() {
           </div>
           <div className="mt-8 lg:mt-0 relative">
               <div className="lg:sticky lg:top-8">
-                <JsonPreview data={watchedData} />
-                <div className="flex flex-col sm:flex-row-reverse gap-4 mt-4">
-                    <Button onClick={form.handleSubmit(handleFormSubmit, onFormError)} className="w-full sm:w-auto bg-accent hover:bg-accent/90 text-accent-foreground" size="lg">
+                <JsonPreview data={watchedData} errors={errors} />
+                <div className="flex flex-col sm:flex-row items-start gap-4 mt-4 lg:flex-row-reverse">
+                    <Button onClick={form.handleSubmit(handleFormSubmit, onFormError)} className="w-full lg:w-auto bg-accent hover:bg-accent/90 text-accent-foreground" size="lg">
                       Generate and Validate Data
                     </Button>
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
-                        <Button type="button" variant="outline">
+                        <Button type="button" variant="outline" className='w-full lg:w-auto'>
                           <RotateCcw className="mr-2 h-4 w-4" />
                           Reset Form
                         </Button>
@@ -235,7 +236,7 @@ export default function Home() {
                           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                           <AlertDialogDescription>
                             This action cannot be undone. This will permanently clear the form
-                            and remove your data from our servers.
+                            and remove your data from local storage.
                           </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>

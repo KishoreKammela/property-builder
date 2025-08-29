@@ -5,12 +5,16 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
-import { ClipboardCopy, Check, FileJson, Braces, Plus, Minus } from 'lucide-react';
+import { ClipboardCopy, Check, FileJson, Braces, Plus, Minus, TriangleAlert } from 'lucide-react';
 import { useState, useMemo, useCallback } from 'react';
 import { cn } from '@/lib/utils';
+import type { FieldErrors } from 'react-hook-form';
+import type { Property } from '@/lib/types';
+import { get } from 'lodash';
 
 interface JsonPreviewProps {
   data: unknown;
+  errors?: FieldErrors<Property>;
 }
 
 // A simple recursive function to format an object as a JS object string
@@ -39,20 +43,24 @@ const JsonNode = ({
   isInitiallyOpen = true,
   isJson = true,
   level = 0,
+  path,
   collapsedNodes,
-  toggleNode
+  toggleNode,
+  errors,
 }: {
   nodeKey: string;
   value: any;
   isInitiallyOpen?: boolean;
   isJson?: boolean;
   level?: number;
+  path: string;
   collapsedNodes: Set<string>;
   toggleNode: (path: string) => void;
+  errors?: FieldErrors<Property>;
 }) => {
-  const path = `${level}-${nodeKey}`;
   const isCollapsed = collapsedNodes.has(path);
   const isObject = typeof value === 'object' && value !== null;
+  const hasError = useMemo(() => errors && get(errors, path.replace(/\[(\d+)\]/g, '.$1')), [errors, path]);
 
   const handleToggle = () => {
     if (isObject) {
@@ -69,9 +77,9 @@ const JsonNode = ({
       );
     }
     if (value === null) return <span className="text-syntax-null">null</span>;
-    if (typeof value === 'string') return <span className="text-syntax-string">{isJson ? `"${value}"` : `'${value}'`}</span>;
-    if (typeof value === 'number') return <span className="text-syntax-number">{value}</span>;
-    if (typeof value === 'boolean') return <span className="text-syntax-boolean">{String(value)}</span>;
+    if (typeof value === 'string') return <span className={cn('text-syntax-string', {'text-destructive': hasError})}>{isJson ? `"${value}"` : `'${value}'`}</span>;
+    if (typeof value === 'number') return <span className={cn('text-syntax-number', {'text-destructive': hasError})}>{value}</span>;
+    if (typeof value === 'boolean') return <span className={cn('text-syntax-boolean', {'text-destructive': hasError})}>{String(value)}</span>;
     return null;
   };
   
@@ -79,13 +87,13 @@ const JsonNode = ({
 
   return (
     <div style={{ marginLeft: `${level * 1.5}rem` }}>
-      <div className="flex items-center">
+      <div className="flex items-center group">
         {isObject && (
            <button onClick={handleToggle} className="mr-2 text-muted-foreground hover:text-foreground">
              {isCollapsed ? <Plus size={14} /> : <Minus size={14} />}
            </button>
         )}
-        {nodeKey && <span className={cn(keyClass, 'mr-2')}>{isJson ? `"${nodeKey}":` : `${nodeKey}:`}</span>}
+        {nodeKey && <span className={cn(keyClass, 'mr-2', {'text-destructive': hasError})}>{isJson ? `"${nodeKey}":` : `${nodeKey}:`}</span>}
         
         {isObject ? (
             isCollapsed ? renderValue() : (
@@ -93,6 +101,9 @@ const JsonNode = ({
             )
         ) : (
           renderValue()
+        )}
+         {hasError && (
+          <TriangleAlert className="h-4 w-4 ml-2 text-destructive" />
         )}
       </div>
 
@@ -106,8 +117,10 @@ const JsonNode = ({
               isInitiallyOpen={isInitiallyOpen}
               isJson={isJson}
               level={level + 1}
+              path={Array.isArray(value) ? `${path}[${key}]` : (path ? `${path}.${key}` : key)}
               collapsedNodes={collapsedNodes}
               toggleNode={toggleNode}
+              errors={errors}
             />
           ))}
           <div style={{ marginLeft: `${level * 1.5}rem` }}>
@@ -120,7 +133,7 @@ const JsonNode = ({
 };
 
 
-export function JsonPreview({ data }: JsonPreviewProps) {
+export function JsonPreview({ data, errors }: JsonPreviewProps) {
   const { toast } = useToast();
   const [copied, setCopied] = useState<'json' | 'js' | null>(null);
   const [collapsedNodes, setCollapsedNodes] = useState<Set<string>>(new Set());
@@ -192,10 +205,10 @@ export function JsonPreview({ data }: JsonPreviewProps) {
             </div>
             <ScrollArea className="h-96 w-full rounded-md border bg-muted/40 p-4 font-code text-sm">
               <TabsContent value="json">
-                <JsonNode nodeKey="" value={data} isJson={true} collapsedNodes={collapsedNodes} toggleNode={toggleNode} />
+                <JsonNode nodeKey="" value={data} isJson={true} path="" collapsedNodes={collapsedNodes} toggleNode={toggleNode} errors={errors}/>
               </TabsContent>
               <TabsContent value="js">
-                <JsonNode nodeKey="" value={data} isJson={false} collapsedNodes={collapsedNodes} toggleNode={toggleNode} />
+                <JsonNode nodeKey="" value={data} isJson={false} path="" collapsedNodes={collapsedNodes} toggleNode={toggleNode} errors={errors}/>
               </TabsContent>
             </ScrollArea>
           </Tabs>
