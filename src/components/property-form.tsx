@@ -7,7 +7,7 @@ import { Accordion } from '@/components/ui/accordion';
 import type { Property } from '@/lib/types';
 import { useToast } from '@/hooks/use-toast';
 import { handleAltTextGeneration, handleIdGeneration } from '@/lib/actions';
-import { Loader2 } from 'lucide-react';
+import { Loader2, RotateCcw } from 'lucide-react';
 import { useState } from 'react';
 import { BasicInfoSection } from './form-parts/basic-info-section';
 import { DescriptionSection } from './form-parts/description-section';
@@ -26,9 +26,10 @@ import { PropertySpecificationsDetailPageSection } from './form-parts/property-s
 
 interface PropertyFormProps {
   onFormSubmit: (data: Property) => void;
+  onReset: () => void;
 }
 
-export function PropertyForm({ onFormSubmit }: PropertyFormProps) {
+export function PropertyForm({ onFormSubmit, onReset }: PropertyFormProps) {
   const [isGeneratingAltText, setIsGeneratingAltText] = useState(false);
   const form = useFormContext<Property>();
   
@@ -40,7 +41,7 @@ export function PropertyForm({ onFormSubmit }: PropertyFormProps) {
       toast({
         variant: 'destructive',
         title: 'Error',
-        description: 'Please enter a property name first.',
+        description: 'Please enter a property name first to generate an ID.',
       });
       return;
     }
@@ -54,7 +55,7 @@ export function PropertyForm({ onFormSubmit }: PropertyFormProps) {
     } else {
       toast({
         variant: 'destructive',
-        title: 'Error',
+        title: 'Error Generating ID',
         description: result.error,
       });
     }
@@ -65,8 +66,8 @@ export function PropertyForm({ onFormSubmit }: PropertyFormProps) {
     if (!imageUrl) {
       toast({
         variant: 'destructive',
-        title: 'Error',
-        description: 'Please provide an image URL first.',
+        title: 'Image URL Missing',
+        description: 'Please provide a featured image URL first.',
       });
       return;
     }
@@ -84,12 +85,12 @@ export function PropertyForm({ onFormSubmit }: PropertyFormProps) {
       form.setValue('alt', result.altText, { shouldValidate: true });
       toast({
         title: 'Alt Text Generated',
-        description: 'Successfully generated alt text for the image.',
+        description: 'Successfully generated alt text for the featured image.',
       });
     } else {
       toast({
         variant: 'destructive',
-        title: 'Error',
+        title: 'Error Generating Alt Text',
         description: result.error,
       });
     }
@@ -118,9 +119,15 @@ export function PropertyForm({ onFormSubmit }: PropertyFormProps) {
             <PropertySpecificationsDetailPageSection generateId={generateId} />
           </Accordion>
 
-          <Button type="submit" className="w-full bg-accent hover:bg-accent/90 text-accent-foreground" size="lg">
-            Generate and Validate Data
-          </Button>
+          <div className="flex flex-col sm:flex-row gap-4">
+             <Button type="button" variant="outline" onClick={onReset} className="w-full sm:w-auto">
+                <RotateCcw />
+                Reset Form
+            </Button>
+            <Button type="submit" className="w-full bg-accent hover:bg-accent/90 text-accent-foreground" size="lg">
+              Generate and Validate Data
+            </Button>
+          </div>
         </form>
       </Form>
   );
