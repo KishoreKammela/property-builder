@@ -157,11 +157,13 @@ export function PropertyForm({ onFormSubmit, children }: PropertyFormProps) {
             <PropertySpecificationsDetailPageSection generateId={generateId} />
           </Accordion>
 
-          <div className="flex flex-col sm:flex-row-reverse gap-4">
-            <Button type="submit" className="w-full sm:w-auto bg-accent hover:bg-accent/90 text-accent-foreground" size="lg">
-              Generate and Validate Data
-            </Button>
-            {children}
+          <div className="flex items-start gap-4">
+             <div className="flex-1 lg:hidden">
+              <Button type="submit" className="w-full bg-accent hover:bg-accent/90 text-accent-foreground" size="lg">
+                Generate and Validate Data
+              </Button>
+             </div>
+             {children}
           </div>
         </form>
       </Form>

@@ -194,8 +194,15 @@ export default function Home() {
               </PropertyForm>
             </FormProvider>
           </div>
-          <div className="mt-8 lg:mt-0">
-            <JsonPreview data={watchedData} />
+          <div className="mt-8 lg:mt-0 relative">
+              <div className="lg:sticky lg:top-8">
+                <JsonPreview data={watchedData} />
+                 <div className="hidden lg:flex flex-col sm:flex-row-reverse gap-4 mt-4">
+                    <Button onClick={form.handleSubmit(handleFormSubmit)} className="w-full sm:w-auto bg-accent hover:bg-accent/90 text-accent-foreground" size="lg">
+                      Generate and Validate Data
+                    </Button>
+                </div>
+              </div>
           </div>
         </div>
       </main>

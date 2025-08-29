@@ -35,11 +35,37 @@ export function LocationConnectivitySection({ generateId }: LocationConnectivity
                   </div>
                   <FormField control={control} name={`propertyDetailPage.propertyLocationAndConnectivitySection.locationTabs.${index}.id`} render={({ field }) => (<FormItem><FormLabel>ID</FormLabel><div className="flex gap-2"><FormControl><Input {...field} /></FormControl><Button type="button" size="icon" variant="outline" onClick={() => generateId(`loc-tab-${index + 1}`, `propertyDetailPage.propertyLocationAndConnectivitySection.locationTabs.${index}.id`)}><Sparkles /></Button></div><FormMessage /></FormItem>)} />
                   <FormField control={control} name={`propertyDetailPage.propertyLocationAndConnectivitySection.locationTabs.${index}.tabName`} render={({ field }) => (<FormItem><FormLabel>Tab Name</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
-                  {/* Nested Field Array for Connectivity */}
+                  <ConnectivityArray name={`propertyDetailPage.propertyLocationAndConnectivitySection.locationTabs.${index}.connectivity`} parentIndex={index} />
               </div>
           ))}
           <Button type="button" variant="outline" onClick={() => append({id: '', tabName: '', connectivity: []})}>Add Location Tab</Button>
       </div>
    </FormSection>
+  );
+}
+
+function ConnectivityArray({ name, parentIndex }: { name: string; parentIndex: number }) {
+  const { control } = useFormContext();
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name,
+  });
+
+  return (
+    <div className="space-y-2 pl-4 border-l">
+      <h5 className="font-medium">Connectivity Details</h5>
+      {fields.map((field, index) => (
+        <div key={field.id} className="p-3 border rounded-md space-y-2">
+          <div className="flex justify-between items-center">
+            <h6 className="font-semibold">Connectivity {index + 1}</h6>
+            <Button type="button" variant="destructive" size="icon" onClick={() => remove(index)}><Trash className="h-4 w-4" /></Button>
+          </div>
+          <FormField control={control} name={`${name}.${index}.name`} render={({ field }) => (<FormItem><FormLabel>Name</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
+          <FormField control={control} name={`${name}.${index}.time`} render={({ field }) => (<FormItem><FormLabel>Time</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
+          <FormField control={control} name={`${name}.${index}.distance`} render={({ field }) => (<FormItem><FormLabel>Distance</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
+        </div>
+      ))}
+      <Button type="button" variant="outline" size="sm" onClick={() => append({ name: '', time: '', distance: '' })}>Add Connectivity Detail</Button>
+    </div>
   );
 }
