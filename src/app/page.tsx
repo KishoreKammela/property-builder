@@ -11,231 +11,24 @@ import { propertySchema } from '@/lib/schema';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { RotateCcw } from 'lucide-react';
+import { defaultValues } from '@/data/property-data';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 
 const LOCAL_STORAGE_KEY = 'property-form-autosave';
 
 export default function Home() {
   const { toast } = useToast();
-  
-  const defaultValues: Property = {
-    name: '',
-    id: '',
-    slug: '',
-    city: '',
-    area: '',
-    type: undefined,
-    status: undefined,
-    description: '',
-    shortDescription: '',
-    priceRange: { min: 0, max: 0 },
-    currency: 'INR',
-    featuredImage: '',
-    alt: '',
-    features: [],
-    amenities: [],
-    specifications: {
-        totalFloors: 0,
-        totalUnits: 0,
-        constructionType: '',
-        launchDate: '',
-        possessionDate: '',
-        approvals: [],
-        elevators: 0,
-        parkingRatio: '',
-    },
-    floorPlans: [],
-    masterPlan: '',
-    address: '',
-    developer: '',
-    possession: '',
-    coordinates: { lat: 0, lng: 0 },
-    createdAt: '',
-    updatedAt: '',
-    propertyDetailPage: {
-        propertyBannerSection: {
-            headingOne: '',
-            headingTwo: '',
-            mainBannerImageUrl: '',
-            primeLocationAt: '',
-            projectStatusTitle: 'Project status: ',
-            projectStatusValue: undefined,
-            isReraCertified: true,
-            reraLogo: '',
-            reraCertifiedLabel: 'RERA Certified',
-            priceRangeLabel: 'Price range',
-            grabEarlyBirdAdvantages: '',
-            limitedSlotsAvailable: '',
-            brochureCta: 'Brochure',
-            bookVisitCta: 'Book visit',
-            viewAllPhotosCta: 'View all photos',
-            specifications: [],
-        },
-        propertyLocationAndConnectivitySection: {
-            mainHeading: '',
-            locationText: '',
-            locationImage: '',
-            locationLinkText: 'View in detail',
-            locationLink: '',
-            locationTabs: [],
-        },
-        propertyOverviewSection: {
-            projectOverviewLabel: 'Project Overview',
-            projectWalkthroughLabel: 'Project walkthrough',
-            projectOverviewDescription: '',
-            propertySpecifications: [],
-            isReraCertified: true,
-            reraLogo: '',
-            reraCertifiedLabel: 'Project RERA certified',
-            reraNumberLabel: 'RERA No: ',
-            projectReraNumber: '',
-            keyProjectDatesTitle: 'Key Project Dates',
-            keyProjectDates: [],
-            projectOverviewImageUrl: '',
-            projectOverviewViewMoreCta: 'View more',
-        },
-        propertyAmenitiesSection: {
-            variant: 'dark',
-            mainHeading: '',
-            subtitle: '',
-            amenitiesAccordionItems: [],
-            cardSlideItems: [],
-            footerDescription: '',
-            contactButtonText: ''
-        },
-        propertyHighlightsSection: {
-            propertyHighlightsTitle: '',
-            propertyHighlightsDescription: '',
-            propertyHighlights: [],
-        },
-        propertyMasterPlanSection: {
-            masterPlanTitle: '',
-            masterPlanImageUrl: '',
-            masterPlanDescription: '',
-            masterPlanEnquireNowCta: 'Enquire now',
-            masterPlanViewInDetailCta: 'View in detail',
-        },
-        propertyUnitPlansSection: {
-            unitPlanTitle: '',
-            unitPlanDescription: '',
-            unitPlanViewInDetailCta: 'View in detail',
-            unitPlans: [],
-        },
-        propertyPricingSection: {
-            pricingTitle: '',
-            pricingDescription: '',
-            pricingImageUrl: '',
-            completeCostingDetailsLabel: 'Complete costing details',
-            pricingEnquireNowCta: 'Enquire now',
-            pricingData: [],
-        },
-        propertySpecificationsSection: {
-            specificationTitle: '',
-            specificationDescription: '',
-            specificationViewInDetailCta: 'View in detail',
-            specificationImageUrl: '',
-        },
-        propertyLocationSection: {
-            propertyLoactionTitle: '',
-            propertyLoactionDescription: '',
-            propertyLoactionImageUrl: '',
-            propertyLoactionInformation: [],
-        },
-        propertyDetailsFAQSection: {
-            mainHeading: 'Frequently asked questions',
-            subtitle: "Didn't find the question?",
-            contactButtonText: 'Contact us',
-            faqItems: [],
-        },
-    },
-    propertyMasterPlanDetailPage: {
-        propertyMasterPlanBannerSection: {
-            bannerSectionHeader: '',
-            bannerSectionCta: '',
-            bannerSectionImageUrl: '',
-            bannerSectionDescription: '',
-            bannerSectionFeatures: [],
-        },
-        propertyMasterPlanTowersSection: {
-            towerSectionHeading: '',
-            towerSectionDescription: '',
-            towerSectionAmenitiesHeading: '',
-            towerSectionUnitSizesHeading: '',
-            towerSectionUnitSizesSubHeading: '',
-            towerSectionTableDescription: '',
-            towerSectionSliderImages: [],
-            towerSectionTableDetails: [],
-            towerSectionAmenitiesPoints: [],
-            towerSectionUnitsSizes: [],
-        },
-        propertyMasterPlanFeaturesSection: {
-            features: [],
-        },
-        propertyMasterPlanFAQSection: {
-            mainHeading: 'Frequently asked questions',
-            subtitle: "Didn't find the question?",
-            contactButtonText: 'Contact us',
-            faqItems: [],
-        },
-    },
-    propertyUnitPlanDetailPage: {
-        propertyFloorPlanSection: {
-            floorPlanSectionHeading: '',
-            floorPlanSectionDescription: '',
-            floorPlanSectionPlans: [],
-        },
-        propertyDesignAndQualitySection: {
-            designAndQualitySectionHeading: '',
-            designAndQualitySectionFeatures: [],
-        },
-        propertyUnitSizesSection: {
-            unitSizesSectionHeading: '',
-            unitSizesWithinTower: [],
-        },
-        propertyUnitHighlightsSection: {
-            highlightsSectionHeading: '',
-            highlightsSectionHighlights: [],
-        },
-        propertyUnitPlanFAQSection: {
-            mainHeading: 'Frequently asked questions',
-            subtitle: "Didn't find the question?",
-            contactButtonText: 'Contact us',
-            faqItems: [],
-        },
-    },
-    propertyAmenitiesDetailPage: {
-        propertyAmenitiesAccordionSection: {
-            variant: 'light',
-            mainHeading: '',
-            subtitle: '',
-            footerDescription: '',
-            contactButtonText: '',
-            amenitiesAccordionItems: [],
-            cardSlideItems: [],
-        },
-        propertyAmenitiesGalleryShowCaseArea: [],
-        propertyAmenitiesFAQSection: {
-            mainHeading: 'Frequently asked questions',
-            subtitle: "Didn't find the question?",
-            contactButtonText: 'Contact us',
-            faqItems: [],
-        },
-    },
-    propertySpecificationsDetailPage: {
-        propertySpecificationsBannerSection: {
-            specificationsBannerSectionTitle: '',
-            specificationsBannerSectionDescription: '',
-            specificationsBannerSectionImageUrl: '',
-            specificationsBannerSectionMobileImageUrl: '',
-        },
-        propertySpecificationsGalleryShowCaseArea: [],
-        propertySpecificationFAQSection: {
-            mainHeading: 'Frequently asked questions',
-            subtitle: "Didn't find the question?",
-            contactButtonText: 'Contact us',
-            faqItems: [],
-        },
-    },
-};
+  const [isMounted, setIsMounted] = useState(false);
 
   const form = useForm<Property>({
     resolver: zodResolver(propertySchema),
@@ -247,34 +40,38 @@ export default function Home() {
 
   // Load from localStorage on initial render
   useEffect(() => {
+    setIsMounted(true);
     const savedData = localStorage.getItem(LOCAL_STORAGE_KEY);
     if (savedData) {
-        try {
-            const parsedData = JSON.parse(savedData);
-            form.reset(parsedData);
-            toast({
-                title: "Form Restored",
-                description: "Your previous session has been restored.",
-            });
-        } catch (error) {
-            console.error("Failed to parse saved form data:", error);
-        }
-    } else {
+      try {
+        const parsedData = JSON.parse(savedData);
+        form.reset(parsedData);
+        toast({
+          title: "Form Restored",
+          description: "Your previous session has been restored.",
+        });
+      } catch (error) {
+        console.error("Failed to parse saved form data:", error);
+        localStorage.removeItem(LOCAL_STORAGE_KEY); // Clear corrupted data
         const now = new Date().toISOString();
-        form.setValue('createdAt', now);
-        form.setValue('updatedAt', now);
+        form.reset({ ...defaultValues, createdAt: now, updatedAt: now });
+      }
+    } else {
+      const now = new Date().toISOString();
+      form.reset({ ...defaultValues, createdAt: now, updatedAt: now });
     }
   }, [form, toast]);
 
   // Save to localStorage on change
   useEffect(() => {
+    if (!isMounted) return;
     const subscription = form.watch((value) => {
-        const now = new Date().toISOString();
-        const dataToSave = { ...value, updatedAt: now };
-        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(dataToSave));
+      const now = new Date().toISOString();
+      const dataToSave = { ...value, updatedAt: now };
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(dataToSave));
     });
     return () => subscription.unsubscribe();
-  }, [form.watch]);
+  }, [form, isMounted]);
 
 
   const handleFormSubmit = (data: Property) => {
@@ -286,17 +83,15 @@ export default function Home() {
   };
   
   const handleReset = () => {
-    if(window.confirm("Are you sure you want to reset the form? All unsaved changes will be lost.")){
-        form.reset(defaultValues);
-        localStorage.removeItem(LOCAL_STORAGE_KEY);
-        const now = new Date().toISOString();
-        form.setValue('createdAt', now);
-        form.setValue('updatedAt', now);
-        toast({
-            title: "Form Reset",
-            description: "The form has been cleared.",
-        });
-    }
+    form.reset(defaultValues);
+    localStorage.removeItem(LOCAL_STORAGE_KEY);
+    const now = new Date().toISOString();
+    form.setValue('createdAt', now);
+    form.setValue('updatedAt', now);
+    toast({
+        title: "Form Reset",
+        description: "The form has been cleared.",
+    });
   }
 
   return (
@@ -316,7 +111,29 @@ export default function Home() {
         <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-12">
           <div className="lg:pr-6">
             <FormProvider {...form}>
-              <PropertyForm onFormSubmit={handleFormSubmit} onReset={handleReset} />
+              <PropertyForm onFormSubmit={handleFormSubmit}>
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button type="button" variant="outline">
+                        <RotateCcw className="mr-2 h-4 w-4" />
+                        Reset Form
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          This action cannot be undone. This will permanently clear the form
+                          and remove your data from our servers.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction onClick={handleReset}>Continue</AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+              </PropertyForm>
             </FormProvider>
           </div>
           <div className="mt-8 lg:mt-0">

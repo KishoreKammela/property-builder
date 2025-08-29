@@ -7,7 +7,7 @@ import { Accordion } from '@/components/ui/accordion';
 import type { Property } from '@/lib/types';
 import { useToast } from '@/hooks/use-toast';
 import { handleAltTextGeneration, handleIdGeneration, handleDescriptionGeneration } from '@/lib/actions';
-import { Loader2, RotateCcw } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { useState } from 'react';
 import { BasicInfoSection } from './form-parts/basic-info-section';
 import { DescriptionSection } from './form-parts/description-section';
@@ -26,10 +26,10 @@ import { PropertySpecificationsDetailPageSection } from './form-parts/property-s
 
 interface PropertyFormProps {
   onFormSubmit: (data: Property) => void;
-  onReset: () => void;
+  children: React.ReactNode;
 }
 
-export function PropertyForm({ onFormSubmit, onReset }: PropertyFormProps) {
+export function PropertyForm({ onFormSubmit, children }: PropertyFormProps) {
   const [isGeneratingAltText, setIsGeneratingAltText] = useState(false);
   const [isGeneratingDescriptions, setIsGeneratingDescriptions] = useState(false);
   const form = useFormContext<Property>();
@@ -41,7 +41,7 @@ export function PropertyForm({ onFormSubmit, onReset }: PropertyFormProps) {
     if (!propertyName) {
       toast({
         variant: 'destructive',
-        title: 'Error',
+        title: 'Property Name Required',
         description: 'Please enter a property name first to generate an ID.',
       });
       return;
@@ -158,14 +158,11 @@ export function PropertyForm({ onFormSubmit, onReset }: PropertyFormProps) {
             <PropertySpecificationsDetailPageSection generateId={generateId} />
           </Accordion>
 
-          <div className="flex flex-col sm:flex-row gap-4">
-             <Button type="button" variant="outline" onClick={onReset} className="w-full sm:w-auto">
-                <RotateCcw />
-                Reset Form
-            </Button>
-            <Button type="submit" className="w-full bg-accent hover:bg-accent/90 text-accent-foreground" size="lg">
+          <div className="flex flex-col sm:flex-row-reverse gap-4">
+            <Button type="submit" className="w-full sm:w-auto bg-accent hover:bg-accent/90 text-accent-foreground" size="lg">
               Generate and Validate Data
             </Button>
+            {children}
           </div>
         </form>
       </Form>
