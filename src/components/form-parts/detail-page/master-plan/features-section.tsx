@@ -5,6 +5,7 @@ import { FormSection } from '@/components/form-section';
 import { Textarea } from '@/components/ui/textarea';
 import { Sparkles, Trash } from 'lucide-react';
 import { useFormContext, useFieldArray } from 'react-hook-form';
+import { ImagePreviewInput } from '@/components/image-preview-input';
 
 interface MasterPlanFeaturesSectionProps {
     generateId: (sectionName: string, fieldName: any) => void;
@@ -32,7 +33,7 @@ export function MasterPlanFeaturesSection({ generateId }: MasterPlanFeaturesSect
                 <FormField control={control} name={`propertyMasterPlanDetailPage.propertyMasterPlanFeaturesSection.features.${index}.featuresSectionFeaturesHeading`} render={({ field }) => (<FormItem><FormLabel>Features Heading</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
                 <FormField control={control} name={`propertyMasterPlanDetailPage.propertyMasterPlanFeaturesSection.features.${index}.featuresSectionAccessibilityHeading`} render={({ field }) => (<FormItem><FormLabel>Accessibility Heading</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
                 <FormField control={control} name={`propertyMasterPlanDetailPage.propertyMasterPlanFeaturesSection.features.${index}.featuresSectionDescription`} render={({ field }) => (<FormItem><FormLabel>Description</FormLabel><FormControl><Textarea {...field} /></FormControl><FormMessage /></FormItem>)} />
-                <FormField control={control} name={`propertyMasterPlanDetailPage.propertyMasterPlanFeaturesSection.features.${index}.featuresSectionBannerImageUrl`} render={({ field }) => (<FormItem><FormLabel>Banner Image URL</FormLabel><FormControl><Input type="url" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                <ImagePreviewInput name={`propertyMasterPlanDetailPage.propertyMasterPlanFeaturesSection.features.${index}.featuresSectionBannerImageUrl`} label="Banner Image URL" />
 
                 <StringArrayField name={`propertyMasterPlanDetailPage.propertyMasterPlanFeaturesSection.features.${index}.featuresSectionFeatureRichSpaces`} label="Feature Rich Spaces" />
                 <StringArrayField name={`propertyMasterPlanDetailPage.propertyMasterPlanFeaturesSection.features.${index}.featuresSectionAccessibilityLayoutStrategies`} label="Accessibility Layout Strategies" />

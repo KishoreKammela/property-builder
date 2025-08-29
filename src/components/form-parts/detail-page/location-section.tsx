@@ -5,6 +5,7 @@ import { FormSection } from '@/components/form-section';
 import { Textarea } from '@/components/ui/textarea';
 import { Sparkles, Trash } from 'lucide-react';
 import { useFormContext, useFieldArray } from 'react-hook-form';
+import { ImagePreviewInput } from '@/components/image-preview-input';
 
 interface LocationSectionProps {
     generateId: (sectionName: string, fieldName: any) => void;
@@ -21,7 +22,7 @@ export function LocationSection({ generateId }: LocationSectionProps) {
     <FormSection value="sub-item-9" title="Location Section">
       <FormField control={control} name="propertyDetailPage.propertyLocationSection.propertyLoactionTitle" render={({ field }) => (<FormItem><FormLabel>Title</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
       <FormField control={control} name="propertyDetailPage.propertyLocationSection.propertyLoactionDescription" render={({ field }) => (<FormItem><FormLabel>Description</FormLabel><FormControl><Textarea {...field} /></FormControl><FormMessage /></FormItem>)} />
-      <FormField control={control} name="propertyDetailPage.propertyLocationSection.propertyLoactionImageUrl" render={({ field }) => (<FormItem><FormLabel>Image URL</FormLabel><FormControl><Input type="url" {...field} /></FormControl><FormMessage /></FormItem>)} />
+      <ImagePreviewInput name="propertyDetailPage.propertyLocationSection.propertyLoactionImageUrl" label="Image URL" />
       <div className="space-y-4">
           <h4 className="font-semibold">Location Information</h4>
           {fields.map((field, index) => (

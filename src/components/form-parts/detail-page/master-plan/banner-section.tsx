@@ -5,6 +5,7 @@ import { FormSection } from '@/components/form-section';
 import { Textarea } from '@/components/ui/textarea';
 import { Sparkles, Trash } from 'lucide-react';
 import { useFormContext, useFieldArray } from 'react-hook-form';
+import { ImagePreviewInput } from '@/components/image-preview-input';
 
 interface MasterPlanBannerSectionProps {
     generateId: (sectionName: string, fieldName: any) => void;
@@ -21,7 +22,7 @@ export function MasterPlanBannerSection({ generateId }: MasterPlanBannerSectionP
     <FormSection value="sub-item-11" title="Master Plan Banner Section">
       <FormField control={control} name="propertyMasterPlanDetailPage.propertyMasterPlanBannerSection.bannerSectionHeader" render={({ field }) => (<FormItem><FormLabel>Header</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
       <FormField control={control} name="propertyMasterPlanDetailPage.propertyMasterPlanBannerSection.bannerSectionCta" render={({ field }) => (<FormItem><FormLabel>CTA</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
-      <FormField control={control} name="propertyMasterPlanDetailPage.propertyMasterPlanBannerSection.bannerSectionImageUrl" render={({ field }) => (<FormItem><FormLabel>Image URL</FormLabel><FormControl><Input type="url" {...field} /></FormControl><FormMessage /></FormItem>)} />
+      <ImagePreviewInput name="propertyMasterPlanDetailPage.propertyMasterPlanBannerSection.bannerSectionImageUrl" label="Image URL" />
       <FormField control={control} name="propertyMasterPlanDetailPage.propertyMasterPlanBannerSection.bannerSectionDescription" render={({ field }) => (<FormItem><FormLabel>Description</FormLabel><FormControl><Textarea {...field} /></FormControl><FormMessage /></FormItem>)} />
       
       <div className="space-y-4">

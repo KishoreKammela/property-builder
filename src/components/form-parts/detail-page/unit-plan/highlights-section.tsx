@@ -5,6 +5,7 @@ import { FormSection } from '@/components/form-section';
 import { Textarea } from '@/components/ui/textarea';
 import { Sparkles, Trash } from 'lucide-react';
 import { useFormContext, useFieldArray } from 'react-hook-form';
+import { ImagePreviewInput } from '@/components/image-preview-input';
 
 export function UnitPlanHighlightsSection() {
   const { control } = useFormContext();
@@ -53,7 +54,7 @@ function ImagesArray({ name }: { name: string }) {
                 <Button type="button" variant="destructive" size="icon" onClick={() => remove(index)}><Trash /></Button>
             </div>
             <FormField control={control} name={`${name}.${index}.id`} render={({ field }) => (<FormItem><FormLabel>ID</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
-            <FormField control={control} name={`${name}.${index}.src`} render={({ field }) => (<FormItem><FormLabel>Source URL</FormLabel><FormControl><Input type="url" {...field} /></FormControl><FormMessage /></FormItem>)} />
+            <ImagePreviewInput name={`${name}.${index}.src`} label="Source URL" />
             <FormField control={control} name={`${name}.${index}.alt`} render={({ field }) => (<FormItem><FormLabel>Alt Text</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
           </div>
         ))}

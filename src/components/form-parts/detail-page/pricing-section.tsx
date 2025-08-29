@@ -5,6 +5,7 @@ import { FormSection } from '@/components/form-section';
 import { Textarea } from '@/components/ui/textarea';
 import { Sparkles, Trash } from 'lucide-react';
 import { useFormContext, useFieldArray } from 'react-hook-form';
+import { ImagePreviewInput } from '@/components/image-preview-input';
 
 interface PricingSectionProps {
     generateId: (sectionName: string, fieldName: any) => void;
@@ -21,7 +22,7 @@ export function PricingSection({ generateId }: PricingSectionProps) {
     <FormSection value="sub-item-7" title="Pricing Section">
       <FormField control={control} name="propertyDetailPage.propertyPricingSection.pricingTitle" render={({ field }) => (<FormItem><FormLabel>Title</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
       <FormField control={control} name="propertyDetailPage.propertyPricingSection.pricingDescription" render={({ field }) => (<FormItem><FormLabel>Description</FormLabel><FormControl><Textarea {...field} /></FormControl><FormMessage /></FormItem>)} />
-      <FormField control={control} name="propertyDetailPage.propertyPricingSection.pricingImageUrl" render={({ field }) => (<FormItem><FormLabel>Image URL</FormLabel><FormControl><Input type="url" {...field} /></FormControl><FormMessage /></FormItem>)} />
+      <ImagePreviewInput name="propertyDetailPage.propertyPricingSection.pricingImageUrl" label="Image URL" />
       <FormField control={control} name="propertyDetailPage.propertyPricingSection.completeCostingDetailsLabel" render={({ field }) => (<FormItem><FormLabel>Complete Costing Details Label</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
       <FormField control={control} name="propertyDetailPage.propertyPricingSection.pricingEnquireNowCta" render={({ field }) => (<FormItem><FormLabel>Enquire Now CTA</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
       <div className="space-y-4">

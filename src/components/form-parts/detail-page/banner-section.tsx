@@ -6,6 +6,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Sparkles, Trash } from 'lucide-react';
 import { useFormContext, useFieldArray } from 'react-hook-form';
+import { ImagePreviewInput } from '@/components/image-preview-input';
 
 interface BannerSectionProps {
     generateId: (sectionName: string, fieldName: any) => void;
@@ -22,7 +23,7 @@ export function BannerSection({ generateId }: BannerSectionProps) {
     <FormSection value="sub-item-1" title="Banner Section">
        <FormField control={control} name="propertyDetailPage.propertyBannerSection.headingOne" render={({ field }) => (<FormItem><FormLabel>Heading One</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
        <FormField control={control} name="propertyDetailPage.propertyBannerSection.headingTwo" render={({ field }) => (<FormItem><FormLabel>Heading Two</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
-       <FormField control={control} name="propertyDetailPage.propertyBannerSection.mainBannerImageUrl" render={({ field }) => (<FormItem><FormLabel>Main Banner Image URL</FormLabel><FormControl><Input type="url" {...field} /></FormControl><FormMessage /></FormItem>)} />
+       <ImagePreviewInput name="propertyDetailPage.propertyBannerSection.mainBannerImageUrl" label="Main Banner Image URL" />
        <FormField control={control} name="propertyDetailPage.propertyBannerSection.primeLocationAt" render={({ field }) => (<FormItem><FormLabel>Prime Location At</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
        <FormField control={control} name="propertyDetailPage.propertyBannerSection.projectStatusTitle" render={({ field }) => (<FormItem><FormLabel>Project Status Title</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
        <FormField
@@ -48,7 +49,7 @@ export function BannerSection({ generateId }: BannerSectionProps) {
           )}
           />
        <FormField control={control} name="propertyDetailPage.propertyBannerSection.isReraCertified" render={({ field }) => (<FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4"><FormControl><Checkbox checked={field.value} onCheckedChange={field.onChange} /></FormControl><div className="space-y-1 leading-none"><FormLabel>RERA Certified</FormLabel></div></FormItem>)} />
-       <FormField control={control} name="propertyDetailPage.propertyBannerSection.reraLogo" render={({ field }) => (<FormItem><FormLabel>RERA Logo URL</FormLabel><FormControl><Input type="url" {...field} /></FormControl><FormMessage /></FormItem>)} />
+       <ImagePreviewInput name="propertyDetailPage.propertyBannerSection.reraLogo" label="RERA Logo URL" />
        <FormField control={control} name="propertyDetailPage.propertyBannerSection.reraCertifiedLabel" render={({ field }) => (<FormItem><FormLabel>RERA Certified Label</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
        <FormField control={control} name="propertyDetailPage.propertyBannerSection.priceRangeLabel" render={({ field }) => (<FormItem><FormLabel>Price Range Label</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
        <FormField control={control} name="propertyDetailPage.propertyBannerSection.grabEarlyBirdAdvantages" render={({ field }) => (<FormItem><FormLabel>Grab Early Bird Advantages</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />

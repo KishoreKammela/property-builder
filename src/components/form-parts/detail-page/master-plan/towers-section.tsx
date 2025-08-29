@@ -5,6 +5,7 @@ import { FormSection } from '@/components/form-section';
 import { Textarea } from '@/components/ui/textarea';
 import { Sparkles, Trash } from 'lucide-react';
 import { useFormContext, useFieldArray } from 'react-hook-form';
+import { ImagePreviewInput } from '@/components/image-preview-input';
 
 interface MasterPlanTowersSectionProps {
     generateId: (sectionName: string, fieldName: any) => void;
@@ -35,7 +36,7 @@ export function MasterPlanTowersSection({ generateId }: MasterPlanTowersSectionP
               <Button type="button" variant="destructive" size="icon" onClick={() => removeSliderImage(index)}><Trash /></Button>
             </div>
             <FormField control={control} name={`propertyMasterPlanDetailPage.propertyMasterPlanTowersSection.towerSectionSliderImages.${index}.id`} render={({ field }) => (<FormItem><FormLabel>ID</FormLabel><div className="flex gap-2"><FormControl><Input {...field} /></FormControl><Button type="button" size="icon" variant="outline" onClick={() => generateId(`tower-slider-${index + 1}`, `propertyMasterPlanDetailPage.propertyMasterPlanTowersSection.towerSectionSliderImages.${index}.id`)}><Sparkles /></Button></div><FormMessage /></FormItem>)} />
-            <FormField control={control} name={`propertyMasterPlanDetailPage.propertyMasterPlanTowersSection.towerSectionSliderImages.${index}.src`} render={({ field }) => (<FormItem><FormLabel>Image URL</FormLabel><FormControl><Input type="url" {...field} /></FormControl><FormMessage /></FormItem>)} />
+            <ImagePreviewInput name={`propertyMasterPlanDetailPage.propertyMasterPlanTowersSection.towerSectionSliderImages.${index}.src`} label="Image URL" />
             <FormField control={control} name={`propertyMasterPlanDetailPage.propertyMasterPlanTowersSection.towerSectionSliderImages.${index}.alt`} render={({ field }) => (<FormItem><FormLabel>Alt Text</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
           </div>
         ))}

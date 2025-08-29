@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { FormSection } from '@/components/form-section';
 import { Sparkles, Trash } from 'lucide-react';
 import { useFormContext, useFieldArray } from 'react-hook-form';
+import { ImagePreviewInput } from '@/components/image-preview-input';
 
 interface LocationConnectivitySectionProps {
     generateId: (sectionName: string, fieldName: any) => void;
@@ -20,7 +21,7 @@ export function LocationConnectivitySection({ generateId }: LocationConnectivity
     <FormSection value="sub-item-2" title="Location & Connectivity">
       <FormField control={control} name="propertyDetailPage.propertyLocationAndConnectivitySection.mainHeading" render={({ field }) => (<FormItem><FormLabel>Main Heading</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
       <FormField control={control} name="propertyDetailPage.propertyLocationAndConnectivitySection.locationText" render={({ field }) => (<FormItem><FormLabel>Location Text</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
-      <FormField control={control} name="propertyDetailPage.propertyLocationAndConnectivitySection.locationImage" render={({ field }) => (<FormItem><FormLabel>Location Image URL</FormLabel><FormControl><Input type="url" {...field} /></FormControl><FormMessage /></FormItem>)} />
+      <ImagePreviewInput name="propertyDetailPage.propertyLocationAndConnectivitySection.locationImage" label="Location Image URL" />
       <FormField control={control} name="propertyDetailPage.propertyLocationAndConnectivitySection.locationLink" render={({ field }) => (<FormItem><FormLabel>Location Link</FormLabel><FormControl><Input type="url" {...field} /></FormControl><FormMessage /></FormItem>)} />
       <FormField control={control} name="propertyDetailPage.propertyLocationAndConnectivitySection.locationLinkText" render={({ field }) => (<FormItem><FormLabel>Location Link Text</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
 

@@ -6,6 +6,7 @@ import { FormSection } from '@/components/form-section';
 import { Trash } from 'lucide-react';
 import { useFormContext, useFieldArray } from 'react-hook-form';
 import { toWords } from '@/lib/currency-to-words';
+import { ImagePreviewInput } from '../image-preview-input';
 
 export function FloorPlansSection() {
   const { control, watch } = useFormContext();
@@ -33,7 +34,9 @@ export function FloorPlansSection() {
                     <FormField control={control} name={`floorPlans.${index}.price`} render={({ field }) => ( <FormItem><FormLabel>Price</FormLabel><FormControl><Input type="number" placeholder="7500000" {...field} onChange={e => field.onChange(Number(e.target.value))}/></FormControl>
                     {price > 0 && <FormDescription>{toWords(price)}</FormDescription>}
                     <FormMessage /></FormItem> )} />
-                    <FormField control={control} name={`floorPlans.${index}.image`} render={({ field }) => ( <FormItem className="md:col-span-2"><FormLabel>Image URL</FormLabel><FormControl><Input type="url" placeholder="https://placehold.co/600x400.png" {...field} /></FormControl><FormMessage /></FormItem> )} />
+                    <div className='md:col-span-2'>
+                      <ImagePreviewInput name={`floorPlans.${index}.image`} label="Image URL" />
+                    </div>
                     <FormField control={control} name={`floorPlans.${index}.description`} render={({ field }) => ( <FormItem className="md:col-span-2"><FormLabel>Description</FormLabel><FormControl><Textarea placeholder="Describe this floor plan." {...field} /></FormControl><FormMessage /></FormItem> )} />
                 </div>
             </div>

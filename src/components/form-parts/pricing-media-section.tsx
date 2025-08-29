@@ -5,6 +5,7 @@ import { FormSection } from '@/components/form-section';
 import { Loader2, Sparkles } from 'lucide-react';
 import { useFormContext } from 'react-hook-form';
 import { toWords } from '@/lib/currency-to-words';
+import { ImagePreviewInput } from '../image-preview-input';
 
 interface PricingMediaSectionProps {
     isGeneratingAltText: boolean;
@@ -56,19 +57,7 @@ export function PricingMediaSection({ isGeneratingAltText, generateAltText }: Pr
             />
         </div>
          <div className="space-y-4 rounded-lg border p-4">
-            <FormField
-                control={control}
-                name="featuredImage"
-                render={({ field }) => (
-                <FormItem>
-                    <FormLabel>Featured Image URL</FormLabel>
-                    <FormControl>
-                        <Input type="url" placeholder="https://placehold.co/800x600.png" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                </FormItem>
-                )}
-            />
+            <ImagePreviewInput name="featuredImage" label="Featured Image URL" />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-end">
                 <FormField
                 control={control}
@@ -89,19 +78,7 @@ export function PricingMediaSection({ isGeneratingAltText, generateAltText }: Pr
                 </Button>
             </div>
         </div>
-         <FormField
-            control={control}
-            name="masterPlan"
-            render={({ field }) => (
-                <FormItem>
-                <FormLabel>Master Plan Image URL</FormLabel>
-                <FormControl>
-                    <Input type="url" placeholder="https://placehold.co/800x800.png" {...field} />
-                </FormControl>
-                <FormMessage />
-                </FormItem>
-            )}
-        />
+        <ImagePreviewInput name="masterPlan" label="Master Plan Image URL" />
     </FormSection>
   );
 }

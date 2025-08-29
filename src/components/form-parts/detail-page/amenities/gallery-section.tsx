@@ -5,6 +5,7 @@ import { FormSection } from '@/components/form-section';
 import { Textarea } from '@/components/ui/textarea';
 import { Sparkles, Trash } from 'lucide-react';
 import { useFormContext, useFieldArray } from 'react-hook-form';
+import { ImagePreviewInput } from '@/components/image-preview-input';
 
 interface AmenitiesGallerySectionProps {
     generateId: (sectionName: string, fieldName: any) => void;
@@ -91,7 +92,7 @@ function ImagesArray({ name, generateId, parentIndex }: { name: string, generate
                 <Button type="button" variant="destructive" size="icon" onClick={() => remove(index)}><Trash /></Button>
             </div>
             <FormField control={control} name={`${name}.${index}.id`} render={({ field }) => (<FormItem><FormLabel>ID</FormLabel><div className="flex gap-2"><FormControl><Input {...field} /></FormControl><Button type="button" size="icon" variant="outline" onClick={() => generateId(`gallery-${parentIndex + 1}-img-${index + 1}`, `${name}.${index}.id`)}><Sparkles /></Button></div><FormMessage /></FormItem>)} />
-            <FormField control={control} name={`${name}.${index}.src`} render={({ field }) => (<FormItem><FormLabel>Source URL</FormLabel><FormControl><Input type="url" {...field} /></FormControl><FormMessage /></FormItem>)} />
+            <ImagePreviewInput name={`${name}.${index}.src`} label="Source URL" />
             <FormField control={control} name={`${name}.${index}.alt`} render={({ field }) => (<FormItem><FormLabel>Alt Text</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
           </div>
         ))}
