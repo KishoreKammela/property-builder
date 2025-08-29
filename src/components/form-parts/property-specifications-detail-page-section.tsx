@@ -7,14 +7,16 @@ import { SpecificationsFaqSection } from './detail-page/specifications/faq-secti
 
 interface PropertySpecificationsDetailPageSectionProps {
     generateId: (sectionName: string, fieldName: any) => void;
+    generateAltText: (imageUrlField: string, altTextField: string) => void;
+    isGenerating: Record<string, boolean>;
 }
 
-export function PropertySpecificationsDetailPageSection({ generateId }: PropertySpecificationsDetailPageSectionProps) {
+export function PropertySpecificationsDetailPageSection({ generateId, generateAltText, isGenerating }: PropertySpecificationsDetailPageSectionProps) {
   return (
     <FormSection value="item-13" title="Property Specifications Page" description="Content for the specifications detail page.">
       <Accordion type="single" collapsible className="w-full">
         <SpecificationsBannerSection />
-        <SpecificationsGallerySection generateId={generateId} />
+        <SpecificationsGallerySection generateId={generateId} generateAltText={generateAltText} isGenerating={isGenerating} />
         <SpecificationsFaqSection generateId={generateId} />
       </Accordion>
     </FormSection>

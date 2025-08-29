@@ -6,12 +6,15 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Sparkles, Trash } from 'lucide-react';
 import { useFormContext, useFieldArray } from 'react-hook-form';
+import { ImagePreviewInput } from '@/components/image-preview-input';
 
 interface AmenitiesAccordionSectionProps {
     generateId: (sectionName: string, fieldName: any) => void;
+    generateAltText: (imageUrlField: string, altTextField: string) => void;
+    isGenerating: Record<string, boolean>;
 }
 
-export function AmenitiesAccordionSection({ generateId }: AmenitiesAccordionSectionProps) {
+export function AmenitiesAccordionSection({ generateId, generateAltText, isGenerating }: AmenitiesAccordionSectionProps) {
   const { control } = useFormContext();
   const { fields: accordionItems, append: appendAccordion, remove: removeAccordion } = useFieldArray({ control, name: "propertyAmenitiesDetailPage.propertyAmenitiesAccordionSection.amenitiesAccordionItems" });
   const { fields: slideItems, append: appendSlide, remove: removeSlide } = useFieldArray({ control, name: "propertyAmenitiesDetailPage.propertyAmenitiesAccordionSection.cardSlideItems" });
@@ -64,8 +67,13 @@ export function AmenitiesAccordionSection({ generateId }: AmenitiesAccordionSect
                         <Button type="button" variant="destructive" size="icon" onClick={() => removeSlide(index)}><Trash /></Button>
                     </div>
                     <FormField control={control} name={`propertyAmenitiesDetailPage.propertyAmenitiesAccordionSection.cardSlideItems.${index}.id`} render={({ field }) => (<FormItem><FormLabel>ID</FormLabel><div className="flex gap-2"><FormControl><Input {...field} /></FormControl><Button type="button" size="icon" variant="outline" onClick={() => generateId(`amenity-slide-${index + 1}`, `propertyAmenitiesDetailPage.propertyAmenitiesAccordionSection.cardSlideItems.${index}.id`)}><Sparkles /></Button></div><FormMessage /></FormItem>)} />
-                    <FormField control={control} name={`propertyAmenitiesDetailPage.propertyAmenitiesAccordionSection.cardSlideItems.${index}.src`} render={({ field }) => (<FormItem><FormLabel>Image URL</FormLabel><FormControl><Input type="url" {...field} /></FormControl><FormMessage /></FormItem>)} />
-                    <FormField control={control} name={`propertyAmenitiesDetailPage.propertyAmenitiesAccordionSection.cardSlideItems.${index}.alt`} render={({ field }) => (<FormItem><FormLabel>Alt Text</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
+                    <ImagePreviewInput
+                        name={`propertyAmenitiesDetailPage.propertyAmenitiesAccordionSection.cardSlideItems.${index}.src`}
+                        label="Image URL"
+                        altFieldName={`propertyAmenitiesDetailPage.propertyAmenitiesAccordionSection.cardSlideItems.${index}.alt`}
+                        onGenerateAltText={generateAltText}
+                        isGenerating={isGenerating[`propertyAmenitiesDetailPage.propertyAmenitiesAccordionSection.cardSlideItems.${index}.alt`]}
+                    />
                 </div>
             ))}
             <Button type="button" variant="outline" onClick={() => appendSlide({ id: '', src: '', alt: '' })}>Add Slide Item</Button>

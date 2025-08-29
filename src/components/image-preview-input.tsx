@@ -10,18 +10,28 @@ import {
 import { Input } from '@/components/ui/input';
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 import { Button } from './ui/button';
-import { Eye, ImageIcon } from 'lucide-react';
+import { Eye, ImageIcon, Loader2, Sparkles } from 'lucide-react';
 
 interface ImagePreviewInputProps {
   name: string;
   label: string;
+  altFieldName?: string;
+  onGenerateAltText?: (imageUrlField: string, altTextField: string) => void;
+  isGenerating?: boolean;
 }
 
-export function ImagePreviewInput({ name, label }: ImagePreviewInputProps) {
+export function ImagePreviewInput({ name, label, altFieldName, onGenerateAltText, isGenerating }: ImagePreviewInputProps) {
   const { control, watch } = useFormContext();
   const imageUrl = watch(name);
 
+  const handleGenerateClick = () => {
+    if (onGenerateAltText && altFieldName) {
+      onGenerateAltText(name, altFieldName);
+    }
+  }
+
   return (
+    <div className='grid gap-2'>
     <FormField
       control={control}
       name={name}
@@ -60,5 +70,28 @@ export function ImagePreviewInput({ name, label }: ImagePreviewInputProps) {
         </FormItem>
       )}
     />
+     {altFieldName && (
+        <FormField
+          control={control}
+          name={altFieldName}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Alt Text</FormLabel>
+              <div className="flex gap-2 items-start">
+                <FormControl>
+                  <Input placeholder="Descriptive alt text for the image" {...field} />
+                </FormControl>
+                {onGenerateAltText && (
+                   <Button type="button" onClick={handleGenerateClick} disabled={isGenerating || !imageUrl} className="w-auto" size="icon">
+                    {isGenerating ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
+                  </Button>
+                )}
+              </div>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      )}
+    </div>
   );
 }

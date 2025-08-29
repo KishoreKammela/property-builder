@@ -14,23 +14,25 @@ import { PropertyAmenitiesSection } from './detail-page/amenities-section';
 
 interface PropertyDetailPageSectionProps {
     generateId: (sectionName: string, fieldName: any) => void;
+    generateAltText: (imageUrlField: string, altTextField: string) => void;
+    isGenerating: Record<string, boolean>;
 }
 
-export function PropertyDetailPageSection({ generateId }: PropertyDetailPageSectionProps) {
+export function PropertyDetailPageSection({ generateId, generateAltText, isGenerating }: PropertyDetailPageSectionProps) {
   return (
     <FormSection value="item-9" title="Property Detail Page" description="Content for the main property detail page.">
       <Accordion type="single" collapsible className="w-full">
         <BannerSection generateId={generateId}/>
         <LocationConnectivitySection generateId={generateId} />
         <OverviewSection generateId={generateId} />
-        <HighlightsSection generateId={generateId} />
+        <HighlightsSection generateId={generateId} generateAltText={generateAltText} isGenerating={isGenerating} />
         <MasterPlanSection />
         <UnitPlansSection generateId={generateId} />
         <PricingSection generateId={generateId} />
         <DetailSpecificationsSection />
         <LocationSection generateId={generateId} />
         <FaqSection generateId={generateId} />
-        <PropertyAmenitiesSection generateId={generateId}/>
+        <PropertyAmenitiesSection generateId={generateId} generateAltText={generateAltText} isGenerating={isGenerating} />
       </Accordion>
     </FormSection>
   );

@@ -9,9 +9,11 @@ import { ImagePreviewInput } from '@/components/image-preview-input';
 
 interface AmenitiesGallerySectionProps {
     generateId: (sectionName: string, fieldName: any) => void;
+    generateAltText: (imageUrlField: string, altTextField: string) => void;
+    isGenerating: Record<string, boolean>;
 }
 
-export function AmenitiesGallerySection({ generateId }: AmenitiesGallerySectionProps) {
+export function AmenitiesGallerySection({ generateId, generateAltText, isGenerating }: AmenitiesGallerySectionProps) {
   const { control } = useFormContext();
   const { fields, append, remove } = useFieldArray({
     control,
@@ -35,7 +37,7 @@ export function AmenitiesGallerySection({ generateId }: AmenitiesGallerySectionP
                     
                     <StringArrayField name={`propertyAmenitiesDetailPage.propertyAmenitiesGalleryShowCaseArea.${index}.amenitiesGalleryAttractions`} label="Attractions" />
                     <StringArrayField name={`propertyAmenitiesDetailPage.propertyAmenitiesGalleryShowCaseArea.${index}.communityAmenities`} label="Community Amenities" />
-                    <ImagesArray name={`propertyAmenitiesDetailPage.propertyAmenitiesGalleryShowCaseArea.${index}.amenitiesGallerySlideImages`} generateId={generateId} parentIndex={index} />
+                    <ImagesArray name={`propertyAmenitiesDetailPage.propertyAmenitiesGalleryShowCaseArea.${index}.amenitiesGallerySlideImages`} generateId={generateId} generateAltText={generateAltText} isGenerating={isGenerating} parentIndex={index} />
                 </div>
             ))}
             <Button type="button" variant="outline" onClick={() => append({ id: '', amenitiesGalleryTitle: '', amenitiesGalleryDescription: '', amenitiesGalleryAttractions: [], amenitiesGallerySlideImages: [], amenitiesGallerySecondHeading: '', communityAmenities: [] })}>Add Showcase Area</Button>
@@ -75,7 +77,7 @@ function StringArrayField({ name, label }: { name: string, label: string }) {
     );
   }
 
-function ImagesArray({ name, generateId, parentIndex }: { name: string, generateId: Function, parentIndex: number }) {
+function ImagesArray({ name, generateId, generateAltText, isGenerating, parentIndex }: { name: string, generateId: Function, generateAltText: (imageUrlField: string, altTextField: string) => void, isGenerating: Record<string, boolean>, parentIndex: number }) {
     const { control } = useFormContext();
     const { fields, append, remove } = useFieldArray({
       control,
@@ -92,8 +94,13 @@ function ImagesArray({ name, generateId, parentIndex }: { name: string, generate
                 <Button type="button" variant="destructive" size="icon" onClick={() => remove(index)}><Trash /></Button>
             </div>
             <FormField control={control} name={`${name}.${index}.id`} render={({ field }) => (<FormItem><FormLabel>ID</FormLabel><div className="flex gap-2"><FormControl><Input {...field} /></FormControl><Button type="button" size="icon" variant="outline" onClick={() => generateId(`gallery-${parentIndex + 1}-img-${index + 1}`, `${name}.${index}.id`)}><Sparkles /></Button></div><FormMessage /></FormItem>)} />
-            <ImagePreviewInput name={`${name}.${index}.src`} label="Source URL" />
-            <FormField control={control} name={`${name}.${index}.alt`} render={({ field }) => (<FormItem><FormLabel>Alt Text</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
+            <ImagePreviewInput 
+              name={`${name}.${index}.src`} 
+              label="Source URL"
+              altFieldName={`${name}.${index}.alt`}
+              onGenerateAltText={generateAltText}
+              isGenerating={isGenerating[`${name}.${index}.alt`]}
+            />
           </div>
         ))}
         <Button type="button" variant="outline" onClick={() => append({ id: '', src: '', alt: ''})}>Add Image</Button>

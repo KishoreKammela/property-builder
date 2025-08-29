@@ -9,9 +9,11 @@ import { ImagePreviewInput } from '@/components/image-preview-input';
 
 interface MasterPlanTowersSectionProps {
     generateId: (sectionName: string, fieldName: any) => void;
+    generateAltText: (imageUrlField: string, altTextField: string) => void;
+    isGenerating: Record<string, boolean>;
 }
 
-export function MasterPlanTowersSection({ generateId }: MasterPlanTowersSectionProps) {
+export function MasterPlanTowersSection({ generateId, generateAltText, isGenerating }: MasterPlanTowersSectionProps) {
   const { control } = useFormContext();
   const { fields: sliderImages, append: appendSliderImage, remove: removeSliderImage } = useFieldArray({ control, name: "propertyMasterPlanDetailPage.propertyMasterPlanTowersSection.towerSectionSliderImages" });
   const { fields: tableDetails, append: appendTableDetail, remove: removeTableDetail } = useFieldArray({ control, name: "propertyMasterPlanDetailPage.propertyMasterPlanTowersSection.towerSectionTableDetails" });
@@ -36,8 +38,13 @@ export function MasterPlanTowersSection({ generateId }: MasterPlanTowersSectionP
               <Button type="button" variant="destructive" size="icon" onClick={() => removeSliderImage(index)}><Trash /></Button>
             </div>
             <FormField control={control} name={`propertyMasterPlanDetailPage.propertyMasterPlanTowersSection.towerSectionSliderImages.${index}.id`} render={({ field }) => (<FormItem><FormLabel>ID</FormLabel><div className="flex gap-2"><FormControl><Input {...field} /></FormControl><Button type="button" size="icon" variant="outline" onClick={() => generateId(`tower-slider-${index + 1}`, `propertyMasterPlanDetailPage.propertyMasterPlanTowersSection.towerSectionSliderImages.${index}.id`)}><Sparkles /></Button></div><FormMessage /></FormItem>)} />
-            <ImagePreviewInput name={`propertyMasterPlanDetailPage.propertyMasterPlanTowersSection.towerSectionSliderImages.${index}.src`} label="Image URL" />
-            <FormField control={control} name={`propertyMasterPlanDetailPage.propertyMasterPlanTowersSection.towerSectionSliderImages.${index}.alt`} render={({ field }) => (<FormItem><FormLabel>Alt Text</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
+            <ImagePreviewInput 
+                name={`propertyMasterPlanDetailPage.propertyMasterPlanTowersSection.towerSectionSliderImages.${index}.src`}
+                label="Image URL"
+                altFieldName={`propertyMasterPlanDetailPage.propertyMasterPlanTowersSection.towerSectionSliderImages.${index}.alt`}
+                onGenerateAltText={generateAltText}
+                isGenerating={isGenerating[`propertyMasterPlanDetailPage.propertyMasterPlanTowersSection.towerSectionSliderImages.${index}.alt`]}
+            />
           </div>
         ))}
         <Button type="button" variant="outline" onClick={() => appendSliderImage({ id: '', src: '', alt: '' })}>Add Slider Image</Button>

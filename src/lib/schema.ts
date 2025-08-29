@@ -464,7 +464,7 @@ export const propertySchema = z.object({
     }),
     propertySpecificationsDetailPage: z.object({
         propertySpecificationsBannerSection: propertySpecificationsBannerSectionSchema,
-        propertySpecificationsGalleryShowCaseArea: z.array(propertySpecificationsGalleryShowCaseAreaSchema),
+        propertySpecificationsGalleryShowCaseArea: z.array(propertySpecificationsGalleryShowCaseAreaSchema.extend({alt: z.string().optional()})),
         propertySpecificationFAQSection: faqSectionSchema,
     }),
 }).deepPartial();

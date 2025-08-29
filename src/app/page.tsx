@@ -26,6 +26,7 @@ import {
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Textarea } from '@/components/ui/textarea';
 import { handleContentIngestion } from '@/lib/actions';
+import { get, set } from 'lodash';
 
 const LOCAL_STORAGE_KEY = 'property-form-autosave';
 
@@ -108,7 +109,7 @@ export default function Home() {
   }
 
 
-  const handleFormSubmit = (data: Property) => {
+ const handleFormSubmit = (data: Property) => {
     toast({
       title: "Success!",
       description: "Property data has been validated and the preview is updated.",
@@ -116,6 +117,48 @@ export default function Home() {
     console.log('Form Submitted:', data);
   };
   
+  const onFormError = (errors: any) => {
+    toast({
+      variant: 'destructive',
+      title: "Validation Error",
+      description: "Please check the form for errors and try again.",
+    });
+
+    // Find the first error and focus the element
+    const errorKeys = Object.keys(errors);
+    if(errorKeys.length > 0) {
+      let fieldToFocus = errorKeys[0];
+
+      // Handle nested fields
+      const findFirstError = (obj: any, path: string = ''): string | null => {
+        for(const key in obj) {
+          const newPath = path ? `${path}.${key}` : key;
+          const value = get(obj, key);
+          if(value.message) { // This is an error object
+            return newPath;
+          }
+          if(typeof value === 'object' && value !== null) {
+            const nestedError = findFirstError(value, newPath);
+            if(nestedError) return nestedError;
+          }
+        }
+        return null;
+      }
+
+      const firstErrorPath = findFirstError(errors);
+
+      if (firstErrorPath) {
+        // Find the element by name attribute
+        const element = document.querySelector(`[name="${firstErrorPath}"]`);
+        if (element && typeof (element as HTMLElement).focus === 'function') {
+          (element as HTMLElement).focus();
+          element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }
+    }
+  };
+
+
   const handleReset = () => {
     form.reset(defaultValues);
     localStorage.removeItem(LOCAL_STORAGE_KEY);
@@ -169,38 +212,37 @@ export default function Home() {
         <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-12">
           <div className="lg:pr-6">
             <FormProvider {...form}>
-              <PropertyForm onFormSubmit={handleFormSubmit}>
-                  <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                      <Button type="button" variant="outline">
-                        <RotateCcw className="mr-2 h-4 w-4" />
-                        Reset Form
-                      </Button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                        <AlertDialogDescription>
-                          This action cannot be undone. This will permanently clear the form
-                          and remove your data from our servers.
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction onClick={handleReset}>Continue</AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
-              </PropertyForm>
+              <PropertyForm onFormSubmit={handleFormSubmit} onFormError={onFormError} />
             </FormProvider>
           </div>
           <div className="mt-8 lg:mt-0 relative">
               <div className="lg:sticky lg:top-8">
                 <JsonPreview data={watchedData} />
-                 <div className="hidden lg:flex flex-col sm:flex-row-reverse gap-4 mt-4">
-                    <Button onClick={form.handleSubmit(handleFormSubmit)} className="w-full sm:w-auto bg-accent hover:bg-accent/90 text-accent-foreground" size="lg">
+                <div className="hidden lg:flex flex-col sm:flex-row-reverse gap-4 mt-4">
+                    <Button onClick={form.handleSubmit(handleFormSubmit, onFormError)} className="w-full sm:w-auto bg-accent hover:bg-accent/90 text-accent-foreground" size="lg">
                       Generate and Validate Data
                     </Button>
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button type="button" variant="outline">
+                          <RotateCcw className="mr-2 h-4 w-4" />
+                          Reset Form
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            This action cannot be undone. This will permanently clear the form
+                            and remove your data from our servers.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogAction onClick={handleReset}>Continue</AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
                 </div>
               </div>
           </div>

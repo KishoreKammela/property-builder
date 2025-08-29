@@ -8,14 +8,16 @@ import { MasterPlanFaqSection } from './detail-page/master-plan/faq-section';
 
 interface PropertyMasterPlanDetailPageSectionProps {
     generateId: (sectionName: string, fieldName: any) => void;
+    generateAltText: (imageUrlField: string, altTextField: string) => void;
+    isGenerating: Record<string, boolean>;
 }
 
-export function PropertyMasterPlanDetailPageSection({ generateId }: PropertyMasterPlanDetailPageSectionProps) {
+export function PropertyMasterPlanDetailPageSection({ generateId, generateAltText, isGenerating }: PropertyMasterPlanDetailPageSectionProps) {
   return (
     <FormSection value="item-10" title="Property Master Plan Page" description="Content for the master plan detail page.">
       <Accordion type="single" collapsible className="w-full">
         <MasterPlanBannerSection generateId={generateId} />
-        <MasterPlanTowersSection generateId={generateId} />
+        <MasterPlanTowersSection generateId={generateId} generateAltText={generateAltText} isGenerating={isGenerating} />
         <MasterPlanFeaturesSection generateId={generateId} />
         <MasterPlanFaqSection generateId={generateId} />
       </Accordion>

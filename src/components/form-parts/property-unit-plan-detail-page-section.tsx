@@ -8,16 +8,18 @@ import { UnitPlanFaqSection } from './detail-page/unit-plan/faq-section';
 
 interface PropertyUnitPlanDetailPageSectionProps {
     generateId: (sectionName: string, fieldName: any) => void;
+    generateAltText: (imageUrlField: string, altTextField: string) => void;
+    isGenerating: Record<string, boolean>;
 }
 
-export function PropertyUnitPlanDetailPageSection({ generateId }: PropertyUnitPlanDetailPageSectionProps) {
+export function PropertyUnitPlanDetailPageSection({ generateId, generateAltText, isGenerating }: PropertyUnitPlanDetailPageSectionProps) {
   return (
     <FormSection value="item-11" title="Property Unit Plan Page" description="Content for the unit plan detail page.">
       <Accordion type="single" collapsible className="w-full">
         <UnitPlanFloorPlanSection generateId={generateId} />
         <UnitPlanDesignAndQualitySection generateId={generateId} />
         <UnitPlanSizesSection />
-        <UnitPlanHighlightsSection />
+        <UnitPlanHighlightsSection generateAltText={generateAltText} isGenerating={isGenerating} />
         <UnitPlanFaqSection generateId={generateId} />
       </Accordion>
     </FormSection>

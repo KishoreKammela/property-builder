@@ -9,9 +9,11 @@ import { ImagePreviewInput } from '@/components/image-preview-input';
 
 interface SpecificationsGallerySectionProps {
     generateId: (sectionName: string, fieldName: any) => void;
+    generateAltText: (imageUrlField: string, altTextField: string) => void;
+    isGenerating: Record<string, boolean>;
 }
 
-export function SpecificationsGallerySection({ generateId }: SpecificationsGallerySectionProps) {
+export function SpecificationsGallerySection({ generateId, generateAltText, isGenerating }: SpecificationsGallerySectionProps) {
   const { control } = useFormContext();
   const { fields, append, remove } = useFieldArray({
     control,
@@ -39,7 +41,13 @@ export function SpecificationsGallerySection({ generateId }: SpecificationsGalle
                         <FormMessage />
                       </FormItem>
                     )} />
-                    <ImagePreviewInput name={`propertySpecificationsDetailPage.propertySpecificationsGalleryShowCaseArea.${index}.specificationsGalleryImageUrl`} label="Image URL" />
+                    <ImagePreviewInput 
+                        name={`propertySpecificationsDetailPage.propertySpecificationsGalleryShowCaseArea.${index}.specificationsGalleryImageUrl`} 
+                        label="Image URL"
+                        altFieldName={`propertySpecificationsDetailPage.propertySpecificationsGalleryShowCaseArea.${index}.alt`}
+                        onGenerateAltText={generateAltText}
+                        isGenerating={isGenerating[`propertySpecificationsDetailPage.propertySpecificationsGalleryShowCaseArea.${index}.alt`]}
+                     />
 
                     <StringArrayField name={`propertySpecificationsDetailPage.propertySpecificationsGalleryShowCaseArea.${index}.specificationsGalleryFeatures`} label="Features" />
                 </div>
