@@ -6,7 +6,7 @@ import { Form } from '@/components/ui/form';
 import { Accordion } from '@/components/ui/accordion';
 import type { Property } from '@/lib/types';
 import { useToast } from '@/hooks/use-toast';
-import { handleAltTextGeneration, handleIdGeneration } from '@/lib/actions';
+import { handleAltTextGeneration, handleIdGeneration, handleDescriptionGeneration } from '@/lib/actions';
 import { Loader2, RotateCcw } from 'lucide-react';
 import { useState } from 'react';
 import { BasicInfoSection } from './form-parts/basic-info-section';
@@ -31,6 +31,7 @@ interface PropertyFormProps {
 
 export function PropertyForm({ onFormSubmit, onReset }: PropertyFormProps) {
   const [isGeneratingAltText, setIsGeneratingAltText] = useState(false);
+  const [isGeneratingDescriptions, setIsGeneratingDescriptions] = useState(false);
   const form = useFormContext<Property>();
   
   const { toast } = useToast();
@@ -96,13 +97,51 @@ export function PropertyForm({ onFormSubmit, onReset }: PropertyFormProps) {
     }
   };
 
+  const generateDescriptions = async () => {
+    const { name, type, area, features, amenities } = form.getValues();
+
+    if (!name || !type || !area) {
+      toast({
+        variant: 'destructive',
+        title: 'Missing Information',
+        description: 'Please fill in the Property Name, Type, and Area before generating descriptions.',
+      });
+      return;
+    }
+
+    setIsGeneratingDescriptions(true);
+    const result = await handleDescriptionGeneration({
+      propertyName: name,
+      propertyType: type,
+      propertyArea: area,
+      features,
+      amenities,
+    });
+    setIsGeneratingDescriptions(false);
+
+    if (result.success && result.description && result.shortDescription) {
+      form.setValue('description', result.description, { shouldValidate: true });
+      form.setValue('shortDescription', result.shortDescription, { shouldValidate: true });
+      toast({
+        title: 'Descriptions Generated',
+        description: 'The full and short descriptions have been successfully generated.',
+      });
+    } else {
+      toast({
+        variant: 'destructive',
+        title: 'Error Generating Descriptions',
+        description: result.error,
+      });
+    }
+  }
+
 
   return (
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onFormSubmit)} className="space-y-8">
           <Accordion type="multiple" className="w-full space-y-4" defaultValue={['item-1']}>
             <BasicInfoSection generateId={generateId} />
-            <DescriptionSection />
+            <DescriptionSection isGenerating={isGeneratingDescriptions} onGenerate={generateDescriptions} />
             <PricingMediaSection 
               isGeneratingAltText={isGeneratingAltText} 
               generateAltText={generateAltText} 

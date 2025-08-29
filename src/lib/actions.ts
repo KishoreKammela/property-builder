@@ -2,6 +2,7 @@
 
 import { generateUniqueId as generateUniqueIdFlow, type GenerateUniqueIdInput } from '@/ai/flows/generate-unique-id';
 import { generateAltText as generateAltTextFlow, type GenerateAltTextInput } from '@/ai/flows/generate-alt-text';
+import { generateDescriptions as generateDescriptionsFlow, type GenerateDescriptionsInput } from '@/ai/flows/generate-descriptions';
 
 export async function handleIdGeneration(input: GenerateUniqueIdInput) {
   try {
@@ -38,5 +39,15 @@ export async function handleAltTextGeneration(input: Omit<GenerateAltTextInput, 
   } catch (error) {
     console.error('Error generating alt text:', error);
     return { success: false, error: 'Failed to generate alt text.' };
+  }
+}
+
+export async function handleDescriptionGeneration(input: GenerateDescriptionsInput) {
+  try {
+    const result = await generateDescriptionsFlow(input);
+    return { success: true, ...result };
+  } catch (error) {
+    console.error('Error generating descriptions:', error);
+    return { success: false, error: 'Failed to generate descriptions.' };
   }
 }

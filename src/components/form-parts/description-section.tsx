@@ -2,11 +2,24 @@ import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/comp
 import { Textarea } from '@/components/ui/textarea';
 import { FormSection } from '@/components/form-section';
 import { useFormContext } from 'react-hook-form';
+import { Button } from '../ui/button';
+import { Loader2, Sparkles } from 'lucide-react';
 
-export function DescriptionSection() {
+interface DescriptionSectionProps {
+  isGenerating: boolean;
+  onGenerate: () => void;
+}
+
+export function DescriptionSection({ isGenerating, onGenerate }: DescriptionSectionProps) {
     const { control } = useFormContext();
   return (
     <FormSection value="item-2" title="Property Descriptions" description="Add detailed and summary descriptions for the property.">
+      <div className="flex justify-end">
+        <Button type="button" onClick={onGenerate} disabled={isGenerating}>
+          {isGenerating ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Sparkles className="mr-2 h-4 w-4" />}
+          Generate Descriptions
+        </Button>
+      </div>
        <FormField
           control={control}
           name="description"
