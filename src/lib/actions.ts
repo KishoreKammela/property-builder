@@ -10,17 +10,17 @@ import type { GenerateUniqueIdInput, GenerateAltTextInput, GenerateDescriptionsI
 export async function handleIdGeneration(input: GenerateUniqueIdInput) {
   try {
     const { uniqueId } = await generateUniqueIdFlow(input);
-    const filteredId = uniqueId
-      .toLowerCase()
-      .replace(/[^a-z0-9-]/g, '') // Remove invalid characters
-      .replace(/\s+/g, '-') // Replace spaces with hyphens
-      .replace(/-+/g, '-') // Replace multiple hyphens with a single one
-      .replace(/^-+|-+$/g, ''); // Trim leading/trailing hyphens
-    return { success: true, id: filteredId };
+    return { success: true, id: uniqueId };
   } catch (error) {
-    console.error('Detailed error in handleIdGeneration:', error);
-    const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred.';
-    return { success: false, error: `Failed to generate ID. Reason: ${errorMessage}` };
+    console.warn('AI ID generation failed. Falling back to simple slug generation.', error);
+    // Fallback logic
+    const fallbackId = `${input.propertyName}-${input.sectionName}`
+      .toLowerCase()
+      .replace(/[^a-z0-9-]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-')
+      .replace(/^-+|-+$/g, '');
+    return { success: true, id: fallbackId };
   }
 }
 
@@ -54,8 +54,10 @@ export async function handleAltTextGeneration(input: Omit<GenerateAltTextInput, 
     const result = await generateAltTextFlow({ ...input, imageUrl: dataUrl });
     return { success: true, altText: result.altText };
   } catch (error) {
-    console.error('Error generating alt text:', error);
-    return { success: false, error: 'Failed to generate alt text.' };
+    console.warn('AI alt text generation failed. Falling back to basic template.', error);
+    // Fallback logic
+    const fallbackAltText = `Image of ${input.propertyName}, a ${input.propertyType} in ${input.propertyArea}`;
+    return { success: true, altText: fallbackAltText };
   }
 }
 
@@ -64,8 +66,11 @@ export async function handleDescriptionGeneration(input: GenerateDescriptionsInp
     const result = await generateDescriptionsFlow(input);
     return { success: true, ...result };
   } catch (error) {
-    console.error('Error generating descriptions:', error);
-    return { success: false, error: 'Failed to generate descriptions.' };
+    console.warn('AI description generation failed. Falling back to basic template.', error);
+    // Fallback logic
+    const shortDescription = `A premier ${input.propertyType} located in the heart of ${input.propertyArea}.`;
+    const description = `Discover ${input.propertyName}, a premier ${input.propertyType} located in the heart of ${input.propertyArea}. This property features ${input.features.join(', ')} and offers world-class amenities such as ${input.amenities.join(', ')}.`;
+    return { success: true, description, shortDescription };
   }
 }
 
@@ -75,6 +80,7 @@ export async function handleContentIngestion(input: IngestContentInput) {
         return { success: true, data: result };
     } catch (error) {
         console.error('Error ingesting content:', error);
-        return { success: false, error: 'Failed to ingest content from the provided text.' };
+        const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred.';
+        return { success: false, error: `Failed to ingest content. Reason: ${errorMessage}` };
     }
 }
