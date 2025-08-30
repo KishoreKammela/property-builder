@@ -150,7 +150,7 @@ export function BasicInfoSection({ generateId }: BasicInfoSectionProps) {
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Select property status" />
-                  </Trigger>
+                  </SelectTrigger>
                 </FormControl>
                 <SelectContent>
                   <SelectItem value="upcoming">Upcoming</SelectItem>
