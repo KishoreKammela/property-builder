@@ -20,7 +20,7 @@ export function BasicInfoSection({ generateId }: BasicInfoSectionProps) {
         if (propertyName) {
             const slug = propertyName
                 .toLowerCase()
-                .replace(/[^a-z\s-]/g, '') // Remove special chars and numbers, but keep letters, spaces, and hyphens
+                .replace(/[^a-z\s-]/g, '') // Remove special chars and numbers, keeping letters, spaces, hyphens
                 .trim()
                 .replace(/\s+/g, '-') // Replace spaces with a single hyphen
                 .replace(/-+/g, '-'); // Replace multiple hyphens with a single one
