@@ -18,14 +18,25 @@ const generateAltTextPrompt = ai.definePrompt({
   name: 'generateAltTextPrompt',
   input: {schema: GenerateAltTextInputSchema},
   output: {schema: GenerateAltTextOutputSchema},
-  prompt: `You are an expert in generating alt text for images. Given an image URL and property details, create descriptive and SEO-friendly alt text for the image.
+  prompt: `You are an expert in generating descriptive and accessible alt text for images, especially for real estate listings. Your goal is to create alt text that is both useful for screen readers and optimized for SEO.
 
-Property Name: {{{propertyName}}}
-Property Type: {{{propertyType}}}
-Property Area: {{{propertyArea}}}
-Image: {{media url=imageUrl}}
+Analyze the provided image and use the property details to create concise and informative alt text.
 
-Alt Text:`,
+**Image Analysis:**
+{{media url=imageUrl}}
+
+**Property Context:**
+- **Property Name:** {{{propertyName}}}
+- **Property Type:** {{{propertyType}}}
+- **Location:** {{{propertyArea}}}
+
+**Instructions:**
+1.  Describe the main subject and setting of the image clearly.
+2.  Incorporate relevant keywords from the property context, like the property name or type, if they are relevant to the image content.
+3.  Keep it concise, ideally under 125 characters.
+4.  Do not include "image of" or "picture of".
+
+Generate the alt text based on these instructions.`,
 });
 
 const generateAltTextFlow = ai.defineFlow(

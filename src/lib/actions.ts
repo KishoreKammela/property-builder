@@ -12,8 +12,10 @@ export async function handleIdGeneration(input: GenerateUniqueIdInput) {
     const { uniqueId } = await generateUniqueIdFlow(input);
     const filteredId = uniqueId
       .toLowerCase()
-      .replace(/[^a-z-]/g, '')
-      .replace(/^-+|-+$/g, '');
+      .replace(/[^a-z0-9-]/g, '') // Remove invalid characters
+      .replace(/\s+/g, '-') // Replace spaces with hyphens
+      .replace(/-+/g, '-') // Replace multiple hyphens with a single one
+      .replace(/^-+|-+$/g, ''); // Trim leading/trailing hyphens
     return { success: true, id: filteredId };
   } catch (error) {
     console.error('Error generating unique ID:', error);
@@ -45,6 +47,9 @@ async function imageUrlToDataUrl(url: string): Promise<string> {
 export async function handleAltTextGeneration(input: Omit<GenerateAltTextInput, 'imageUrl'> & { imageUrl: string }) {
   try {
     const dataUrl = await imageUrlToDataUrl(input.imageUrl);
+    if (!dataUrl || dataUrl === "data:image/png;base64,") {
+        return { success: false, error: 'Failed to fetch image from the provided URL.' };
+    }
     const result = await generateAltTextFlow({ ...input, imageUrl: dataUrl });
     return { success: true, altText: result.altText };
   } catch (error) {
