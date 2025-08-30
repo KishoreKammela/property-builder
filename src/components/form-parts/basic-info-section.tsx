@@ -17,7 +17,7 @@ export function BasicInfoSection({ generateId }: BasicInfoSectionProps) {
 
     useEffect(() => {
         if (propertyName) {
-            const slug = propertyName.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+            const slug = propertyName.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z-]/g, '');
             setValue('slug', slug, { shouldValidate: true });
             
             // Auto-populate other headings
