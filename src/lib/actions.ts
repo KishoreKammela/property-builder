@@ -18,8 +18,9 @@ export async function handleIdGeneration(input: GenerateUniqueIdInput) {
       .replace(/^-+|-+$/g, ''); // Trim leading/trailing hyphens
     return { success: true, id: filteredId };
   } catch (error) {
-    console.error('Error generating unique ID:', error);
-    return { success: false, error: 'Failed to generate ID.' };
+    console.error('Detailed error in handleIdGeneration:', error);
+    const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred.';
+    return { success: false, error: `Failed to generate ID. Reason: ${errorMessage}` };
   }
 }
 
