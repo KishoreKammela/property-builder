@@ -14,25 +14,34 @@ interface BasicInfoSectionProps {
 export function BasicInfoSection({ generateId }: BasicInfoSectionProps) {
     const { control, watch, setValue } = useFormContext();
     const propertyName = watch('name');
+    const propertyArea = watch('area');
 
     useEffect(() => {
         if (propertyName) {
-            const slug = propertyName.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z-]/g, '');
+            const slug = propertyName
+                .toLowerCase()
+                .replace(/[^a-z\s-]/g, '') // Remove special chars and numbers, but keep letters, spaces, and hyphens
+                .trim()
+                .replace(/\s+/g, '-') // Replace spaces with a single hyphen
+                .replace(/-+/g, '-'); // Replace multiple hyphens with a single one
             setValue('slug', slug, { shouldValidate: true });
             
-            // Auto-populate other headings
             setValue('propertyDetailPage.propertyBannerSection.headingOne', propertyName.split(' ')[0]);
             setValue('propertyDetailPage.propertyBannerSection.headingTwo', propertyName.substring(propertyName.indexOf(' ') + 1));
             setValue('propertyDetailPage.propertyHighlightsSection.propertyHighlightsTitle', `${propertyName} Highlights`);
             setValue('propertyDetailPage.propertyMasterPlanSection.masterPlanTitle', `${propertyName} Master Plan`);
             setValue('propertyDetailPage.propertyUnitPlansSection.unitPlanTitle', `${propertyName} Floor Plan`);
-            setValue('propertyDetailPage.propertyPricingSection.pricingTitle', `${propertyName} Price`);
             setValue('propertyDetailPage.propertySpecificationsSection.specificationTitle', `${propertyName} Specification`);
-            setValue('propertyDetailPage.propertyLocationSection.propertyLoactionTitle', `Know about ${watch('area')}`);
             setValue('propertyMasterPlanDetailPage.propertyMasterPlanBannerSection.bannerSectionHeader', `${propertyName} Master Plan - A Vision in 53 Acres`);
             setValue('propertyUnitPlanDetailPage.propertyFloorPlanSection.floorPlanSectionHeading', `${propertyName} Floor Plan`);
         }
-    }, [propertyName, setValue, watch]);
+    }, [propertyName, setValue]);
+
+    useEffect(() => {
+      if(propertyArea){
+        setValue('propertyDetailPage.propertyLocationSection.propertyLoactionTitle', `Know about ${propertyArea}`);
+      }
+    }, [propertyArea, setValue]);
 
   return (
     <FormSection value="item-1" title="Basic Property Information" description="Provide the main details for the property listing.">
@@ -141,7 +150,7 @@ export function BasicInfoSection({ generateId }: BasicInfoSectionProps) {
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Select property status" />
-                  </SelectTrigger>
+                  </Trigger>
                 </FormControl>
                 <SelectContent>
                   <SelectItem value="upcoming">Upcoming</SelectItem>

@@ -12,14 +12,15 @@ export async function handleIdGeneration(input: GenerateUniqueIdInput) {
     const { uniqueId } = await generateUniqueIdFlow(input);
     return { success: true, id: uniqueId };
   } catch (error) {
-    console.warn('AI ID generation failed. Falling back to simple slug generation.', error);
+    console.warn('AI ID generation failed. Falling back to simple slug generation.');
+    console.log('Detailed error in handleIdGeneration:', error);
     // Fallback logic
     const fallbackId = `${input.propertyName}-${input.sectionName}`
       .toLowerCase()
-      .replace(/[^a-z0-9-]/g, '')
-      .replace(/\s+/g, '-')
-      .replace(/-+/g, '-')
-      .replace(/^-+|-+$/g, '');
+      .replace(/[^a-z0-9\s-]/g, '') // Remove special chars but keep spaces and hyphens
+      .trim()
+      .replace(/\s+/g, '-') // Replace spaces with a single hyphen
+      .replace(/-+/g, '-'); // Replace multiple hyphens with a single one
     return { success: true, id: fallbackId };
   }
 }
